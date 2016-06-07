@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>무제 문서</title>
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="bootstrap/css/docs.css" rel="stylesheet" type="text/css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script src="bootstrap/js/bootstrap.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+<div role="tabpanel">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs tab" role="tablist"  id="myTab">
+        <li role="presentation" class="active"><a href="#tab1" aria-controls="home" role="tab" data-toggle="tab">tab1</a></li>
+        <li role="presentation"><a href="#tab2" aria-controls="profile" role="tab" data-toggle="tab">tab2</a></li>
+        <li role="presentation"><a href="#tab3" aria-controls="messages" role="tab" data-toggle="tab">tab3</a></li>
+        <li role="presentation"><a href="#tab4" aria-controls="settings" role="tab" data-toggle="tab">tab4</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="tab1">tab1 contents</div>
+        <div role="tabpanel" class="tab-pane" id="tab2">tab2 contents</div>
+        <div role="tabpanel" class="tab-pane" id="tab3">tab3 contents</div>
+        <div role="tabpanel" class="tab-pane" id="tab4">tab4 contents</div>
+    </div>
+
+</div>
+</div>
+
+
+
+</body>
+<script>
+    $('#myTab a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+</script>
+</html>

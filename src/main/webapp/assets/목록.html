@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>광고 컨텐츠 관리</title>
+<link href="bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="bootstrap/css/docs.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+ <!-- main-container -->
+	<section>
+		<div class="container">
+			<h1>title</h1>
+            <!--검색-->
+            <table class="searchTable">
+            	<colgroup>
+                	<col width="15%">
+                    <col width="35%">
+                    <col width="15%">
+                    <col width="35%">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th>지역</th>
+                        <td>
+                            <select class="form-control">
+                                <option>전체</option>
+                            </select>
+                        </td>
+                        <th>영화관</th>
+                        <td>
+                            <select class="form-control">
+                                <option>전체</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>게시기간</th>
+                        <td colspan="3">
+                         	<input type="date" style="width: 200px;" class="form-control" id="adTopDateStart" placeholder="시작일자를 입력하세요"> ~
+                            <input type="date"  style="width: 200px" class="form-control" id="adTopDateEnd" placeholder="종료일자를 입력하세요">   
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p  class="searchBtn">
+            	<button class="btn btn-primary" type="submit" id="">조회</button>
+            </p>
+            <!--검색-->
+            
+            <!--리스트 테이블-->
+            <div class="listetc">
+            	&#8250; 검색결과 <strong class="red">1,000건</strong>
+                <div class="floatR mtMis10">
+                	<select class="form-control"  style="display:inline; width:auto;">
+                    	<option>10건씩</option>
+                        <option>20건씩</option>
+                    </select>
+                    <span style="margin-top:-10px;">
+                    <button class="btn btn-default" type="button" id="" style="margin-top:-5px;">일정등록</button >
+                    </span>
+                </div>
+            </div>
+            <table class="listTable">
+            	<colgroup>
+                	<col width="5%">
+                    <col width="5%">
+                    <col width="40%">
+                    <col width="25%">
+                    <col width="25%">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th>번호</th>
+                        <th><input type="checkbox"></th>
+                        <th>광고명</th>
+                        <th>게시기간</th>
+                        <th>최종수정정보</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="checkbox"></td>
+                        <td>마케팅광고</td>
+                        <td>2015.11.01~2015.11.30</td>
+                        <td>홍길동 (2015.11.10 08:00)</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                     <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+			<nav style="text-align:center">
+                <ul class="pagination pagination-sm">
+                    <li> <a href="#" aria-label="Previous"> <span aria-hidden="true">&laquo;</span> </a> </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li> <a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span> </a> </li>
+                </ul>
+            <nav>
+              
+
+
+            <!--//리스트 테이블-->
+        </div>
+    </section>
+</body>
+</html>

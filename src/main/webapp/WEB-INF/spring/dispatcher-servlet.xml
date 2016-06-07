@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!--
+		- The controllers are autodetected POJOs labeled with the @Controller annotation.
+	-->
+	<context:component-scan base-package="egovframework, clikmonitor">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<!--
+        - This bean resolves specific types of exceptions to corresponding logical view names for error views. 
+        - The default behaviour of DispatcherServlet is to propagate all exceptions to the servlet container: 
+        - this will happen here with all other types of exceptions.
+    -->
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="cmmn/bizError" />
+		<property name="exceptionMappings">
+			<props>
+                <prop key="org.springframework.dao.DataAccessException">/cmmn/dataAccessFailure</prop>
+                <prop key="org.springframework.transaction.TransactionException">/cmmn/transactionFailure</prop>
+                <prop key="egovframework.rte.fdl.cmmn.exception.EgovBizException">/cmmn/bizError</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!--
+        - This bean configures the 'prefix' and 'suffix' properties of InternalResourceViewResolver, which resolves logical view names returned by Controllers. 
+        - For example, a logical view name of "vets" will be mapped to "/WEB-INF/jsp/vets.jsp".
+    -->
+	<!-- 일반파일 jsp -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+		<property name="order" value="2" />
+	</bean>
+
+	<bean id="beanNameResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="0" />
+	</bean>
+
+	<!-- tiles start -->
+	<bean id="viewResolver2" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+		<property name="order" value="1" />
+	</bean>
+
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles/tiles-definition.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:viewClass="org.springframework.web.servlet.view.JstlView"
+	    p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" />-->
+	
+	<!-- Pagination Tag -->
+    <bean id="imageRenderer" class="egovframework.sample.cmmn.EgovImgPaginationRenderer" />
+
+    <bean id="paginationManager" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager">
+        <property name="rendererType">
+            <map>
+                <entry key="image" value-ref="imageRenderer"/> 
+            </map>
+        </property>
+    </bean>
+	<!-- Pagination Tag -->
+
+	<!-- 로그인 후 백버튼 누르면 로그인 페이지로 이동하는 오류 수정 -->
+	<!--<mvc:interceptors>
+		<bean id="webContentInterceptor"
+			  class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+			<property name="cacheSeconds" value="0" />
+			<property name="useExpiresHeader" value="true" />
+			<property name="useCacheControlHeader" value="true" />
+			<property name="useCacheControlNoStore" value="true" />
+		</bean>
+	</mvc:interceptors>-->
+
+</beans>

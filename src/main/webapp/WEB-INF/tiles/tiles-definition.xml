@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition name="empty.layout" template="/WEB-INF/jsp/layouts/empty.jsp">
+        <put-attribute name="content" value=""/>
+    </definition>
+
+    <definition name="header.layout" template="/WEB-INF/jsp/layouts/header.jsp">
+        <put-attribute name="title" value="지방의회 표준연계 API모니터링 시스템"/>
+        <put-attribute name="javascript.header" value=""/>
+        <put-attribute name="stylesheet" value=""/>
+        <put-attribute name="javascript.footer" value=""/>
+    </definition>
+
+    <definition name="admin.layout" template="/WEB-INF/jsp/layouts/admin.jsp">
+        <put-attribute name="title" value=""/>
+        <put-attribute name="javascript.header" value=""/>
+        <put-attribute name="stylesheet" value=""/>
+        <put-attribute name="javascript.footer" value=""/>
+    </definition>
+
+    <definition name="error.layout" template="/WEB-INF/jsp/layouts/error.jsp" extends="header.layout"/>
+</tiles-definitions>

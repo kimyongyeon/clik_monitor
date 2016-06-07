@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>무제 문서</title>
+<link href="bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="bootstrap/css/docs.css" rel="stylesheet" type="text/css">
+
+ <style>
+    ul{
+			list-style: none outside none;
+		    padding-left: 0;
+            margin: 0;
+		}	
+
+		.content-slider li{
+		    background-color:#fff;
+		    text-align: center;
+		    color: #FFF;
+		}
+		.content-slider span {
+		    margin: 0;
+		    padding: 0;
+		}
+		.demo{
+			width: 1100px;
+			height:160px;
+		}
+    </style>
+    
+     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="js/lightslider.js"></script> 
+    <script>
+    	 $(document).ready(function() {
+			$("#content-slider").lightSlider({
+                loop:true,
+                keyPress:true
+            });
+            $('#image-gallery').lightSlider({
+                gallery:true,
+                item:1,
+                thumbItem:9,
+                slideMargin: 0,
+                speed:500,
+                auto:true,
+                loop:true,
+                onSliderLoad: function() {
+                    $('#image-gallery').removeClass('cS-hidden');
+                }  
+            });
+		});
+    </script>
+</head>
+
+<body>
+<!-- main-container -->
+<section>
+    <div class="container">
+        <h1>광고 스케줄 관리</h1>
+        <table class="searchTable">
+        	<colgroup>
+                <col width="150px">
+                <col width="">
+            </colgroup>
+            <tr>
+                <th>광고명</th>
+                <td><input type="text" class="form-control" id="exampleInputEmail1" placeholder="완다 홍보 광고"></td>
+            </tr>
+            <tr>
+                <th>광고설명</th>
+                <td><input type="text" class="form-control" id="exampleInputEmail1" placeholder="광고정보에 대한 내용 설명"></td>
+            </tr>
+            <tr>
+                <th>이미지 노출간격</th>
+                <td><input type="text" class="form-control" id="exampleInputEmail1" placeholder="30초"></td>
+            </tr>
+            <tr>
+                <th>동영상</th>
+                <td><span>Sample1.mp4</span></td>
+            </tr>
+            <tr>
+                <th>이미지</th>
+                <td>
+                	<div class="demo">
+       					<div class="item">
+                            <ul id="content-slider" class="content-slider">
+                                <li>
+                                    <span><img src="http://placehold.it/350x150" class="img-thumbnail" alt="Responsive image"></span>
+                                </li>
+                                <li>
+                                    <span><img src="http://placehold.it/350x150" class="img-thumbnail" alt="Responsive image"></span>
+                                </li>
+                                <li>
+                                    <span><img src="http://placehold.it/350x150" class="img-thumbnail" alt="Responsive image"></span>
+                                </li>
+                                <li>
+                                    <span><img src="http://placehold.it/350x150" class="img-thumbnail" alt="Responsive image"></span>
+                                </li>
+                            </ul>
+                        </div>
+					</div>	
+                </td>
+            </tr>
+            <tr>
+                <th>게시기간</th>
+                <td>
+                	<input type="date" style="width: 200px;" class="form-control" id="exampleInputEmail1" placeholder="이미지 노출간격 입력하세요"> ~
+                    <input type="date"  style="width: 200px" class="form-control" id="exampleInputEmail1" placeholder="이미지 노출간격 입력하세요">
+                </td>
+            </tr>
+           
+        </table>
+        <p  class="floatR" style="margin-top:10px;">
+        	<button class="btn btn-default" type="submit">저장</button> <button class="btn btn-default" type="submit">삭제</button>
+        </p>
+            
+            
+        <div style="width: 100%; clear:both; padding-top:20px">
+            <div style="width: 48%; float: left;">
+                <table class="searchTable">
+                	<colgroup>
+                		<col width="150px">
+                		<col width="">
+            		</colgroup>
+                    <tr>
+                        <th>게시기간</th>
+                        <td>
+                        	<input type="date" style="width: 200px;" class="form-control" id="exampleInputEmail1" placeholder="이미지 노출간격 입력하세요"> ~
+                        	<input type="date"  style="width: 200px" class="form-control" id="exampleInputEmail1" placeholder="이미지 노출간격 입력하세요">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>CBD지점</th>
+                        <td><input type="text" class="form-control" id="exampleInputEmail1" placeholder="2015.11.01 ~ 2015.12.31"></td>
+                    </tr>
+                    <tr>
+                        <th>CBD지점</th>
+                        <td><input type="text" class="form-control" id="exampleInputEmail1" placeholder=""></td>
+                    </tr>
+                    <tr>
+                        <th>CBD지점</th>
+                        <td><input type="text" class="form-control" id="exampleInputEmail1" placeholder=""></td>
+                    </tr>
+                </table>
+            </div>
+            <div style="width: 49%; float: right">
+                <table class="searchTable">
+                	<colgroup>
+                		<col width="150px">
+                		<col width="">
+            		</colgroup>
+                    <tr>
+                        <th>북경</th>
+                        <td style="height:40px"><input type="text" class="form-control" id="" placeholder=""></td>
+                    </tr>
+                    <tr>
+                        <th>CBD지점</th>
+                        <td><input type="text" class="form-control" id="exampleInputEmail1" placeholder=""></td>
+                    </tr>
+                    <tr>
+                        <th>CBD지점</th>
+                        <td><input type="text" class="form-control" id="exampleInputEmail1" placeholder=""></td>
+                    </tr>
+                    <tr>
+                        <th>CBD지점</th>
+                        <td><input type="text" class="form-control" id="exampleInputEmail1" placeholder=""></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!--// main-container-->
+</body>
+</html>

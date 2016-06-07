@@ -1,0 +1,349 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>지방의회 표준연계 API모니터링 시스템</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+    <link href="css/style.css" rel="stylesheet" />
+    
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/common.js"></script>
+    <script type="text/javascript">
+        //달력 소스(jQuery UI)
+        $(function () {
+            $("#datepicker1, #datepicker2").datepicker({
+                //달력 아이콘
+                showOn: "button",
+                buttonImage: "img/btn/calendar.gif",
+                buttonImageOnly: true,
+                buttonText: "Select date",
+
+                //한글버전
+                dateFormat: 'yy-mm-dd',
+                prevText: '이전 달',
+                nextText: '다음 달',
+                monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+                monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+                dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+                dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+                dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+                showMonthAfterYear: true,
+                yearSuffix: '년'
+            });
+        });
+
+
+    </script>
+</head>
+<body>
+    <div id="container">
+        <div id="login"><a href="#">Logout</a></div>
+        <div id="topBox">
+            <div id="title"><h1><a href="index.html">지방의회 표준연계<br />API모니터링 시스템</a></h1></div>
+            <div id="menu">
+                <ul>
+                    <li><a href="통계관리.html">통계관리</a></li>
+                    <li><a href="임계값 설정.html">임계값설정</a></li>
+                    <li><a href="메일링관리.html">메일링관리</a></li>
+                    <li><a href="#">메타데이터관리</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="sideBar">
+            <div class="sideBar_tabMenu">
+                <ul>
+                    <li class="list01"><a href="#">의회별</a></li>
+                    <li class="list02"><a href="#">지역별</a></li>
+                </ul>      
+            </div>
+            <div class="tab01">
+                <div class="sideBar_radioBox">
+                    <ul>
+                        <li><span><input type="radio" id="radio1" name="radioBox01" /><label for="radio1">광역의회</label></span></li>
+                        <li><span><input type="radio" id="radio2" name="radioBox01" /><label for="radio2">기초의회</label></span></li>
+                    </ul>
+                </div>
+                <div class="sideBar_radioBox4">
+                    <ul>
+                        <li><span><input type="radio" id="radio3" name="radioBox02" /><label for="radio3">회의록</label></span></li>
+                        <li><span><input type="radio" id="radio4" name="radioBox02" /><label for="radio4">부록</label></span></li>
+                        <li><span><input type="radio" id="radio5" name="radioBox02" /><label for="radio5">의안</label></span></li>
+                        <li><span><input type="radio" id="radio6" name="radioBox02" /><label for="radio6">의원</label></span></li>
+                    </ul>
+                </div>
+                <div class="treeBox">
+                    트리메뉴
+                </div>
+            </div>
+            <div class="tab02">
+                <div class="sideBar_radioBox4">
+                    <ul>
+                        <li><span><input type="radio" id="radio9" name="radioBox02" /><label for="radio3">회의록</label></span></li>
+                        <li><span><input type="radio" id="radio10" name="radioBox02" /><label for="radio4">부록</label></span></li>
+                        <li><span><input type="radio" id="radio11" name="radioBox02" /><label for="radio5">의안</label></span></li>
+                        <li><span><input type="radio" id="radio12" name="radioBox02" /><label for="radio6">의원</label></span></li>
+                    </ul>
+                </div>
+                <div class="treeBox">
+                    트리메뉴
+                </div>
+            </div>
+
+        </div>
+        <div id="rightBox">
+            <div class="titleArea">
+                <h2>임계값 설정</h2>
+                <div class="location">
+                    <ul>
+                        <li><a href="#">home</a></li>
+                        <li> > </li>
+                        <li class="end"><a href="#">임계값 설정</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="topTable">
+                <table class="table01">
+                <tr>
+                    <th scope="row">지방의회</th>
+                    <td>
+                        <div class="selectBox">
+                            <div class="select01">
+                                <select name="select01" class="select01">
+                                    <option value="">전체</option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="select02">
+                                <select name="select02" class="select02">
+                                    <option value="">지역선택</option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="select03">
+                                <select name="select03" class="select03">
+                                    <option value="">지방의회선택</option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">최종 수정일</th>
+                    <td>
+                        <span class="calendar01"><input type="text" id="datepicker1" /></span><span class="pado">~</span>
+                        <span class="calendar01"><input type="text" id="datepicker2" /></span>
+
+                        <span class="calendarBtn"><input type="button" value="당일" /><input type="button" value="1주일" /><input type="button" value="1개월" /></span>
+                    </td>
+                </tr>
+                </table>
+                <div class="btn">
+                    <a href="#">검색</a>
+                </div>
+            </div>
+            <div class="bottomTable">
+                <div class="tab03Box">
+                    <div class="inputCount">
+                        <div class="txtSum">
+                        총 <span class="txtCount">50</span>건 ( 1 / 10 page )
+                        </div>
+                        <div class="selectBox">
+                            <span class="inputSumTxt">출력건수</span>
+                            <select name="select01" class="select01">
+                                <option value="">20</option>
+                                <option value="">40</option>
+                                <option value="">60</option>
+                                <option value="">80</option>
+                                <option value="">100</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table class="listTable01">
+                      <tr>
+                        <th scope="col">의회 ▼</th>
+                        <th scope="col">지방의회 ▼</th>
+                        <th scope="col">응답시간</th>
+                        <th scope="col">요청 처리율</th>
+                        <th scope="col">최종 수정일 ▼</th>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                      <tr>
+                        <td>광역의회</td>
+                        <td>서울특별시의회</td>
+                        <td>1분</td>
+                        <td>90%</td>
+                        <td>2016.04.15</td>
+                      </tr>
+                    </table>
+                    <div class="paging">
+	                    <ul>
+	                        <li class="first"><a href="#"><img src="img/btn/btnFirst.png" alt="맨처음으로"></a></li>
+		                    <li class="pre"><a href="#"><img src="img/btn/btnPre.png" alt="이전으로"></a></li>
+                            <li class="active"><a href="#">1</a></li>
+		                    <li><a href="#">2</a></li>
+                            <li class="next"><a href="#"><img src="img/btn/btnNext.png" alt="다음으로"></a></li>
+	                        <li class="end"><a href="#"><img src="img/btn/btnLast.png" alt="마지막으로"></a></li>
+	                    </ul>
+                    </div>
+                    <div class="writeBtn"><a href="#">등록</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>

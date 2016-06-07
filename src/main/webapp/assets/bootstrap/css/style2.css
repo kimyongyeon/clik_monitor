@@ -1,0 +1,313 @@
+ @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+ 
+        * {
+            font-family: 'Nanum Gothic', sans-serif;
+            font-weight:800;
+        }
+        
+.box01 { padding: 35px 0 15px 0;
+		 margin : 0 0 0 0;
+}
+.box01 > ul {
+  width:100%;
+  list-style:none;
+  float: left;
+}
+
+.box02 { padding: 0px 0 15px 0;
+		 margin : 0 0 0 0;
+}
+.box02 > ul {
+  width:100%;
+  list-style:none;
+  float: left;
+}
+
+.title12-600{
+  font-family: 'Nanum Gothic', sans-serif;
+  font-size: 12px;
+  font-weight:600;
+  margin: 5px 0 5px 0;
+}
+
+.title12-800{
+  font-family: 'Nanum Gothic', sans-serif;
+  font-size: 12px;
+  font-weight:800;
+  margin: 5px 0 5px 0;
+}
+
+.title14-600 {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-size: 14px;
+  color:#686868;
+  font-weight:600;
+  margin: 5px 0 5px 0;
+}
+.title14 {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-size: 14px;
+  font-weight:800;
+  margin: 5px 0 5px 0;
+}
+.title20 {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-size: 20px;
+  font-weight:600;
+  margin: 5px 0 5px 0;
+}
+
+.title25-600 {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-size: 25px;
+  font-weight:600;
+  margin: 0;
+}
+
+.title30-600 {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-size: 30px;
+  font-weight:600;
+  margin: 0;
+}
+
+.title30-500 {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-size: 30px;
+  font-weight:500;
+  margin: 0;
+  }
+
+.line01 {
+  padding-bottom: 9px;
+  margin: 0;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.page-header01 {
+  margin: 10px 0 10px 0;
+  padding: 0;
+  font-family: 'Nanum Gothic', sans-serif;
+  font-size: 24px;
+  font-weight:600;
+  
+}
+
+.page-header01 ul {
+  list-style:none;
+  margin-left: -30px;
+  
+}
+
+.header01-line01 {
+	list-style:none;
+	border-bottom: 2px solid #656565;
+}
+
+.header01-line02 {
+	list-style:none;
+	font-size: 15px;
+	font-weight: 600;
+	border-bottom: 1px solid #e3e3e3;
+}
+
+.page-header02{
+  margin:7px 0 7px -20px;
+  padding: 0;
+  font-family: 'Nanum Gothic', sans-serif;
+  font-size: 20px;
+  font-weight:500;
+  
+}
+
+.page-header02 ul {
+  list-style-type:none;
+ 
+  
+}
+
+.page-header02 ul li {
+ 	background:url(/resources/images/icon01.gif)  no-repeat 0 3px;  
+ 	padding-left: 20px;
+}
+
+.header02-line01 {
+	list-style:none;
+	border-bottom: 2px solid #656565;
+	
+}
+
+.margin01 {
+  margin:10px 0 10px 0;
+}
+
+.margin02 {
+  margin:30px 0 30px 0;
+}
+
+.margin03 {
+  margin:0 20px 0 20px;
+}
+
+.top-margin01 {
+  height:30px; 
+}
+
+
+.gray-box01 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding:    25px;
+  text-shadow: 0 1px 0 #fff;
+  background-color: #f7f5fa;
+  border-radius: 5px;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5; 
+}
+
+.info-box01 {
+  display:table-cell;vertical-align:middle;   
+  height: 100px;
+  min-height: 20px;
+  width:1000px;
+  padding: 10px;
+  margin: 0 0 15px 0;
+  margin-left: 0;
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  
+}
+
+
+.panel01 {
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d4d4d4;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 1px 6px rgba(0,0,0,0.175);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.175);
+}
+
+.chart-title01{
+	margin: 0 auto;
+    position: relative;
+    height:30px;
+    padding: 0;
+    vertical-align: top;
+    text-align: center;
+} 
+
+.graph-box01{
+	margin: 0 auto;
+    padding: 20px;
+    vertical-align: top;
+    text-align: center;
+} 
+
+.graph-box02{
+	margin: 0 auto;
+    position: relative;
+    padding: 0 20px 0 20px;
+    vertical-align: top;
+    text-align: center;
+} 
+
+.tab-box01{
+	
+    position: relative;
+    
+    margin: 0 0 0 10px;
+    vertical-align: top;
+    text-align: center;
+} 
+
+
+.ellipsisTitle {display:block; text-overflow:ellipsis; width:160px; overflow:hidden;}
+    
+.info-circle  {text-align: center;line-height: 1.5;margin: 0 auto;}  
+.circle01 {
+	border-radius: 50%; 
+	background-color: #a4dfe7; 
+	width:115px; 
+	height: 115px; 
+	margin:0 auto; 
+	letter-spacing: -1px; 
+	padding-top:50px; 
+	font-family: 'Nanum Gothic', sans-serif;
+	margin-bottom: 5px
+}
+
+.circle-join-on {
+	border-radius: 50%; 
+	background-color: #a4dfe7; 
+	width:150px; 
+	height: 150px; 
+	margin:0 auto; 
+	letter-spacing: -1px; 
+	padding-top:50px; 
+	font-family: 'Nanum Gothic', sans-serif;
+	margin-bottom: 5px
+}
+
+.circle-join-off {
+	border-radius: 50%; 
+	background-color: #c0c0c0; 
+	width:150px; 
+	height: 150px; 
+	margin:0 auto; 
+	letter-spacing: -1px; 
+	padding-top:50px; 
+	font-family: 'Nanum Gothic', sans-serif;
+	margin-bottom: 5px
+}
+
+
+.top-img01{
+	height:200px;
+	margin: 0 0 0 0;
+	background:url(/resources/images/about_bg.jpg)  no-repeat 0 3px;
+	background-position:center;background-repeat: none;
+	-webkit-background-size: cover;-moz-background-size: cover;background-size: cover
+}
+
+.top-img01 .text {
+	padding-top:50px;height:200px; margin-left: 50px;font-family: 'Nanum Gothic', sans-serif;font-weight:800;color: #ffffff;
+}
+
+.login-modal .modal-dialog {position:absolute; top:50%; left:50%; width:346px; margin-top:-200px; margin-left:-173px;}
+.login-modal .caution {padding:15px 0 0 47px; height:52px; border-bottom:1px solid #e7e7e7; background:#fbfbfb;}
+.login-modal .caution .bul-point {padding-left:23px; background:url(/resources/images/bul_point.png) no-repeat 0 0; font-family: 'Nanum Gothic', sans-serif; color:#4d4d4d; font-size:12px; line-height:1.5; }
+.login-modal .login-area {position:static; width:245px; margin:0 auto;}
+.login-modal .login-area .login-con {width:100%; padding:0; background:none;} 
+
+.login-area {position:absolute; top:0; right:0; width:281px;}
+.login-area .login-con {float:left; width:100%; height:80px; margin-bottom:15px; padding:15px 16px 0; background:#f1f1ef; font-family: 'Nanum Gothic', sans-serif;}
+.login-area .login-con .input-box {position:relative; margin-bottom:8px}
+.login-area .login-con .btn-login {position:absolute; top:0; right:0; width:32%; height:64px; padding-top:23px; background:#164F78; border:1px solid #4a6a82; color:#fff; font-weight:bold;}
+.login-area .login-con .btn-login2 {margin-left:30px; margin-top:20px; width:32%; height:40px; padding-top:10px; background:#164F78; border:1px solid #4a6a82; color:#fff; font-weight:bold;}
+.login-area .login-con .btn-join {margin-left:20px; margin-top:20px; width:32%; height:40px; padding-top:10px; background:#164F78; border:1px solid #4a6a82; color:#fff; font-weight:bold;}
+.login-area .login-con .form-control {height:30px; border:1px solid #ced2da;}
+.login-area .login-con .form-control:hover,
+.login-area .login-con .form-control:focus {border:1px solid #14bff0; color:#323232;}
+.login-area .login-con .input-id,
+.login-area .login-con .input-password {width:65%;}
+.login-area .login-con .input-password {margin-top:4px;}
+.login-area .login-con .util {list-style:none; padding:0; margin:0;}
+.login-area .login-con .util li {float:left; line-height:1.2;}
+.login-area .login-con .util li a {font-size:11px; color:#818181;}
+.login-area .login-con .util .division-line {color:#b9b9b8;}
+.login-area .login-con .checkbox label {font-size:12px; color:#646464;}
+.login-area .column {margin-top:0;}
+.login-area .user-login {padding:92px 39px 0; background:#cfd5d8 url(../images/main/bg_ico06.png) no-repeat 55% 31px;}
+.login-area .user-login p {padding-top:9px; border-top:1px solid #b2bcc1; color:#656565; font-size:12px; text-align:center;}
+.login-area .user-login p strong {color:#313131;}
+
+.hidden-text {overflow:hidden; width:1px; height:1px; position:absolute; top:-10000px;}
+
+.obj-clear:after {display:block; overflow:hidden; content:"."; clear:both; height:0; font-size:0; line-height:0;}
+.obj-section {margin-top:18px !important;}

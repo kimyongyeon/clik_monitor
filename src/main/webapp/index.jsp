@@ -30,7 +30,7 @@ background-color: #EAEAEA; font-weight: bold;
 <p>
 <pre>
 <span>[요약]</span>
-아래는 MyBatis 적용을 돕기 위한 예제로,
+아래는 MyBatis 적용을 돕기 위한 예제로, 수정합니다.
 1) DAO 클래스 대신 "Mapper 인터페이스"로 구현하는 방법과
 2) EgovAbstractMapper 추상클래스를 상속하여 기존 DAO 클래스를 구현하는 방법으로 두 가지 예제를 제공한다.
 

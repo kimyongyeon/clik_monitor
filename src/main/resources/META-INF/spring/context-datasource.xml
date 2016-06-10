@@ -5,16 +5,16 @@
 			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 			http://www.springframework.org/schema/jdbc  http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd">
 
-	<jdbc:embedded-database id="dataSource">
+	<jdbc:embedded-database id="dataSource" type="HSQL">
 		<jdbc:script location= "classpath:/META-INF/db/ddl.sql"/>
 		<jdbc:script location= "classpath:/META-INF/db/dml.sql"/>
 	</jdbc:embedded-database>
 
-	<!-- 	
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
-			p:driverClassName="${db.driver}" 
-			p:url="${db.url}" 
-			p:username="${db.username}"
-			p:password="${db.password}"/> 
-	-->	
+
+	<!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" -->
+			<!--p:driverClassName="${db.driver}" -->
+			<!--p:url="${db.url}" -->
+			<!--p:username="${db.username}"-->
+			<!--p:password="${db.password}"/> -->
+
 </beans>

@@ -7,6 +7,10 @@
     	<typeAlias alias="empVO" type="egovframework.sample.emp.service.EmpVO" />
     	<typeAlias alias="deptVO" type="egovframework.sample.dept.service.DeptVO" />
     	<typeAlias alias="searchVO" type="egovframework.sample.cmmn.SearchVO" />
+
+		<!-- 여기서부터 추가 -->
+		<typeAlias alias="loginVO" type="clikmonitor.nanet.go.kr.service.LoginVO" />
+
     </typeAliases>
     
 <!-- 

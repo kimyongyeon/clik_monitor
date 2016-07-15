@@ -1100,11 +1100,13 @@
             $("#btnErrorBox1").on("click", function() {
                 currentIndex++;
                 errorBox('서울특별시의회 Agent 문제 발생 ' + currentIndex, currentIndex);
+                $("#errorBox").show().fadeIn('slow');
             });
 
             $("#btnErrorBox2").on("click", function() {
                 errorStart();
                 errorEnd();
+                $("#errorBox").show().fadeIn('slow');
             });
             $("#btnErrorBox3").on("click", function() {
                 clearInterval(errorStartClear);
@@ -1120,6 +1122,38 @@
 
             function fnLoadingStop() {
                 $(".loading").hide();
+            }
+
+            $("#btnErrorBox4").on("click",function(){
+                fnAnimationStart();
+            });
+
+            $("#btnErrorBox5").on("click",function(){
+                fnAnimationStop();
+            });
+
+
+            function fnAnimationStart() {
+                $(".loading__ball:nth-child(odd)").css("-webkit-animation", "up 1s infinite ease-in-out");
+                $(".loading__ball:nth-child(odd)").css("-moz-animation", "up 1s infinite ease-in-out");
+                $(".loading__ball:nth-child(odd)").css("animation", "up 1s infinite ease-in-out");
+
+                $(".loading__ball:nth-child(even)").css("-webkit-animation", "down 1s infinite ease-in-out");
+                $(".loading__ball:nth-child(even)").css("-moz-animation", "down 1s infinite ease-in-out");
+                $(".loading__ball:nth-child(even)").css("animation", "down 1s infinite ease-in-out");
+            }
+
+            function fnAnimationStop() {
+                setTimeout(function() {
+                    $(".loading__ball:nth-child(odd)").css("-webkit-animation", "paused");
+                    $(".loading__ball:nth-child(odd)").css("-moz-animation", "paused");
+                    $(".loading__ball:nth-child(odd)").css("animation", "paused");
+                }, 1000);
+                setTimeout(function() {
+                    $(".loading__ball:nth-child(even)").css("-webkit-animation", "paused");
+                    $(".loading__ball:nth-child(even)").css("-moz-animation", "paused");
+                    $(".loading__ball:nth-child(even)").css("animation", "paused");
+                }, 1000);
             }
 
         </script>

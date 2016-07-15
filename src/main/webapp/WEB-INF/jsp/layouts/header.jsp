@@ -72,6 +72,8 @@
 									<li id="btnErrorBox1"><a href="#">에러박스생성</a></li>
 									<li id="btnErrorBox2"><a href="#">에러박스주기시작</a></li>
 									<li id="btnErrorBox3"><a href="#">에러박스주기정지</a></li>
+									<li id="btnErrorBox4"><a href="#">네트워크상태시작</a></li>
+									<li id="btnErrorBox5"><a href="#">네트워크상태정지</a></li>
 								</ul>
 							</div>
 						</li>
@@ -90,13 +92,11 @@
 			$(".subMenu").css("display","none");
 
 			$("#subMenu1").on("mouseover", function(){
-				$(".loading").hide();
 				$(".subMenu").css("display","block");
 
 			});
 
 			$("#subMenu1").on("mouseout", function(){
-				$(".loading").show();
 				$(".subMenu").css("display","none");
 
 			});

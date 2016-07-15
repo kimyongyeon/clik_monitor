@@ -10,6 +10,11 @@
         <Logger name="egovframework" level="debug" additivity="false">
             <AppenderRef ref="console" />
         </Logger>
+
+        <logger name="jdbc.sqlonly">
+            <AppenderRef ref="console" />
+        </logger>
+
         <Root level="error">
             <AppenderRef ref="console" />
         </Root>         

@@ -28,20 +28,12 @@ import egovframework.sample.dept.service.DeptVO;
 
 /**
  * 부서정보 CRUD 요청을 처리하는 비즈니스 클래스
- * 
+ *
  * @author Daniela Kwon
- * @since 2014.01.24
  * @version 3.0
- * @see <pre>
- *  == 개정이력(Modification Information) ==
- *   
- *   수정일			수정자				수정내용
- *  ---------------------------------------------------------------------------------
- *   2014.04.07	Daniela Kwon		최초생성
- * 
- * </pre>
+ * @see <pre>  == 개정이력(Modification Information) ==   수정일			수정자				수정내용  ---------------------------------------------------------------------------------   2014.04.07	Daniela Kwon		최초생성 </pre>
+ * @since 2014.01.24
  */
-
 @Service("deptService")
 public class DeptServiceImpl extends EgovAbstractServiceImpl implements DeptService {
 

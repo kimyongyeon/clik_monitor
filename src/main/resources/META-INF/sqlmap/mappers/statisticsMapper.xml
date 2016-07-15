@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="clikmonitor.nanet.go.kr.mapper.StatisticsMapper">
+
+    <!--로그 데이터 상세 정보 조회  -->
+    <select id="selectErrorLogInfoOne" parameterType="statisticsSearchVO" resultType="statisticsVO">
+        <![CDATA[
+        SELECT
+             REQUST_INSTT_ID /* 의회코드 */
+           , (SELECT RASMBLY_NM FROM WHERE RASMBLY_ID = REQUST_INSTT_ID) AS RASMBLY_NM /* 의회명 */
+           , (SELECT SERVER_IP FROM WHERE RASMBLY_ID = REQUST_INSTT_ID) AS RASMBLY_NM /* 서버IP */
+           , PROVD_INSTT_ID /* 요청코드 */
+           , REQUST_RECPTN_TM /* 요청일자 */
+           , RESULT_CODE /* 결과코드*/
+           , RESULT_MSSAGE /* 결과메세지 */
+        FROM TAR_LOG WHERE REQUST_INSTT_ID = #requstInsttId# /* 지방의회아이디 */
+		]]>
+    </select>
+    <!--의회별 전송 데이터 목록 조회  -->
+    <select id="selectRasmblyDataSendList" parameterType="statisticsSearchVO" resultType="statisticsVO">
+        <![CDATA[
+        SELECT
+            ,CNTC_RESULT_ID /* '연계_결과_ID'*/
+            ,NUMPR_COUNT /* '대수_개수'*/
+            ,SESN_COUNT /* '회기_개수'*/
+            ,EST_COUNT /* '선거구_개수'*/
+            ,MTGNM_COUNT /* '회의명_개수'*/
+            ,OFCPS_COUNT /* '의원직위_개수'*/
+            ,ASEMBY_COUNT /* '의원_개수'*/
+            ,ASEMBYACT_COUNT /* '의원활동_개수'*/
+            ,BI_COUNT /* '의안_개수'*/
+            ,BIFILE_COUNT /* '의안파일_개수'*/
+            ,BIMINTS_COUNT /* '의안회의록_개수'*/
+            ,ITNCASEMBY_COUNT /* '발의의원_개수'*/
+            ,MINTS_COUNT /* '회의록_개수'*/
+            ,APNDX_COUNT /* '부록_개수'*/
+            ,MTR_COUNT /* '안건_개수'*/
+            ,SPKNG_COUNT /* '발언_개수'*/
+            ,CUD_CODE /* 'CUD_코드'*/
+            ,FRST_REGIST_DT /* '최초등록일시'*/
+            ,LAST_UPDT_DT /* '최종수정일시'*/
+            ,DELETE_DT /* '삭제일시'*/
+            ,CNTC_INPUT_SE_CODE /* '연계입력구분코드'*/
+        FROM TAPI_TRANSPER WHERE RASMBLY_ID IN(#rasmblyId#)
+		]]>
+    </select>
+    <!--의회별 전송 데이터 목록 엑셀저장  -->
+    <select id="selectRasmblyDataSendExcelExportList" parameterType="statisticsSearchVO" resultType="statisticsVO">
+        <![CDATA[
+        SELECT
+            ,CNTC_RESULT_ID /* '연계_결과_ID'*/
+            ,NUMPR_COUNT /* '대수_개수'*/
+            ,SESN_COUNT /* '회기_개수'*/
+            ,EST_COUNT /* '선거구_개수'*/
+            ,MTGNM_COUNT /* '회의명_개수'*/
+            ,OFCPS_COUNT /* '의원직위_개수'*/
+            ,ASEMBY_COUNT /* '의원_개수'*/
+            ,ASEMBYACT_COUNT /* '의원활동_개수'*/
+            ,BI_COUNT /* '의안_개수'*/
+            ,BIFILE_COUNT /* '의안파일_개수'*/
+            ,BIMINTS_COUNT /* '의안회의록_개수'*/
+            ,ITNCASEMBY_COUNT /* '발의의원_개수'*/
+            ,MINTS_COUNT /* '회의록_개수'*/
+            ,APNDX_COUNT /* '부록_개수'*/
+            ,MTR_COUNT /* '안건_개수'*/
+            ,SPKNG_COUNT /* '발언_개수'*/
+            ,CUD_CODE /* 'CUD_코드'*/
+            ,FRST_REGIST_DT /* '최초등록일시'*/
+            ,LAST_UPDT_DT /* '최종수정일시'*/
+            ,DELETE_DT /* '삭제일시'*/
+            ,CNTC_INPUT_SE_CODE /* '연계입력구분코드'*/
+        FROM TAPI_TRANSPER WHERE RASMBLY_ID IN(#rasmblyId#)
+		]]>
+    </select>
+    <!--항목별 최종전송 데이터 목록 조회 -->
+    <select id="selectRasmblyLastSendDataList" parameterType="statisticsSearchVO" resultType="statisticsVO">
+        <![CDATA[
+        SELECT RASMBLY_ID ,
+               MAX(MI.LAST_UPDT_DT) AS MINUTES_LD ,
+               MAX(IT.LAST_UPDT_DT) AS ITEM_LD ,
+               MAX(MS.LAST_UPDT_DT) AS MINUTES_STATEMENT_LD ,
+               MAX(MAR.LAST_UPDT_DT) AS MINUTES_ANSWER_LD ,
+               MAX(MAIX.LAST_UPDT_DT) AS MINUTES_APPENDIX_LD ,
+               MAX(B.LAST_UPDT_DT) AS BILL_LD
+        FROM MINUTES MI ,
+             ITEM IT ,
+             MINUTES_STATEMENT MS ,
+             MINUTES_ANSWER MAR ,
+             MINUTES_APPENDIX MAIX ,
+             BILL B
+        WHERE MI.RASMBLY_ID = IT.RASMBLY_ID
+          AND IT.RASMBLY_ID = MS.RASMBLY_ID
+          AND MS.RASMBLY_ID = MAR.RASMBLY_ID
+          AND MAR.RASMBLY_ID = MAIX.RASMBLY_ID
+          AND MAX.RASMBLY_ID = B.RASMBLY_ID
+          AND RASMBLY_ID IN (#RASMBLY_ID#)
+          GROUP BY RASMBLY_ID
+		]]>
+    </select>
+    <!--항목별 최종전송 데이터 목록 엑셀저장  -->
+    <select id="selectRasmblyLastSendDataExcelExportList" parameterType="statisticsSearchVO" resultType="statisticsVO">
+        <![CDATA[
+        SELECT RASMBLY_ID ,
+               MAX(MI.LAST_UPDT_DT) AS MINUTES_LD ,
+               MAX(IT.LAST_UPDT_DT) AS ITEM_LD ,
+               MAX(MS.LAST_UPDT_DT) AS MINUTES_STATEMENT_LD ,
+               MAX(MAR.LAST_UPDT_DT) AS MINUTES_ANSWER_LD ,
+               MAX(MAIX.LAST_UPDT_DT) AS MINUTES_APPENDIX_LD ,
+               MAX(B.LAST_UPDT_DT) AS BILL_LD
+        FROM MINUTES MI ,
+             ITEM IT ,
+             MINUTES_STATEMENT MS ,
+             MINUTES_ANSWER MAR ,
+             MINUTES_APPENDIX MAIX ,
+             BILL B
+        WHERE MI.RASMBLY_ID = IT.RASMBLY_ID
+          AND IT.RASMBLY_ID = MS.RASMBLY_ID
+          AND MS.RASMBLY_ID = MAR.RASMBLY_ID
+          AND MAR.RASMBLY_ID = MAIX.RASMBLY_ID
+          AND MAX.RASMBLY_ID = B.RASMBLY_ID
+          AND RASMBLY_ID IN (#RASMBLY_ID#)
+          GROUP BY RASMBLY_ID
+		]]>
+    </select>
+
+
+</mapper>

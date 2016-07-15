@@ -1,5 +1,102 @@
 ﻿$(document).ready(function () {
-    
+    tabs(); // 탭
+    pop01();//Agent 서버정보 팝업
+    pop03();//로그 데이터 팝업
+    pop04();//금일 시간당 호출 건수 팝업
+    tong(); //통계관리 테이블
+    meiling(); // 메일링 관리
+    closeBtn(); // 에러창 닫기
+    errorTitle(); // 에러창 제목 클릭시 로그데이터 팝업창 활성화
+    uploadBtn(); // 등록버튼 누를경우 경고창 활성화 (임계값 설정)
+    eidtPop();// 수정 누를경우 경고창 활성화 (임계값 수정)
+    deletePop(); // 삭제 누를경우 경고창 활성화 (임계값 수정)
+    saveBtn(); // 저장버튼 누를 경우 경고창 활성화 (메일링관리)
+});
+
+function closeBtn() { // 에러창 닫기
+    var close = $("#rightBox > .errorPop > .closeBtn > a");
+    $(close).on("click", function () {
+        $(this).parent().parent().css("display", "none");
+    });
+}
+
+function saveBtn() {// 저장 누를경우 경고창 활성화 (메일링 관리)
+    var btn = $(".tab05Box .btn a");
+    $(btn).on("click", function () {
+        $(".savePop").css("display", "block");
+    });
+
+    $(".savePop .btnSet a").on("click", function () {
+        $(".savePop").css("display", "none");
+    });
+
+}
+
+function uploadBtn() {// 등록버튼 누를경우 경고창 활성화 (임계값 설정)
+    var btn = $("#subRightBox .topTable .settingBtn .uploadBtn a");
+    $(btn).on("click", function () {
+        $(".uploadPop").css("display", "block");
+    });
+
+    $(".uploadPop .btnSet a").on("click", function () {
+        $(".uploadPop").css("display", "none");
+    });
+
+}
+
+function eidtPop() {// 수정 누를경우 경고차 활성화 (임계값 수정)
+    var btn = $("#subRightBox .topTable .threebtn .editBtn a");
+    $(btn).on("click", function () {
+        $(".eidtPop").css("display", "block");
+    });
+
+    $(".eidtPop .btnSet a").on("click", function () {
+        $(".eidtPop").css("display", "none");
+    });
+
+}
+
+function deletePop() {// 수정 누를경우 경고차 활성화 (임계값 수정)
+    var btn = $("#subRightBox .topTable .threebtn .deletedBtn a");
+    $(btn).on("click", function () {
+        $(".deletePop").css("display", "block");
+    });
+
+    $(".deletePop .btnSet a").on("click", function () {
+        $(".deletePop").css("display", "none");
+    });
+
+}
+
+function uploadBtn() {// 수정 누를경우 경고차 활성화 (임계값 수정)
+    var btn = $("#subRightBox .topTable .threebtn .editBtn a");
+    $(btn).on("click", function () {
+        $(".eidtPop").css("display", "block");
+    });
+
+    $(".eidtPop .btnSet a").on("click", function () {
+        $(".eidtPop").css("display", "none");
+    });
+
+}
+
+function errorTitle() {// 에러창 제목 클릭시 로그데이터 팝업창 활성화
+    var title = $("#rightBox > .errorPop > .txtTitle > a");
+    $(title).on("click", function () {
+        $(".logData").css("display", "block");
+    });
+
+    $(".logData .top .closeBtn a").on("click", function () {
+        $(".logData").css("display", "none");
+    });
+
+    $(".logData .bottom span.btnSet a").on("click", function () {
+        $(".logData").css("display", "none");
+    });
+
+}
+
+function tabs() {// 탭
     var tab01 = $("#sideBar > .sideBar_tabMenu > ul > li.list01 > a");
     var tab02 = $("#sideBar > .sideBar_tabMenu > ul > li.list02 > a");
 
@@ -8,6 +105,7 @@
     $(tab01).addClass("hover");
 
 
+    // jquery 1.7 ->
     $(tab01).on("click", function (e) {
         e.preventDefault(e);
         $(tab01).addClass("hover");
@@ -25,23 +123,13 @@
         $("#sideBar > .tab01").css("display", "none");
         $("#sideBar > .tab02").css("display", "block");
     });
+}
 
 
-    //Agent 서버정보 팝업
-    pop01();
-    //Agent 서버정보 추가 팝업
-    pop02();
-    //로그 데이터 팝업
-    pop03();
-    //금일 시간당 호출 건수 팝업
-    pop04();
-
-
-
-
+function tong() {
     /*통계관리 테이블*/
-    var tab001 = $("#rightBox .topTable .adminTab01 ul li.listTab01 a");
-    var tab002 = $("#rightBox .topTable .adminTab01 ul li.listTab02 a");
+    var tab001 = $("#subRightBox .topTable .adminTab01 ul li.listTab01 a");
+    var tab002 = $("#subRightBox .topTable .adminTab01 ul li.listTab02 a");
 
     $(".BottomTable > .tab01Box").css("display", "block");
     $(".BottomTable > .tab02Box").css("display", "none");
@@ -65,14 +153,14 @@
         $(".BottomTable > .tab01Box").css("display", "none");
         $(".BottomTable > .tab02Box").css("display", "block");
     });
+}
 
 
-
-
-
+function meiling() {
     /*메일링 관리*/
-    var tab0001 = $("#rightBox .topTable .adminTab02 ul li.listTab01 a");
-    var tab0002 = $("#rightBox .topTable .adminTab02 ul li.listTab02 a");
+
+    var tab0001 = $("#subRightBox .topTable .adminTab02 ul li.listTab01 a");
+    var tab0002 = $("#subRightBox .topTable .adminTab02 ul li.listTab02 a");
 
     $(".bottomTable > .tab04Box").css("display", "block");
     $(".topTable > table.table04").css("display", "block");
@@ -105,17 +193,11 @@
         $(".bottomTable > .tab05Box").css("display", "block");
     });
 
-});
-
-function page_go(sel) {
-    if(sel == "main") {
-        location.href = "/main.do";
-    }
 }
 
 //Agent 서버정보 팝업
 var pop01 = function () {
-    var openPop = $("#rightBox > .topBox > ul.list > li > a");
+    var openPop = $("#rightBox > .topBox ul.list > li > a");
     $(openPop).on("click", function () {
         $(".agentServerInfo").addClass("openPop");
     });
@@ -137,23 +219,6 @@ var pop01 = function () {
     });
 }
 
-//Agent 서버정보 추가 팝업
-var pop02 = function () {
-    var openPop = $("#rightBox > .topBox > ul.list > li.lastArea > a");
-    $(openPop).on("click", function () {
-        $(".agentServerInfoInsert").addClass("openPop");
-    });
-
-    //X 버튼
-    $(".closeBtn > a").on("click", function () {
-        $(".agentServerInfoInsert").removeClass("openPop");
-    });
-
-    //확인 버튼
-    $(".agentServerInfoInsert > .bottom > span.btnSet > a").on("click", function () {
-        $(".agentServerInfoInsert").removeClass("openPop");
-    });
-}
 
 //로그 데이터 추가 팝업 (PPT 주간평균 응답시간)
 var pop03 = function () {
@@ -189,3 +254,31 @@ var pop04 = function () {
         $(".logData").removeClass("openPop");
     });
 }
+
+
+function page_go(sel) {
+    if(sel === "main") {
+        location.href = "/main.do";
+        return;
+    } else if (sel === 'stat') {
+        location.href = "/statistics_list.do";
+        return;
+    } else if (sel === 'range') {
+        location.href = "/range_setting_list.do";
+        return;
+    } else if (sel === 'mail') {
+        location.href = "/mail_list.do";
+        return;
+    } else if (sel === 'meta') {
+        location.href = "/metadata_list.do";
+        return;
+    } else if (sel === 'range_setting_reg') {
+        location.href = "/range_setting_reg.do";
+        return;
+    } 
+    
+    else {
+        location.href = "/main.do";
+    }
+}
+

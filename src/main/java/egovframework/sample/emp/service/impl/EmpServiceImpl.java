@@ -28,20 +28,12 @@ import egovframework.sample.emp.service.EmpVO;
 
 /**
  * 사원정보 CRUD 요청을 처리하는 비즈니스 클래스
- * 
+ *
  * @author Daniela Kwon
- * @since 2014.01.24
  * @version 3.0
- * @see <pre>
- *  == 개정이력(Modification Information) ==
- *   
- *   수정일			수정자				수정내용
- *  ---------------------------------------------------------------------------------
- *   2014.04.07	Daniela Kwon		최초생성
- * 
- * </pre>
+ * @see <pre>  == 개정이력(Modification Information) ==   수정일			수정자				수정내용  ---------------------------------------------------------------------------------   2014.04.07	Daniela Kwon		최초생성 </pre>
+ * @since 2014.01.24
  */
-
 @Service("empService")
 public class EmpServiceImpl extends EgovAbstractServiceImpl implements EmpService {
 

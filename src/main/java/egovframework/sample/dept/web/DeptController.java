@@ -15,52 +15,46 @@
  */
 package egovframework.sample.dept.web;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
+import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+import egovframework.sample.dept.service.DeptService;
+import egovframework.sample.dept.service.DeptVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import egovframework.rte.fdl.property.EgovPropertyService;
-import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
-import egovframework.sample.dept.service.DeptService;
-import egovframework.sample.dept.service.DeptVO;
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
- *  부서정보 CRUD 요청을 처리하는 Controller 클래스
- * 
+ * 부서정보 CRUD 요청을 처리하는 Controller 클래스
+ *
  * @author Daniela Kwon
- * @since 2014.01.24
  * @version 3.0
- * @see <pre>
- *  == 개정이력(Modification Information) ==
- *   
- *   수정일			수정자				수정내용
- *  ---------------------------------------------------------------------------------
- *   2014.04.07	Daniela Kwon		최초생성
- * 
- * </pre>
+ * @see <pre>  == 개정이력(Modification Information) ==   수정일			수정자				수정내용  ---------------------------------------------------------------------------------   2014.04.07	Daniela Kwon		최초생성 </pre>
+ * @since 2014.01.24
  */
-
 @Controller
 public class DeptController {
 
 	@Resource(name = "deptService")
 	private DeptService deptService;
 
+	/**
+	 * The Properties service.
+	 */
 	@Resource(name = "propertiesService")
 	protected EgovPropertyService propertiesService;
 
-	/** 
-	 *부서목록을 조회한다.
+	/**
+	 * 부서목록을 조회한다.
+	 *
 	 * @param deptVO 검색조건
-	 * @param model
+	 * @param model  the model
 	 * @return "dept/list"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/dept/retrieveDeptList.do")
 	public String retrieveDeptList(@ModelAttribute("dept") DeptVO deptVO, ModelMap model) throws Exception {
@@ -89,17 +83,18 @@ public class DeptController {
 
 		model.addAttribute("paginationInfo", paginationInfo);
 
-		// 검색조건과 키워드로 부서목록조회
 		List<DeptVO> resultDeptList = deptService.retrieveDeptList(deptVO);
 		model.addAttribute("resultList", resultDeptList);
-		return "dept/list";
+		return "egovframework/dept/list";
 	}
 
 	/**
 	 * 부서상세조회 화면으로 이동한다.
+	 *
 	 * @param deptNo 부서번호
+	 * @param model  the model
 	 * @return "dept/detail"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/dept/retrieveDept.do")
 	public String retrieveDept(@RequestParam("deptNo") String deptNo, ModelMap model) throws Exception {
@@ -116,9 +111,11 @@ public class DeptController {
 
 	/**
 	 * 부서정보 등록 화면으로 이동한다.
-	 * @param model
+	 *
+	 * @param deptVO the dept vo
+	 * @param model  the model
 	 * @return "dept/form"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/dept/retrieveDeptNewForm.do")
 	public String retrieveDeptNewForm(@ModelAttribute("dept") DeptVO deptVO, ModelMap model) throws Exception {
@@ -127,10 +124,11 @@ public class DeptController {
 
 	/**
 	 * 부서정보 등록하고 목록조회 화면으로 이동한다.
+	 *
 	 * @param deptVO 부서정보
-	 * @param model
+	 * @param model  the model
 	 * @return "redirect:/dept/retrieveDeptList.do"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/dept/insertDept.do")
 	public String insertDept(@ModelAttribute("dept") DeptVO deptVO, ModelMap model) throws Exception {
@@ -141,10 +139,11 @@ public class DeptController {
 
 	/**
 	 * 부서정보 수정 화면으로 이동한다.
-	 * @param dept 부서정보(부서번호 deptNo)
-	 * @param model
+	 *
+	 * @param deptVO the dept vo
+	 * @param model  the model
 	 * @return "dept/form"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/dept/retrieveDeptForm.do")
 	public String retrieveDeptForm(@ModelAttribute("dept") DeptVO deptVO, ModelMap model) throws Exception {
@@ -156,12 +155,13 @@ public class DeptController {
 		return "dept/form";
 	}
 
-	/** 
+	/**
 	 * 부서정보 수정하고 목록조회 화면으로 이동한다.
+	 *
 	 * @param deptVO 부서정보
-	 * @param model
+	 * @param model  the model
 	 * @return "forward:/dept/retrieveDept.do"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/dept/updateDept.do")
 	public String updateDept(@ModelAttribute("dept") DeptVO deptVO, ModelMap model) throws Exception {
@@ -172,9 +172,11 @@ public class DeptController {
 
 	/**
 	 * 부서정보 삭제 후 목록조회 화면으로 이동한다.
+	 *
 	 * @param deptVO 부서정보
+	 * @param model  the model
 	 * @return "redirect:/dept/retrieveDeptList.do"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/dept/deleteDept.do")
 	public String deleteDept(@ModelAttribute("dept") DeptVO deptVO, ModelMap model) throws Exception {

@@ -20,6 +20,9 @@ import org.slf4j.LoggerFactory;
 
 import egovframework.rte.fdl.cmmn.exception.handler.ExceptionHandler;
 
+/**
+ * The type Jdbc logging excep hndlr.
+ */
 public class JdbcLoggingExcepHndlr implements ExceptionHandler {
 
 	private Logger logger = LoggerFactory.getLogger(JdbcLoggingExcepHndlr.class.getName());

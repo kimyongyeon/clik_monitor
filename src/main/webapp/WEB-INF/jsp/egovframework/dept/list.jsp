@@ -8,8 +8,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="content-language" content="ko">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="content-language" content="ko" />
 <title>MyBatis | 부서조회목록 </title>
 <link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/egov.css'/>">
 <script type="text/javaScript" language="javascript">

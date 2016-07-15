@@ -21,12 +21,21 @@ import org.springframework.web.context.ServletContextAware;
 
 import egovframework.rte.ptl.mvc.tags.ui.pagination.AbstractPaginationRenderer;
 
+/**
+ * The type Egov img pagination renderer.
+ */
 public class EgovImgPaginationRenderer extends AbstractPaginationRenderer implements ServletContextAware {
 	private ServletContext servletContext;
 
+	/**
+	 * Instantiates a new Egov img pagination renderer.
+	 */
 	public EgovImgPaginationRenderer() {
 	}
 
+	/**
+	 * Init variables.
+	 */
 	public void initVariables() {
 		String contextPath = servletContext.getContextPath();
 		String webDir = contextPath + "/images/egovframework/cmmn/";

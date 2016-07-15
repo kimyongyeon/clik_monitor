@@ -32,35 +32,31 @@ import egovframework.sample.emp.service.EmpVO;
 
 /**
  * 사원정보 CRUD 요청을 처리하는 Controller 클래스
- * 
+ *
  * @author Daniela Kwon
- * @since 2014.01.24
  * @version 3.0
- * @see <pre>
- *  == 개정이력(Modification Information) ==
- *   
- *   수정일			수정자				수정내용
- *  ---------------------------------------------------------------------------------
- *   2014.04.07	Daniela Kwon		최초생성
- * 
- * </pre>
+ * @see <pre>  == 개정이력(Modification Information) ==   수정일			수정자				수정내용  ---------------------------------------------------------------------------------   2014.04.07	Daniela Kwon		최초생성 </pre>
+ * @since 2014.01.24
  */
-
 @Controller
 public class EmpController {
 
 	@Resource(name = "empService")
 	private EmpService empService;
 
+	/**
+	 * The Properties service.
+	 */
 	@Resource(name = "propertiesService")
 	protected EgovPropertyService propertiesService;
 
-	/** 
-	 *사원목록을 조회한다.
+	/**
+	 * 사원목록을 조회한다.
+	 *
 	 * @param empVO 검색조건
-	 * @param model
+	 * @param model the model
 	 * @return "emp/list"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/emp/retrieveEmployeeList.do")
 	public String retrieveEmpList(@ModelAttribute("emp") EmpVO empVO, ModelMap model) throws Exception {
@@ -96,9 +92,11 @@ public class EmpController {
 
 	/**
 	 * 사원상세조회 화면으로 이동한다.
+	 *
 	 * @param empNo 사원번호
+	 * @param model the model
 	 * @return "emp/detail"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/emp/retrieveEmployee.do")
 	public String retrieveEmp(@RequestParam("empNo") String empNo, ModelMap model) throws Exception {
@@ -115,10 +113,11 @@ public class EmpController {
 
 	/**
 	 * 사원정보 등록 화면으로 이동한다.
-	 * @param empVO
-	 * @param model
+	 *
+	 * @param empVO the emp vo
+	 * @param model the model
 	 * @return "emp/form"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/emp/retrieveEmployeeNewForm.do")
 	public String retrieveEmpNewForm(@ModelAttribute("emp") EmpVO empVO, ModelMap model) throws Exception {
@@ -127,10 +126,11 @@ public class EmpController {
 
 	/**
 	 * 사원정보 등록하고 목록조회 화면으로 이동한다.
+	 *
 	 * @param empVO 사원정보
-	 * @param model
+	 * @param model the model
 	 * @return "redirect:/emp/retrieveEmployeeList.do"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/emp/insertEmployee.do")
 	public String insertEmp(@ModelAttribute("emp") EmpVO empVO, ModelMap model) throws Exception {
@@ -141,10 +141,11 @@ public class EmpController {
 
 	/**
 	 * 사원정보 수정 화면으로 이동한다.
+	 *
 	 * @param empVO 사원정보(사원번호 empNo)
-	 * @param model
+	 * @param model the model
 	 * @return "emp/form"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/emp/retrieveEmployeeForm.do")
 	public String retrieveEmpForm(@ModelAttribute("emp") EmpVO empVO, ModelMap model) throws Exception {
@@ -156,12 +157,13 @@ public class EmpController {
 		return "emp/form";
 	}
 
-	/** 
+	/**
 	 * 사원정보 수정하고 목록조회 화면으로 이동한다.
+	 *
 	 * @param empVO 사원정보
-	 * @param model
+	 * @param model the model
 	 * @return "forward:/emp/retrieveEmployee.do"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/emp/updateEmployee.do")
 	public String updateEmp(@ModelAttribute("emp") EmpVO empVO, ModelMap model) throws Exception {
@@ -172,9 +174,11 @@ public class EmpController {
 
 	/**
 	 * 사원정보 삭제 후 목록조회 화면으로 이동한다.
+	 *
 	 * @param empVO 사원정보
+	 * @param model the model
 	 * @return "redirect:/emp/retrieveEmployeeList.do"
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/emp/deleteEmployee.do")
 	public String deleteEmp(@ModelAttribute("emp") EmpVO empVO, ModelMap model) throws Exception {

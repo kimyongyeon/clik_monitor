@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>지방의회 표준연계 API모니터링 시스템</title>
+    <link href="css/style.css" rel="stylesheet" />
+    
+    <script src="js/jquery.min.js"></script>
+    <script src="js/common.js"></script>
+</head>
+<body>
+    <div id="container">
+        <div id="headerArea">
+            <div id="login"><a href="#">Logout</a></div>
+            <div id="topBox">
+                <div id="title"><h1><a href="index.html">지방의회 표준연계<br />API모니터링 시스템</a></h1></div>
+                <div id="menu">
+                    <ul>
+                        <li><a href="menu01.html">통계관리</a></li>
+                        <li><a href="menu02_setting.html">임계값설정</a></li>
+                        <li><a href="menu03.html">메일링관리</a></li>
+                        <li><a href="menu04.html">메타데이터관리</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="subRightBox">
+            <div class="titleArea">
+                <h2>임계값 설정</h2>
+                <div class="location">
+                    <ul>
+                        <li><a href="#">home</a></li>
+                        <li> > </li>
+                        <li class="end"><a href="#">임계값 설정</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="locationTitle">
+                ■ 임계값 등록
+            </div>
+            <div class="topTable">
+                <table class="table01">
+                <tr>
+                    <th scope="row">지방의회</th>
+                    <td>
+                        <div class="selectBox">
+                            <div class="select01">
+                                <select name="select01" class="select01">
+                                    <option value="">의회선택</option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="select02">
+                                <select name="select02" class="select02">
+                                    <option value="">지역선택</option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="select03">
+                                <select name="select03" class="select03">
+                                    <option value="">지방의회선택</option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">응답시간</th>
+                    <td>
+                        <span class="inputTxt01"><input type="text" title="응답시간" /></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">서비스 요청 처리율</th>
+                    <td>
+                        <span class="inputTxt01"><input type="text" title="서비스 요청 처리율" /></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">알람설정</th>
+                    <td>
+                        <span class="chk01"><input type="checkbox" id="chk01" /><label for="chk01">이메일</label></span>
+                    </td>                
+                </tr>
+                </table>
+                <div class="btnArea">
+                    <div class="settingBtn">
+                        <span class="uploadBtn"><a href="#">등록</a></span><a href="menu02_setting.html">취소</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="uploadPop">
+        <p>등록하시겠습니까?</p>
+        <div class="btnSet">
+            <a href="#">예</a><a href="#">아니오</a>
+        </div>
+    </div>
+
+</body>
+</html>

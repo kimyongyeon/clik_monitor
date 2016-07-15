@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="clikmonitor.nanet.go.kr.mapper.CommonMapper">
+
+	<!-- Agent 상태 정보 목록 조회 -->
+	<select id="selectAgentStateList" parameterType="agentVO" resultType="agentVO">
+		SELECT
+			RASMBLY_NM
+		   ,SYSTEM_STTUS_CODE
+		FROM
+			COLGOVER
+	</select>
+
+	<!-- Agent 상태 정보 상세 조회 -->
+	<select id="selectAgentInfoOne" parameterType="agentVO" resultType="agentVO">
+		SELECT
+			RASMBLY_NM
+		   ,SYSTEM_STTUS_CODE
+		FROM
+			COLGOVER
+	  	WHERE
+	  		RASMBLY_NM = #rasmblyNm#
+	  	AND ROWNUM = 1
+	</select>
+
+	<!-- Agent 정보 등록 -->
+	<insert id="insertAgentInfoOne" parameterType="agentVO">
+
+	</insert>
+
+	<!-- Agent 정보 수정 -->
+	<update id="updateAgentInfoOne" parameterType="agentVO">
+
+	</update>
+
+	<!-- Agent 정보 삭제 -->
+	<delete id="deleteAgentInfoOne" parameterType="agentVO">
+
+	</delete>
+
+
+</mapper>

@@ -17,6 +17,9 @@ package egovframework.sample.cmmn;
 
 import java.io.Serializable;
 
+/**
+ * The type Search vo.
+ */
 public class SearchVO implements Serializable {
 
 	private static final long serialVersionUID = 1L; 
@@ -31,66 +34,146 @@ public class SearchVO implements Serializable {
 	private String searchCondition = "";
 	private String searchKeyword = "";
 
+	/**
+	 * Gets page index.
+	 *
+	 * @return the page index
+	 */
 	public int getPageIndex() {
 		return pageIndex;
 	}
 
+	/**
+	 * Sets page index.
+	 *
+	 * @param pageIndex the page index
+	 */
 	public void setPageIndex(int pageIndex) {
 		this.pageIndex = pageIndex;
 	}
 
+	/**
+	 * Gets page unit.
+	 *
+	 * @return the page unit
+	 */
 	public int getPageUnit() {
 		return pageUnit;
 	}
 
+	/**
+	 * Sets page unit.
+	 *
+	 * @param pageUnit the page unit
+	 */
 	public void setPageUnit(int pageUnit) {
 		this.pageUnit = pageUnit;
 	}
 
+	/**
+	 * Gets page size.
+	 *
+	 * @return the page size
+	 */
 	public int getPageSize() {
 		return pageSize;
 	}
 
+	/**
+	 * Sets page size.
+	 *
+	 * @param pageSize the page size
+	 */
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
 
+	/**
+	 * Gets first index.
+	 *
+	 * @return the first index
+	 */
 	public int getFirstIndex() {
 		return firstIndex;
 	}
 
+	/**
+	 * Sets first index.
+	 *
+	 * @param firstIndex the first index
+	 */
 	public void setFirstIndex(int firstIndex) {
 		this.firstIndex = firstIndex;
 	}
 
+	/**
+	 * Gets last index.
+	 *
+	 * @return the last index
+	 */
 	public int getLastIndex() {
 		return lastIndex;
 	}
 
+	/**
+	 * Sets last index.
+	 *
+	 * @param lastIndex the last index
+	 */
 	public void setLastIndex(int lastIndex) {
 		this.lastIndex = lastIndex;
 	}
 
+	/**
+	 * Gets record count per page.
+	 *
+	 * @return the record count per page
+	 */
 	public int getRecordCountPerPage() {
 		return recordCountPerPage;
 	}
 
+	/**
+	 * Sets record count per page.
+	 *
+	 * @param recordCountPerPage the record count per page
+	 */
 	public void setRecordCountPerPage(int recordCountPerPage) {
 		this.recordCountPerPage = recordCountPerPage;
 	}
 
+	/**
+	 * Gets search condition.
+	 *
+	 * @return the search condition
+	 */
 	public String getSearchCondition() {
 		return searchCondition;
 	}
 
+	/**
+	 * Sets search condition.
+	 *
+	 * @param searchCondition the search condition
+	 */
 	public void setSearchCondition(String searchCondition) {
 		this.searchCondition = searchCondition;
 	}
 
+	/**
+	 * Gets search keyword.
+	 *
+	 * @return the search keyword
+	 */
 	public String getSearchKeyword() {
 		return searchKeyword;
 	}
 
+	/**
+	 * Sets search keyword.
+	 *
+	 * @param searchKeyword the search keyword
+	 */
 	public void setSearchKeyword(String searchKeyword) {
 		this.searchKeyword = searchKeyword;
 	}

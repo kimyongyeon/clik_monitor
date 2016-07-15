@@ -9,7 +9,15 @@
     	<typeAlias alias="searchVO" type="egovframework.sample.cmmn.SearchVO" />
 
 		<!-- 여기서부터 추가 -->
-		<typeAlias alias="loginVO" type="clikmonitor.nanet.go.kr.service.LoginVO" />
+		<typeAlias alias="loginVO" type="clikmonitor.nanet.go.kr.dto.LoginVO" />
+		<typeAlias alias="commonVO" type="clikmonitor.nanet.go.kr.dto.CommonVO" />
+		<typeAlias alias="agentVO" type="clikmonitor.nanet.go.kr.dto.AgentVO" />
+
+		<typeAlias alias="statisticsVO" type="clikmonitor.nanet.go.kr.dto.StatisticsVO" />
+		<typeAlias alias="statisticsSearchVO" type="clikmonitor.nanet.go.kr.dto.StatisticsSearchVO" />
+		<typeAlias alias="rangeVO" type="clikmonitor.nanet.go.kr.dto.RangeVO" />
+
+
 
     </typeAliases>
     

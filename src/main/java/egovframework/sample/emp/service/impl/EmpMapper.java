@@ -24,84 +24,76 @@ import egovframework.sample.emp.service.EmpVO;
 
 /**
  * 사원정보에 관한 데이터처리 매퍼 클래스
- * 
+ *
  * @author Daniela Kwon
- * @since 2014.01.24
  * @version 3.0
- * @see <pre>
- *  == 개정이력(Modification Information) ==
- *   
- *   수정일			수정자				수정내용
- *  ---------------------------------------------------------------------------------
- *   2014.04.07	Daniela Kwon		최초생성
- * 
- * </pre>
+ * @see <pre>  == 개정이력(Modification Information) ==   수정일			수정자				수정내용  ---------------------------------------------------------------------------------   2014.04.07	Daniela Kwon		최초생성 </pre>
+ * @since 2014.01.24
  */
-
 @Repository("empMapper")
 public class EmpMapper extends EgovAbstractMapper {
 
 	/**
 	 * DB에서 사원목록을 조회한다.
-	 * 
-	 * @param empVO
-	 * @return List
-	 * @throws Exception
+	 *
+	 * @param empVO the emp vo
+	 * @return List list
+	 * @throws Exception the exception
 	 */
 	public List<EmpVO> retrieveEmpList(EmpVO empVO) throws Exception {
 		return selectList("EmpMapper.retrieveEmpList", empVO);
 	}
 
 	/**
-	 *  DB에서 사원정보를 상세조회한다.
-	 * 
-	 * @param empVO
-	 * @return EmpVO
-	 * @throws Exception
+	 * DB에서 사원정보를 상세조회한다.
+	 *
+	 * @param empVO the emp vo
+	 * @return EmpVO emp vo
+	 * @throws Exception the exception
 	 */
 	public EmpVO retrieveEmp(EmpVO empVO) throws Exception {
 		return (EmpVO) selectOne("EmpMapper.retrieveEmp", empVO);
 	}
 
 	/**
-	 *  DB에서 사원정보를 수정한다.
-	 * 
-	 * @param empVO
+	 * DB에서 사원정보를 수정한다.
+	 *
+	 * @param empVO the emp vo
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	public void updateEmp(EmpVO empVO) throws Exception {
 		update("EmpMapper.updateEmp", empVO);
 	}
 
 	/**
-	 *  DB에 사원정보를 입력한다.
-	 * 
-	 * @param empVO
+	 * DB에 사원정보를 입력한다.
+	 *
+	 * @param empVO the emp vo
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	public void insertEmp(EmpVO empVO) throws Exception {
 		insert("EmpMapper.insertEmp", empVO);
 	}
 
 	/**
-	 *  DB에서 사원정보를 삭제한다.
-	 * 
-	 * @param empVO
+	 * DB에서 사원정보를 삭제한다.
+	 *
+	 * @param empVO the emp vo
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	public void deleteEmp(EmpVO empVO) throws Exception {
 		delete("EmpMapper.deleteEmp", empVO);
 	}
 
 	/**
-	 *  사원조회 시 총 레코드 수를 조회한다.
-	 * 
-	 * @param empVO
-	 * @return int
-	 * @throws Exception
+	 * 사원조회 시 총 레코드 수를 조회한다.
+	 *
+	 * @param empVO the emp vo
+	 * @return int int
+	 * @throws Exception the exception
 	 */
 	public int retrieveEmpListTotCnt(EmpVO empVO) throws Exception {
 		return selectOne("EmpMapper.retrieveEmpListTotCnt", empVO);

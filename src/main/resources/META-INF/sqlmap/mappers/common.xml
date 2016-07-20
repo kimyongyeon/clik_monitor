@@ -47,4 +47,17 @@
 		ORDER BY LOASM_CODE ASC
 	</select>
 
+	<!-- 지방의회 왼쪽 콤보 조회 -->
+	<select id="selectAreaLeftComboList" parameterType="commonSearchVO" resultType="commonVO">
+
+	</select>
+	<!-- 지방의회 가운데 콤보 조회 -->
+	<select id="selectAreaCenterComboList" parameterType="commonSearchVO" resultType="commonVO">
+
+	</select>
+	<!-- 지방의회 오른쪽 콤보 조회 -->
+	<select id="selectAreaRightComboList" parameterType="commonSearchVO" resultType="commonVO">
+
+	</select>
+
 </mapper>

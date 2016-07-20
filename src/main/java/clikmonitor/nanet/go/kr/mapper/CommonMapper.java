@@ -1,5 +1,6 @@
 package clikmonitor.nanet.go.kr.mapper;
 
+import clikmonitor.nanet.go.kr.dto.CommonSearchVO;
 import clikmonitor.nanet.go.kr.dto.CommonVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
@@ -31,4 +32,25 @@ public interface CommonMapper {
      * @return list list
      */
     List<CommonVO> selectBroadList(); // 광역별 의회 목록 조회
+
+    /**
+     * 지방의회 왼쪽 콤보 리스트
+     * @param commonSearchVO
+     * @return
+     */
+    List<CommonVO> selectAreaLeftComboList(CommonSearchVO commonSearchVO);
+
+    /**
+     * 지방의회 가운데 콤보 리스트
+     * @param commonSearchVO
+     * @return
+     */
+    List<CommonVO> selectAreaCenterComboList(CommonSearchVO commonSearchVO);
+
+    /**
+     * 지방의회 오른쪽 콤보 리스트
+     * @param commonSearchVO
+     * @return
+     */
+    List<CommonVO> selectAreaRightComboList(CommonSearchVO commonSearchVO);
 }

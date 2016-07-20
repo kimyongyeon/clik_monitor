@@ -3,6 +3,7 @@
     pop01();//Agent 서버정보 팝업
     pop03();//로그 데이터 팝업
     pop04();//금일 시간당 호출 건수 팝업
+    pop05();//Agent 상태정보 팝업
     tong(); //통계관리 테이블
     meiling(); // 메일링 관리
     closeBtn(); // 에러창 닫기
@@ -197,7 +198,7 @@ function meiling() {
 
 //Agent 서버정보 팝업
 var pop01 = function () {
-    var openPop = $("#rightBox > .topBox ul.list > li > a");
+    var openPop = $("#rightBox .topBox ul.list li a");
     $(openPop).on("click", function () {
         $(".agentServerInfo").addClass("openPop");
     });
@@ -205,11 +206,13 @@ var pop01 = function () {
     //X 버튼
     $(".closeBtn > a").on("click", function () {
         $(".agentServerInfo").removeClass("openPop");
+        $(".screen").css("display", "none");
     });
 
     //확인 버튼
     $(".agentServerInfo > .bottom > span.btnSet > a").on("click", function () {
         $(".agentServerInfo").removeClass("openPop");
+        $(".screen").css("display", "none");
     });
 
     //파란색 + 클릭시 "Agent 서버정보 팝업" 안뜨게하기 위해 작성
@@ -230,11 +233,13 @@ var pop03 = function () {
     //X 버튼
     $(".closeBtn > a").on("click", function () {
         $(".logData").removeClass("openPop");
+        $(".screen").css("display", "none");
     });
 
     //확인 버튼
     $(".logData > .bottom > span.btnSet > a").on("click", function () {
         $(".logData").removeClass("openPop");
+        $(".screen").css("display", "none");
     });
 }
 //로그 데이터 추가 팝업 (PPT 금일 시간당 호출 건수)
@@ -247,11 +252,13 @@ var pop04 = function () {
     //X 버튼
     $(".closeBtn > a").on("click", function () {
         $(".logData").removeClass("openPop");
+        $(".screen").css("display", "none");
     });
 
     //확인 버튼
     $(".logData > .bottom > span.btnSet > a").on("click", function () {
         $(".logData").removeClass("openPop");
+        $(".screen").css("display", "none");
     });
 }
 
@@ -282,3 +289,41 @@ function page_go(sel) {
     }
 }
 
+function screenPop() {
+    var size = $(window).height();
+    $(".screen").css("height", size + "px");
+    $(".screen").css("display", "block");
+    $(".screenPop").css("display", "block");
+}
+
+// Agent 서버 상태정보
+var pop05 = function () {
+    var openPop = $("#rightBox .middleBox .fullBox .fullSub");
+    $(openPop).on("click", function () {
+        $(".agentServerStateInfoPop").addClass("openPop");
+        screenPop();
+    });
+
+    //X 버튼
+    $(".closeBtn > a").on("click", function () {
+        $(".agentServerStateInfoPop").removeClass("openPop");
+        $(".screen").css("display", "none");
+    });
+
+    //확인 버튼
+    $(".agentServerStateInfoPop .bottom a").on("click", function () {
+        $(".agentServerStateInfoPop").removeClass("openPop");
+        $(".screen").css("display", "none");
+    });
+
+}
+
+// handlebarjs 
+function getHtmlText(templateID, data) {
+// Template 취득
+    var templateText = $("#" + templateID).html();
+    var compiledText = Handlebars.compile(templateText);
+// Handlebars.compile()
+// var renderedText = compiledText.render(data);
+    return compiledText;
+}

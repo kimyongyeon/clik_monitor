@@ -11,6 +11,7 @@
 		<!-- 여기서부터 추가 -->
 		<typeAlias alias="loginVO" type="clikmonitor.nanet.go.kr.dto.LoginVO" />
 		<typeAlias alias="commonVO" type="clikmonitor.nanet.go.kr.dto.CommonVO" />
+		<typeAlias alias="commonSearchVO" type="clikmonitor.nanet.go.kr.dto.CommonSearchVO" />
 		<typeAlias alias="agentVO" type="clikmonitor.nanet.go.kr.dto.AgentVO" />
 
 		<typeAlias alias="statisticsVO" type="clikmonitor.nanet.go.kr.dto.StatisticsVO" />

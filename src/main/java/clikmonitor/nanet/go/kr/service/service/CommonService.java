@@ -1,11 +1,13 @@
 package clikmonitor.nanet.go.kr.service.service;
 
-import clikmonitor.nanet.go.kr.mapper.CommonMapper;
 import clikmonitor.nanet.go.kr.dto.CommonVO;
+import clikmonitor.nanet.go.kr.mapper.CommonMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by kimyongyeon on 2016-06-22.
@@ -24,6 +26,8 @@ public interface CommonService {
     /*
         CommonService 메서드 선언 시작
      */
+
+
 
     /**
      * The type Common service.

@@ -5,7 +5,6 @@
     <tiles:putAttribute name="content">
 
         <div id="content">
-
             <div id="sideBar">
                 <div class="sideBar_tabMenu">
                     <ul>
@@ -47,53 +46,34 @@
             <div id="rightBox">
 
                 <div id="errorBox"></div>
-                <%--<div class="errorPop">--%>
-                    <%--<div class="txtTitle">--%>
-                        <%--<a href="#">서울특별시의회 Agent 문제 발생</a>--%>
-                    <%--</div>--%>
-                    <%--<div class="closeBtn"><a href="#">X</a></div>--%>
-                <%--</div>--%>
-                <%--<div class="errorPop">--%>
-                    <%--<div class="txtTitle">--%>
-                        <%--<a href="#">부산광역시의회 Agent 문제 발생</a>--%>
-                    <%--</div>--%>
-                    <%--<div class="closeBtn"><a href="#">X</a></div>--%>
-                <%--</div>--%>
                 <div class="topBox">
-                    <div class="topNemo">
+
+                    <!-- Agent 서버정보 팝업 start -->
+                    <script id="agent_server_info_list1-template" type="text/x-handlebars-template">
                         <ul class="list">
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img02.png" alt="" /></span><span class="listTxt">서울특별시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img02.png" alt="" /></span><span class="listTxt">부산특별시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">대구광역시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">인천광역시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">광주광역시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">대전광역시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">울산광역시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">세종특별자치시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">경기도의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">강원도의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">충청북도의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">충청남도의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">전라북도의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">전라남도의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">경상북도의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">경상남도의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">제주특별자치도의회(2016.05.12)</span></a></li>
+                            {{#areas1}}
+                            <li>
+                                <a href="#" onclick="fnAreaPopup({{code}})"><span class="listBox"><img src="img/img/img_img0{{state}}.png" alt="" /></span><span class="listTxt">{{name}}({{upDate}})</span></a>
+                            </li>
+                            {{/areas1}}
                         </ul>
+                    </script>
+
+                    <script id="agent_server_info_list2-template" type="text/x-handlebars-template">
+                        <ul class="list">
+                            {{#areas2}}
+                            <li>
+                                <a href="#" onclick="fnAreaPopup({{code}})"><span class="listBox"><img src="img/img/img_img0{{state}}.png" alt="" /></span><span class="listTxt">{{name}}({{upDate}})</span></a>
+                            </li>
+                            {{/areas2}}
+                        </ul>
+                    </script>
+
+                    <div class="topNemo">
+                        <div id="agent_server_info_list1"></div>
                     </div>
                     <div class="bottomNemo">
-                        <ul class="list">
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">경기도 부천시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">경기도 하남시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">강원도 강릉시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">충청북도 청주시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">충청남도 서산시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">전라북도 정읍시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">전라남도 순천시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">경상북도 상주시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">경상남도 거제시의회(2016.05.12)</span></a></li>
-                            <li><a href="#"><span class="listBox"><img src="img/img/img_img01.png" alt="" /></span><span class="listTxt">경상남도 김해시의회(2016.05.12)</span></a></li>
-                        </ul>
+                        <div id="agent_server_info_list2"></div>
                     </div>
                 </div>
                 <div class="middleBox">
@@ -148,82 +128,86 @@
         </div>
 
         <!-- Agent 서버정보 팝업 start -->
-        <div class="agentServerInfo">
-            <div class="top">
-                <h1>Agent 서버정보</h1>
-                <div class="btn"><a href="#">로그데이터 확인</a></div>
-                <div class="closeBtn"><a href="#">X</a></div>
-            </div>
+        <script id="agent_server_info_popup-template" type="text/x-handlebars-template">
             <div class="middle">
                 <div class="nemo01">
                     <div class="box01">
                         <div class="listBox01">
                             <h2>의회명</h2>
-                            <p>서울특별시의회</p>
+                            <p id="rasmblyNm">{{rasmblyNm}}</p>
                         </div>
                         <div class="listBox01">
                             <h2>서버IP</h2>
-                            <p>152.99.2.212</p>
+                            <p id="serverIp">{{serverIp}}</p>
                         </div>
                         <div class="listBox01">
                             <h2>CPU</h2>
-                            <p>Xeon E6-2630</p>
+                            <p id="cpu">{{cpu}}</p>
                         </div>
                     </div>
                     <div class="box02">
                         <div class="listBox01">
                             <h2>설치년도</h2>
-                            <p>2014년</p>
+                            <p id="installYear">{{installYear}}년</p>
                         </div>
                         <div class="listBox01">
                             <h2>OS</h2>
-                            <p>Linux</p>
+                            <p id="os">{{os}}</p>
                         </div>
                         <div class="listBox01">
                             <h2>RAM</h2>
-                            <p>16GB</p>
+                            <p id="ram">{{ram}}</p>
                         </div>
                     </div>
                     <div class="box03">
                         <div class="listBox01">
                             <h2>서버명</h2>
-                            <p>회의록서버</p>
+                            <p id="serverNm">{{serverNm}}</p>
                         </div>
                         <div class="listBox01">
                             <h2>WAS</h2>
-                            <p>Tomcat</p>
+                            <p id="was">{{was}}</p>
                         </div>
                         <div class="listBox01">
                             <h2>최종수집일</h2>
-                            <p>2016.05.10</p>
+                            <p id="lastDate">{{lastDate}}</p>
                         </div>
                     </div>
                 </div>
                 <div class="box04">
                     <div class="listBox01">
                         <h2>모듈설치경로</h2>
-                        <p>/usr/local/councilOpenApi/usr/local/councilOpenApi/usr/local/councilOpenApi</p>
+                        <p id="modulePath">{{modulePath}}</p>
                     </div>
                 </div>
                 <div class="box05">
                     <div class="listBox01">
                         <h2>비고</h2>
-                        <p>없음</p>
+                        <p id="memo">{{memo}}</p>
                     </div>
                 </div>
                 <div class="nemo02">
                     <ul>
-                        <li>수집API<br />구동</li>
-                        <li>수집API<br />종료</li>
-                        <li class="end">업데이트<br />요청</li>
+                        <li><button>수집API 구동 </button></li>
+                        <li><button>수집API 종료 </button></li>
+                        <li class="end"><button>업데이트 요청 </button></li>
                     </ul>
                 </div>
                 <div class="box06">
                     그래프
                 </div>
             </div>
+        </script>
+        <div class="agentServerInfo">
+            <div class="top">
+                <h1>Agent 서버정보</h1>
+                <div class="btn"><a href="#" onclick="fnLogData()">로그데이터 확인</a></div>
+                <div class="closeBtn"><a href="#">X</a></div>
+            </div>
+            <div id="agent_server_info_popup"></div>
             <div class="bottom"><span class="btnSet"><a href="#">닫기</a></span></div>
         </div>
+
         <!-- Agent 서버정보 팝업 end -->
 
 
@@ -233,8 +217,6 @@
                 <h1>Agent 서버정보 추가</h1>
                 <div class="closeBtn"><a href="#">X</a></div>
             </div>
-
-
             <div class="middle">
                 <table class="table03">
                     <tr>
@@ -408,6 +390,40 @@
         </div>
         <!-- 로그 데이터 팝업 end -->
 
+        <!-- Agent 서버 상태정보 팝업 start -->
+        <script id="agent_server_state_info_popup-template" type="text/x-handlebars-template">
+            <div class="middle">
+                <table>
+                    <tr>
+                        <th>지방의회</th>
+                        <th>서버 IP</th>
+                        <th>CPU</th>
+                        <th>응답 시간</th>
+                        <th class="end">최종수집일</th>
+                    </tr>
+                    {{#listAgentVO}}
+                    <tr>
+                        <td>{{rasmblyNm}}</td>
+                        <td>{{serverIp}}</td>
+                        <td>{{cpu}}</td>
+                        <td>{{reqProcessingRatio}}</td>
+                        <td class="end">{{lastDate}}</td>
+                    </tr>
+                    {{/listAgentVO}}
+                </table>
+            </div>
+        </script>
+        <div class="agentServerStateInfoPop">
+            <div class="top">
+                <h1>Agent 서버 상태정보</h1>
+                <div class="closeBtn"><a href="#">X</a></div>
+            </div>
+            <div id="agent_server_state_info_popup"></div>
+            <div class="bottom"><a href="#">닫기</a></div>
+        </div>
+        <!-- Agent 서버 상태정보 팝업 end -->
+
+
         <!-- 트리뷰 -->
         <link href="<c:url value="/assets/jstree/dist/themes/default/style.min.css"/>" rel="stylesheet">
         <script type="text/javascript" src="<c:url value="/assets/jstree/dist/jstree.min.js"/>"></script>
@@ -421,58 +437,177 @@
 
         <script type="text/javascript">
 
+            // 로그데이터
+            function fnLogData() {
+                $(".agentServerInfo").removeClass("openPop");
+                $(".logData").addClass("openPop");
+            }
+            // Agent 서버정보 팝업 이벤트
+            function fnAreaPopup(code) {
+                $(".agentServerInfo").addClass("openPop");
+                screenPop();
+                fnAjaxAreaDetail(code);
+            }
+            // Agent 서버 상태정보 Ajax
+            function fnAjaxAgentServerStateInfoList() {
+
+                var url = "getAreaStateInfoList.do";
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataTye: 'json',
+                    contentType:"application/json; charset=utf-8",
+                    data: {},
+                    success: function(data, textStatus, jqXHR) {
+                        console.log(data);
+                        var htmlText = getHtmlText("agent_server_state_info_popup-template",data);
+                        $("#agent_server_state_info_popup").html(htmlText(data));
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                    },
+                    statusCode: {
+                        404: function() {
+                            alert("[url: " + url + "]  page not found");
+                        }
+                    }
+                });
+            }
+            // Agent 서버정보 Ajax
+            function fnAjaxAreaDetail(code) {
+
+                var url = "getAreaDeatail.do";
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataTye: 'json',
+                    contentType:"application/json; charset=utf-8",
+                    data: {code:code || ''},
+                    success: function(data, textStatus, jqXHR) {
+                        var htmlText = getHtmlText("agent_server_info_popup-template",data);
+                        $("#agent_server_info_popup").html(htmlText(data));
+
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                    },
+                    statusCode: {
+                        404: function() {
+                            alert("[url: " + url + "]  page not found");
+                        }
+                    }
+                });
+            }
+            // 메인화면 Agent 상태 목록 Ajax
+            function fnAjaxMainAreaData() {
+
+                var url = "getAreas.do";
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataTye: 'json',
+                    contentType:"application/json; charset=utf-8",
+                    data: {},
+                    success: function(data, textStatus, jqXHR) {
+                        console.log(data);
+
+                        var htmlText = getHtmlText("agent_server_info_list1-template",data);
+                        $("#agent_server_info_list1").html(htmlText(data));
+                        var htmlText = getHtmlText("agent_server_info_list2-template",data);
+                        $("#agent_server_info_list2").html(htmlText(data));
+
+//                        var areas = data.areas;
+//                        console.log(areas[0]["name"])
+//                        var liHtml = "";
+//                        var liHtml2 = "";
+//                        for(var i=0; i<areas.length; i++) {
+//                            if(areas[i]["gubun"] === "1") {
+//                                liHtml += '<li><a href="#" onclick="fnAreaPopup('+areas[i]["code"]+');"><span class="listBox"><img src="img/img/img_img0'+areas[i]["state"]+'.png" alt="" /></span><span class="listTxt">';
+//                                liHtml += areas[i]["name"];
+//                                liHtml += '(';
+//                                liHtml += areas[i]["upDate"];
+//                                liHtml += ')';
+//                                liHtml += '</span></a></li>';
+//                            } else {
+//                                liHtml2 += '<li><a href="#" onclick="fnAreaPopup('+areas[i]["code"]+');"><span class="listBox"><img src="img/img/img_img0'+areas[i]["state"]+'.png" alt="" /></span><span class="listTxt">';
+//                                liHtml2 += areas[i]["name"];
+//                                liHtml2 += '(';
+//                                liHtml2 += areas[i]["upDate"];
+//                                liHtml2 += ')';
+//                                liHtml2 += '</span></a></li>';
+//                            }
+//
+//                        }
+//                        $(".topNemo .list").append(liHtml);
+//                        $(".bottomNemo .list").append(liHtml2);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                    },
+                    statusCode: {
+                        404: function() {
+                            alert("[url: " + url + "]  page not found");
+                        }
+                    }
+                });
+            }
+
+            // Ajax TEST
+//            function fnAjaxUiData(page) {
+//
+//                var url = "test.do/한글";
+//
+//                if(page === undefined) {
+//                    page = 1;
+//                }
+//
+//                var arrayData = [];
+//                for(i=0; i<10; i++) {
+//                    arrayData.push({
+//                        name: "charse, " + i,
+//                        number: "num, " + i
+//                    });
+//                }
+//
+//                var params = {
+//                    page: page,
+//                    data: "data1",
+//                    param: "한글테스트",
+//                    name: "rasmblyNm_1",
+//                    number: "systemSttusCode_1",
+//                    channel: "1,2,kim",
+//                    arrayData : JSON.stringify(arrayData)
+//
+//                }
+//
+//                $.ajax({
+//                    url: url,
+//                    type: 'GET',
+//                    dataTye: 'json',
+//                    contentType:"application/json; charset=utf-8",
+//                    data: params,
+//                    success: function(data, textStatus, jqXHR) {
+//                        console.log(data);
+//                    },
+//                    error: function(jqXHR, textStatus, errorThrown) {
+//                    },
+//                    statusCode: {
+//                        404: function() {
+//                            alert("[url: " + url + "]  page not found");
+//                        }
+//                    }
+//                });
+//            }
+
             $(document).ready(function () {
 
-                fnAjaxUiData();
+                // test
+//                fnAjaxUiData();
 
-                function fnAjaxUiData(page) {
-
-                    var url = "test.do/한글";
-
-                    if(page === undefined) {
-                        page = 1;
-                    }
-
-                    var arrayData = [];
-                    for(i=0; i<10; i++) {
-                        arrayData.push({
-                            name: "charse, " + i,
-                            number: "num, " + i
-                        });
-                    }
-
-                    var params = {
-                        page: page,
-                        data: "data1",
-                        param: "한글테스트",
-                        name: "rasmblyNm_1",
-                        number: "systemSttusCode_1",
-                        channel: "1,2,kim",
-                        arrayData : JSON.stringify(arrayData)
-
-                    }
-
-                    $.ajax({
-                        url: url,
-                        type: 'GET',
-                        dataTye: 'json',
-                        contentType:"application/json; charset=utf-8",
-                        data: params,
-                        success: function(data, textStatus, jqXHR) {
-                            console.log(data);
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                        },
-                        statusCode: {
-                            404: function() {
-                                alert("[url: " + url + "]  page not found");
-                            }
-                        }
-                    });
-                }
-
-
-
+                // 지방의회, 기초의회 상태 아이콘 출력
+                fnAjaxMainAreaData();
+                // Agent 서버 상태정보
+                fnAjaxAgentServerStateInfoList();
 
                 // 의회별
                 $('#rTreeBox').jstree({

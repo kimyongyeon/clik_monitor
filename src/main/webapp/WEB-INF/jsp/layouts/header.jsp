@@ -15,8 +15,8 @@
         <link href="<c:url value="/css/style.css"/>" rel="stylesheet">
 
 		<script type="text/javascript" src="<c:url value="/assets/jquery/dist/jquery.min.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/jquery.tablesorter.min.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/json/jquery.dynatable.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/assets/js/jquery.tablesorter.min.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/assets/js/json/jquery.dynatable.js"/>"></script>
 
 		<script type="text/javascript" src="<c:url value="/assets/jquery-ui-1.11.1/jquery-ui.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/assets/js/jquery.qtip.min.js"/>"></script>
@@ -27,6 +27,8 @@
 		<script type="text/javascript" src="<c:url value="/assets/js/underscore-min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/assets/js/babypaunch.libparts.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/assets/js/common.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/assets/js/handlebars-v4.0.5.js"/>"></script>
+		<%--<script type="text/javascript" src="<c:url value="/assets/js/es5-shim.min.js"/>"></script>--%>
 		<%--<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -54,7 +56,7 @@
 	</head>
 
 	<body>
-
+		<div class="screen"></div>
         <!--Main area-->
         <div id="containerMain">
             <div id="topBox">

@@ -13,4 +13,6 @@ public class StatisticsController {
     public String statistics_main() {
         return "biz/statistics_list";
     }
+
+
 }

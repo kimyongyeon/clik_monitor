@@ -8,4 +8,6 @@ import lombok.Data;
 @Data
 public class CommonSearchVO {
     private String keyWord;
+    private String brtcCode;
+    private String insttClCode;
 }

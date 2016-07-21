@@ -3,6 +3,25 @@
 <tiles:insertDefinition name="header.layout">
     <tiles:putAttribute name="content">
 
+        <!-- template engine start -->
+        <script id="brtc_code-template" type="text/x-handlebars-template">
+            지역선택<select name="brtc_code" class="select02" onchange="fn_ajax_loasm_code_list()">
+                <option value="">지역선택</option>
+                {{#commonList}}
+                <option value="{{code}}">{{codenm}}</option>
+                {{/commonList}}
+            </select>
+        </script>
+        <script id="loasm_code-template" type="text/x-handlebars-template">
+            의회명<select name="loasm_code" class="select03">
+                <option value="">지방의회선택</option>
+                {{#commonList}}
+                <option value="{{code}}">{{codenm}}</option>
+                {{/commonList}}
+            </select>
+        </script>
+        <!-- template engine end -->
+
         <div id="json-records">
             [
             {
@@ -101,23 +120,21 @@
                             <td>
                                 <div class="selectBox">
                                     <div class="select01">
-                                        <select name="select01" class="select01">
-                                            <option value="">전체</option>
-                                            <option value=""></option>
-                                            <option value=""></option>
+                                        지방의회<select name="brtcCode" class="select01" onchange="fn_ajax_brtc_code_list()">
+                                            <option value="">기관유형 선택</option>
+                                            <option value="intsttcl_000023">광역의회</option>
+                                            <option value="intsttcl_000024">기초의회</option>
                                         </select>
                                     </div>
-                                    <div class="select02">
-                                        <select name="select02" class="select02">
+                                    <div class="select02" id="brtc_code_div">
+                                        지역선택<select name="insttClCode" class="select02">
                                             <option value="">지역선택</option>
                                             <option value=""></option>
-                                            <option value=""></option>
                                         </select>
                                     </div>
-                                    <div class="select03">
-                                        <select name="select03" class="select03">
+                                    <div class="select03" id="loasm_code_div">
+                                        의회명<select name="loasm_code" class="select03">
                                             <option value="">지방의회선택</option>
-                                            <option value=""></option>
                                             <option value=""></option>
                                         </select>
                                     </div>
@@ -214,25 +231,130 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            var $records = $('#json-records'),
-                    myRecords = JSON.parse($records.text());
+            // 의회별 전송 데이터
+            fn_ajax_tab1_list();
 
-            $('#myTable').dynatable({
-                dataset: {
-                    records: myRecords
-                }
-            });
-
-
-            var $recordsTab02 = $('#json-records2'),
-                    myRecords2 = JSON.parse($recordsTab02.text());
+            var $recordsTab02 = $('#json-records2'), myRecords2 = JSON.parse($recordsTab02.text());
 
             $('#myTable2').dynatable({
                 dataset: {
                     records: myRecords2
                 }
             });
+
         });
+
+        // 의회별전송데이터
+        function fn_ajax_tab1_list() {
+
+            var url = "getTabList1.do";
+            var brtcCode = $('select[name=brtcCode] option:selected').val();
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataTye: 'json',
+                contentType:"application/json; charset=utf-8",
+                data: {brtcCode:brtcCode},
+                success: function(data, textStatus, jqXHR) {
+                    console.log(data);
+                    var myRecords = [];
+                    for(var i=0; i<data.length; i++) {
+                        myRecords.push(
+                                {
+                                    "의회": '광역의회',
+                                    "지방의회": '서울특별시',
+                                    "대수": data[i]['numprCount'],
+                                    "회기": data[i]['sesnCount'],
+                                    "선거구": data[i]['estCount'],
+                                    "회의명": data[i]['mtgnmCount'],
+                                    "의원": data[i]['asembyCount'],
+                                    "의원활동": data[i]['asembyactCount'],
+                                    "의원직위": data[i]['ofcpsCount'],
+                                    "회의록": data[i]['mintsCount'],
+                                    "안건": data[i]['mtrCount'],
+                                    "발언": data[i]['spkngCount'],
+                                    "발언답변": data[i]['numprCount'],
+                                    "부록": data[i]['apndxCount'],
+                                    "의안정보": data[i]['asembyCount'],
+                                    "발의의원": data[i]['itncasembyCount'],
+                                    "의안파일": data[i]['bifileCount'],
+                                    "의안회의록": data[i]['bimintsCount']
+                                }
+                        );
+                    }
+
+                    $('#myTable').dynatable({
+                        dataset: {
+                            records: myRecords
+                        }
+                    });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                },
+                statusCode: {
+                    404: function() {
+                        alert("[url: " + url + "]  page not found");
+                    }
+                }
+            });
+        }
+
+        // 지역선택
+        function fn_ajax_brtc_code_list() {
+
+            var url = "getBrtcCodeDetailsList.do";
+            var brtcCode = $('select[name=brtcCode] option:selected').val();
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataTye: 'json',
+                contentType:"application/json; charset=utf-8",
+                data: {brtcCode:brtcCode},
+                success: function(data, textStatus, jqXHR) {
+                    console.log(data);
+                    var commonList ={commonList:data};
+                    var htmlText = getHtmlText("brtc_code-template",commonList);
+                    $("#brtc_code_div").html(htmlText(commonList));
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                },
+                statusCode: {
+                    404: function() {
+                        alert("[url: " + url + "]  page not found");
+                    }
+                }
+            });
+        }
+
+        // 의회명
+        function fn_ajax_loasm_code_list() {
+
+            var url = "getLoasmInfo.do";
+            var brtcCode = $('select[name=brtcCode] option:selected').val();
+            var insttClCode = $('select[name=insttClCode] option:selected').val();
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataTye: 'json',
+                contentType:"application/json; charset=utf-8",
+                data: {brtcCode:brtcCode, insttClCode:insttClCode},
+                success: function(data, textStatus, jqXHR) {
+                    console.log(data);
+                    var commonList ={commonList:data};
+                    var htmlText = getHtmlText("loasm_code-template",commonList);
+                    $("#loasm_code_div").html(htmlText(commonList));
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                },
+                statusCode: {
+                    404: function() {
+                        alert("[url: " + url + "]  page not found");
+                    }
+                }
+            });
+        }
     </script>
 
 </tiles:putAttribute>

@@ -4,130 +4,27 @@
 
     <tiles:putAttribute name="content">
 
-        <div id="content">
-            <div id="sideBar">
-                <div class="sideBar_tabMenu">
-                    <ul>
-                        <li class="list01"><a href="#">의회별</a></li>
-                        <li class="list02"><a href="#">지역별</a></li>
-                    </ul>
-                </div>
-                <div class="tab01">
-                    <div class="sideBar_radioBox">
-                        <ul>
-                            <li><span><input type="checkbox" id="chk01" name="radioBox01" /><label for="chk01">회의록</label></span></li>
-                            <li><span><input type="checkbox" id="chk02" name="radioBox01" /><label for="chk02">부록</label></span></li>
-                            <li><span><input type="checkbox" id="chk03" name="radioBox01" /><label for="chk03">의안</label></span></li>
-                            <li><span><input type="checkbox" id="chk04" name="radioBox01" /><label for="chk04">의원</label></span></li>
-                        </ul>
-                    </div>
-                    <div class="treeBox">
-                        <div id="rTreeBox">
-                        </div>
-                    </div>
-                </div>
-                <div class="tab02">
-                    <div class="sideBar_radioBox4">
-                        <ul>
-                            <li><span><input type="checkbox" id="chk05" name="radioBox02" /><label for="chk05">회의록</label></span></li>
-                            <li><span><input type="checkbox" id="chk06" name="radioBox02" /><label for="chk06">부록</label></span></li>
-                            <li><span><input type="checkbox" id="chk07" name="radioBox02" /><label for="chk07">의안</label></span></li>
-                            <li><span><input type="checkbox" id="chk08" name="radioBox02" /><label for="chk08">의원</label></span></li>
-                        </ul>
-                    </div>
-                    <div class="treeBox">
-                        <div id="aTreeBox">
-                        </div>
-                    </div>
-                </div>
+        <!-- template engine start -->
+        <script id="agent_server_info_list1-template" type="text/x-handlebars-template">
+            <ul class="list">
+                {{#areas1}}
+                <li>
+                    <a href="#" onclick="fnAreaPopup({{code}})"><span class="listBox"><img src="img/img/img_img0{{state}}.png" alt="" /></span><span class="listTxt">{{name}}({{upDate}})</span></a>
+                </li>
+                {{/areas1}}
+            </ul>
+        </script>
 
-            </div>
+        <script id="agent_server_info_list2-template" type="text/x-handlebars-template">
+            <ul class="list">
+                {{#areas2}}
+                <li>
+                    <a href="#" onclick="fnAreaPopup({{code}})"><span class="listBox"><img src="img/img/img_img0{{state}}.png" alt="" /></span><span class="listTxt">{{name}}({{upDate}})</span></a>
+                </li>
+                {{/areas2}}
+            </ul>
+        </script>
 
-            <div id="rightBox">
-
-                <div id="errorBox"></div>
-                <div class="topBox">
-
-                    <!-- Agent 서버정보 팝업 start -->
-                    <script id="agent_server_info_list1-template" type="text/x-handlebars-template">
-                        <ul class="list">
-                            {{#areas1}}
-                            <li>
-                                <a href="#" onclick="fnAreaPopup({{code}})"><span class="listBox"><img src="img/img/img_img0{{state}}.png" alt="" /></span><span class="listTxt">{{name}}({{upDate}})</span></a>
-                            </li>
-                            {{/areas1}}
-                        </ul>
-                    </script>
-
-                    <script id="agent_server_info_list2-template" type="text/x-handlebars-template">
-                        <ul class="list">
-                            {{#areas2}}
-                            <li>
-                                <a href="#" onclick="fnAreaPopup({{code}})"><span class="listBox"><img src="img/img/img_img0{{state}}.png" alt="" /></span><span class="listTxt">{{name}}({{upDate}})</span></a>
-                            </li>
-                            {{/areas2}}
-                        </ul>
-                    </script>
-
-                    <div class="topNemo">
-                        <div id="agent_server_info_list1"></div>
-                    </div>
-                    <div class="bottomNemo">
-                        <div id="agent_server_info_list2"></div>
-                    </div>
-                </div>
-                <div class="middleBox">
-                    <div class="fullBox">
-                        <div class="fullSub">
-
-                            <div class="well clearfix mt20" style="height:46px; position:relative; background-color: #000 ;">
-                                <div class="loading">
-                                    <div class="loading__ball"></div>
-                                    <div class="loading__ball" style="background:red"></div>
-                                    <div class="loading__ball"></div>
-                                    <div class="loading__ball" style="background:red"></div>
-                                    <div class="loading__ball"></div>
-                                    <div class="loading__ball" style="background:red"></div>
-                                    <div class="loading__ball"></div>
-                                    <div class="loading__ball" style="background:red"></div>
-                                    <div class="loading__ball"></div>
-                                    <div class="loading__ball" style="background:red"></div>
-                                    <div class="loading__ball"></div>
-                                    <div class="loading__ball" style="background:red"></div>
-                                    <div class="loading__ball"></div>
-                                    <div class="loading__ball" style="background:red"></div>
-                                    <div class="loading__ball"></div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="rightTopBox">
-                        <div class="leftTopBox">
-                            <div id="chart_bar" style="width:100%; height: auto"></div>
-                        </div>
-                        <div class="leftBottomBox">
-                            <div id="chart_cloumn" style="width:100%; height: auto"></div>
-                        </div>
-                    </div>
-                    <div class="rightBottomBox">
-                        <div class="leftTopBox">
-                            <div id="chart_spline" style="width:100%; height: auto;"></div>
-                        </div>
-                        <div class="leftBottomBox">
-                            <div id="chart_scatter" style="width:100%; height: auto;"></div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="bottomBox">
-                    <div id="chart_cloumn2" style="width:100%; height: auto;"></div>
-                </div>
-            </div>
-        </div>
-        </div>
-
-        <!-- Agent 서버정보 팝업 start -->
         <script id="agent_server_info_popup-template" type="text/x-handlebars-template">
             <div class="middle">
                 <div class="nemo01">
@@ -198,6 +95,135 @@
                 </div>
             </div>
         </script>
+
+        <script id="agent_server_state_info_popup-template" type="text/x-handlebars-template">
+            <div class="middle">
+                <table>
+                    <tr>
+                        <th>지방의회</th>
+                        <th>서버 IP</th>
+                        <th>CPU</th>
+                        <th>응답 시간</th>
+                        <th class="end">최종수집일</th>
+                    </tr>
+                    {{#listAgentVO}}
+                    <tr>
+                        <td>{{rasmblyNm}}</td>
+                        <td>{{serverIp}}</td>
+                        <td>{{cpu}}</td>
+                        <td>{{reqProcessingRatio}}</td>
+                        <td class="end">{{lastDate}}</td>
+                    </tr>
+                    {{/listAgentVO}}
+                </table>
+            </div>
+        </script>
+        <!-- template engine end -->
+
+        <div id="content">
+            <div id="sideBar">
+                <div class="sideBar_tabMenu">
+                    <ul>
+                        <li class="list01"><a href="#">의회별</a></li>
+                        <li class="list02"><a href="#">지역별</a></li>
+                    </ul>
+                </div>
+                <div class="tab01">
+                    <div class="sideBar_radioBox">
+                        <ul>
+                            <li><span><input type="checkbox" id="chk01" name="radioBox01" /><label for="chk01">회의록</label></span></li>
+                            <li><span><input type="checkbox" id="chk02" name="radioBox01" /><label for="chk02">부록</label></span></li>
+                            <li><span><input type="checkbox" id="chk03" name="radioBox01" /><label for="chk03">의안</label></span></li>
+                            <li><span><input type="checkbox" id="chk04" name="radioBox01" /><label for="chk04">의원</label></span></li>
+                        </ul>
+                    </div>
+                    <div class="treeBox">
+                        <div id="rTreeBox">
+                        </div>
+                    </div>
+                </div>
+                <div class="tab02">
+                    <div class="sideBar_radioBox4">
+                        <ul>
+                            <li><span><input type="checkbox" id="chk05" name="radioBox02" /><label for="chk05">회의록</label></span></li>
+                            <li><span><input type="checkbox" id="chk06" name="radioBox02" /><label for="chk06">부록</label></span></li>
+                            <li><span><input type="checkbox" id="chk07" name="radioBox02" /><label for="chk07">의안</label></span></li>
+                            <li><span><input type="checkbox" id="chk08" name="radioBox02" /><label for="chk08">의원</label></span></li>
+                        </ul>
+                    </div>
+                    <div class="treeBox">
+                        <div id="aTreeBox">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="rightBox">
+
+                <div id="errorBox"></div>
+                <div class="topBox">
+
+                    <!-- Agent 서버정보 팝업 start -->
+                    <div class="topNemo">
+                        <div id="agent_server_info_list1"></div>
+                    </div>
+                    <div class="bottomNemo">
+                        <div id="agent_server_info_list2"></div>
+                    </div>
+                </div>
+                <div class="middleBox">
+                    <div class="fullBox">
+                        <div class="fullSub">
+
+                            <div class="well clearfix mt20" style="height:46px; position:relative; background-color: #000 ;">
+                                <div class="loading">
+                                    <div class="loading__ball"></div>
+                                    <div class="loading__ball" style="background:red"></div>
+                                    <div class="loading__ball"></div>
+                                    <div class="loading__ball" style="background:red"></div>
+                                    <div class="loading__ball"></div>
+                                    <div class="loading__ball" style="background:red"></div>
+                                    <div class="loading__ball"></div>
+                                    <div class="loading__ball" style="background:red"></div>
+                                    <div class="loading__ball"></div>
+                                    <div class="loading__ball" style="background:red"></div>
+                                    <div class="loading__ball"></div>
+                                    <div class="loading__ball" style="background:red"></div>
+                                    <div class="loading__ball"></div>
+                                    <div class="loading__ball" style="background:red"></div>
+                                    <div class="loading__ball"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="rightTopBox">
+                        <div class="leftTopBox">
+                            <div id="chart_bar" style="width:100%; height: auto"></div>
+                        </div>
+                        <div class="leftBottomBox">
+                            <div id="chart_cloumn" style="width:100%; height: auto"></div>
+                        </div>
+                    </div>
+                    <div class="rightBottomBox">
+                        <div class="leftTopBox">
+                            <div id="chart_spline" style="width:100%; height: auto;"></div>
+                        </div>
+                        <div class="leftBottomBox">
+                            <div id="chart_scatter" style="width:100%; height: auto;"></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="bottomBox">
+                    <div id="chart_cloumn2" style="width:100%; height: auto;"></div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Agent 서버정보 팝업 start -->
         <div class="agentServerInfo">
             <div class="top">
                 <h1>Agent 서버정보</h1>
@@ -391,28 +417,6 @@
         <!-- 로그 데이터 팝업 end -->
 
         <!-- Agent 서버 상태정보 팝업 start -->
-        <script id="agent_server_state_info_popup-template" type="text/x-handlebars-template">
-            <div class="middle">
-                <table>
-                    <tr>
-                        <th>지방의회</th>
-                        <th>서버 IP</th>
-                        <th>CPU</th>
-                        <th>응답 시간</th>
-                        <th class="end">최종수집일</th>
-                    </tr>
-                    {{#listAgentVO}}
-                    <tr>
-                        <td>{{rasmblyNm}}</td>
-                        <td>{{serverIp}}</td>
-                        <td>{{cpu}}</td>
-                        <td>{{reqProcessingRatio}}</td>
-                        <td class="end">{{lastDate}}</td>
-                    </tr>
-                    {{/listAgentVO}}
-                </table>
-            </div>
-        </script>
         <div class="agentServerStateInfoPop">
             <div class="top">
                 <h1>Agent 서버 상태정보</h1>

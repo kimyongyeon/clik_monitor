@@ -47,17 +47,32 @@
 		ORDER BY LOASM_CODE ASC
 	</select>
 
-	<!-- 지방의회 왼쪽 콤보 조회 -->
-	<select id="selectAreaLeftComboList" parameterType="commonSearchVO" resultType="commonVO">
-
+	<!-- 지역선택 콤보 조회 -->
+	<select id="selectBrtcCodeDetails" parameterType="commonSearchVO" resultType="commonVO">
+		<![CDATA[
+			SELECT CODE_ID AS code ,
+				   CODE_ID_NM AS codenm
+			FROM common_code
+			WHERE CL_CODE = #brtcCode#
+			  AND USE_AT = 'Y'
+			ORDER BY CODE_ORDR ASC
+		]]>
 	</select>
-	<!-- 지방의회 가운데 콤보 조회 -->
-	<select id="selectAreaCenterComboList" parameterType="commonSearchVO" resultType="commonVO">
-
-	</select>
-	<!-- 지방의회 오른쪽 콤보 조회 -->
-	<select id="selectAreaRightComboList" parameterType="commonSearchVO" resultType="commonVO">
-
+	<!-- 의회명 콤보 조회 -->
+	<select id="selectLoasmInfo" parameterType="commonSearchVO" resultType="commonVO">
+		<![CDATA[
+			SELECT LOASM_CODE AS code ,
+				   LOASM_NM AS codenm ,
+				   BRTC_CODE AS brtcCode ,
+				   CTPRVNGUGUN_CODE AS ctprvngugunCode ,
+				   INSTT_CL_CODE AS insttClCode
+			FROM organ,
+				 COLGOVER
+			WHERE BRTC_CODE = #brtcCode#
+			  AND INSTT_CL_CODE = #insttClCode#
+			  AND organ.loasm_code = COLGOVER.rasmbly_id
+			ORDER BY LOASM_CODE ASC
+		 ]]>
 	</select>
 
 </mapper>

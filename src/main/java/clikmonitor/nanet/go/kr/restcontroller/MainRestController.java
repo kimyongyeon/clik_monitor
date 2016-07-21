@@ -75,7 +75,10 @@ public class MainRestController {
      * Agent 상태 정보 목록
      * @return
      */
-    @RequestMapping(value = "/getAreas.do", headers = "Accept=application/json; charset=utf8", method = RequestMethod.GET, produces = "text/json; charset=utf8")
+    @RequestMapping(value = "/getAreas.do"
+            , headers = "Accept=application/json; charset=utf8"
+            , method = RequestMethod.GET
+            , produces = "text/json; charset=utf8")
     public AgentVO getAreas() {
 
         CommonVO commonVO = new CommonVO();
@@ -129,7 +132,10 @@ public class MainRestController {
      * @param map
      * @return
      */
-    @RequestMapping(value = "/getAreaDeatail.do", headers = "Accept=application/json; charset=utf8", method = RequestMethod.GET, produces = "text/json; charset=utf8")
+    @RequestMapping(value = "/getAreaDeatail.do"
+            , headers = "Accept=application/json; charset=utf8"
+            , method = RequestMethod.GET
+            , produces = "text/json; charset=utf8")
     public AgentVO getAreaDeatil(@RequestParam Map map) {
 
         AgentVO agentVO = new AgentVO();
@@ -156,7 +162,10 @@ public class MainRestController {
      * Agent 서버 상태정보
      * @return
      */
-    @RequestMapping(value = "/getAreaStateInfoList.do", headers = "Accept=application/json; charset=utf8", method = RequestMethod.GET, produces = "text/json; charset=utf8")
+    @RequestMapping(value = "/getAreaStateInfoList.do"
+            , headers = "Accept=application/json; charset=utf8"
+            , method = RequestMethod.GET
+            , produces = "text/json; charset=utf8")
     public AgentVO getAreaStateInfoList() {
 
         List agents = new ArrayList();

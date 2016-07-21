@@ -33,24 +33,18 @@ public interface CommonMapper {
      */
     List<CommonVO> selectBroadList(); // 광역별 의회 목록 조회
 
-    /**
-     * 지방의회 왼쪽 콤보 리스트
-     * @param commonSearchVO
-     * @return
-     */
-    List<CommonVO> selectAreaLeftComboList(CommonSearchVO commonSearchVO);
 
     /**
-     * 지방의회 가운데 콤보 리스트
+     * 지역선택 콤보 리스트
      * @param commonSearchVO
      * @return
      */
-    List<CommonVO> selectAreaCenterComboList(CommonSearchVO commonSearchVO);
+    List<CommonVO> selectBrtcCodeDetails(CommonSearchVO commonSearchVO);
 
     /**
-     * 지방의회 오른쪽 콤보 리스트
+     * 의회명 콤보 리스트
      * @param commonSearchVO
      * @return
      */
-    List<CommonVO> selectAreaRightComboList(CommonSearchVO commonSearchVO);
+    List<CommonVO> selectLoasmInfo(CommonSearchVO commonSearchVO);
 }

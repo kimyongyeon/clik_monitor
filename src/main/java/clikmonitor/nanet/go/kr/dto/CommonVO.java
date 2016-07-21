@@ -18,6 +18,9 @@ public class CommonVO {
     private String loasmCode; // 지역코드
     private String loasmNm; // 지역명
 
+    private String code;
+    private String codenm;
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -32,9 +35,6 @@ public class CommonVO {
     // 지역정보 list
     private List<MainArea> areas;
 
-    // -- list
     private List<CommonVO> listCommonVO;
-
-
 
 }

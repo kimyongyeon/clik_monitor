@@ -1,5 +1,6 @@
 package clikmonitor.nanet.go.kr.service.service;
 
+import clikmonitor.nanet.go.kr.dto.CommonSearchVO;
 import clikmonitor.nanet.go.kr.dto.CommonVO;
 import clikmonitor.nanet.go.kr.mapper.CommonMapper;
 import org.springframework.stereotype.Service;
@@ -19,15 +20,11 @@ public interface CommonService {
      *
      * @return the tree list
      */
-/*
-        CommonService 메서드 선언 시작
-     */
     Map<String, List<CommonVO>> getTreeList(); // 메인화면 트리뷰 목록 조회
-    /*
-        CommonService 메서드 선언 시작
-     */
 
+    List<CommonVO> selectBrtcCodeDetails(CommonSearchVO commonSearchVO);
 
+    List<CommonVO> selectLoasmInfo(CommonSearchVO commonSearchVO);
 
     /**
      * The type Common service.
@@ -40,6 +37,16 @@ public interface CommonService {
          */
         @Resource(name = "commonMapper")
         CommonMapper commonMapper;
+
+        @Override
+        public List<CommonVO> selectBrtcCodeDetails(CommonSearchVO commonSearchVO) {
+            return commonMapper.selectBrtcCodeDetails(commonSearchVO);
+        }
+
+        @Override
+        public List<CommonVO> selectLoasmInfo(CommonSearchVO commonSearchVO) {
+            return commonMapper.selectLoasmInfo(commonSearchVO);
+        }
 
         @Override
         public Map<String, List<CommonVO>> getTreeList() {

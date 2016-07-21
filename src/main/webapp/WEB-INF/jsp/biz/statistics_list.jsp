@@ -5,7 +5,7 @@
 
         <!-- template engine start -->
         <script id="brtc_code-template" type="text/x-handlebars-template">
-            지역선택<select name="brtc_code" class="select02" onchange="fn_ajax_loasm_code_list()">
+            <select name="brtc_code" class="select02" onchange="fn_ajax_loasm_code_list()">
                 <option value="">지역선택</option>
                 {{#commonList}}
                 <option value="{{code}}">{{codenm}}</option>
@@ -13,7 +13,7 @@
             </select>
         </script>
         <script id="loasm_code-template" type="text/x-handlebars-template">
-            의회명<select name="loasm_code" class="select03">
+            <select name="loasm_code" class="select03">
                 <option value="">지방의회선택</option>
                 {{#commonList}}
                 <option value="{{code}}">{{codenm}}</option>
@@ -120,20 +120,20 @@
                             <td>
                                 <div class="selectBox">
                                     <div class="select01">
-                                        지방의회<select name="brtcCode" class="select01" onchange="fn_ajax_brtc_code_list()">
+                                        <select name="brtcCode" class="select01" onchange="fn_ajax_brtc_code_list()">
                                             <option value="">기관유형 선택</option>
                                             <option value="intsttcl_000023">광역의회</option>
                                             <option value="intsttcl_000024">기초의회</option>
                                         </select>
                                     </div>
                                     <div class="select02" id="brtc_code_div">
-                                        지역선택<select name="insttClCode" class="select02">
+                                        <select name="insttClCode" class="select02">
                                             <option value="">지역선택</option>
                                             <option value=""></option>
                                         </select>
                                     </div>
                                     <div class="select03" id="loasm_code_div">
-                                        의회명<select name="loasm_code" class="select03">
+                                        <select name="loasm_code" class="select03">
                                             <option value="">지방의회선택</option>
                                             <option value=""></option>
                                         </select>
@@ -152,8 +152,9 @@
                         <table id="myTable" class="listTable01">
                             <thead>
                             <tr>
-                                <th scope="col">의회</th>
-                                <th scope="col">지방의회</th>
+                                <th data-dynatable-sorts="Computer Year" scope="col">의회</th>
+                                <th scope="col" style="width:250px;">지방의회</th>
+                                <th style="display: none">rasmblyNmNo</th>
                                 <th scope="col">대수</th>
                                 <th scope="col">회기</th>
                                 <th scope="col">선거구</th>
@@ -262,8 +263,8 @@
                     for(var i=0; i<data.length; i++) {
                         myRecords.push(
                                 {
-                                    "의회": '광역의회',
-                                    "지방의회": '서울특별시',
+                                    "의회": data[i]['subRasmblyNm'],
+                                    "지방의회": data[i]['rasmblyNm'],
                                     "대수": data[i]['numprCount'],
                                     "회기": data[i]['sesnCount'],
                                     "선거구": data[i]['estCount'],
@@ -279,7 +280,8 @@
                                     "의안정보": data[i]['asembyCount'],
                                     "발의의원": data[i]['itncasembyCount'],
                                     "의안파일": data[i]['bifileCount'],
-                                    "의안회의록": data[i]['bimintsCount']
+                                    "의안회의록": data[i]['bimintsCount'],
+                                    "rasmblyNmNo": data[i]['rasmblyNmNo']
                                 }
                         );
                     }
@@ -287,8 +289,38 @@
                     $('#myTable').dynatable({
                         dataset: {
                             records: myRecords
-                        }
+                        },
+                        features: {
+                            paginate: true,
+                            sort: true,
+                            pushState: true,
+                            search: false,
+                            recordCount: false,
+                            perPageSelect: true
+                        },
+                        inputs: {
+                            page: null,
+                            recordCountTarget: null,
+                            recordCountPlacement: 'after',
+                            paginationLinkTarget: null,
+                            paginationLinkPlacement: 'after',
+                            paginationPrev: '이전',
+                            paginationNext: '다음',
+                            paginationGap: [1,2,2,1],
+                            searchTarget: null,
+                            searchPlacement: 'before',
+                            perPageTarget: null,
+                            perPagePlacement: 'before',
+                            perPageText: '한페이지당 개수: ',
+                            recordCountText: '전체 ',
+                            processingText: 'Processing...'
+                        },
                     });
+                    var dynatable = $('#myTable').data('dynatable');
+                    dynatable.paginationPerPage.set(20); // Show 20 records per page
+                    dynatable.paginationPage.set(1); // Go to page 5
+                    dynatable.process();
+                    dynatable.dom.update();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                 },
@@ -299,6 +331,23 @@
                 }
             });
         }
+
+//        $('#myTable').bind('dynatable:init', function(e, dynatable) {
+//
+//            $('#myTable').click( function(e) {
+//                // Clear any existing sorts
+//                dynatable.sorts.clear();
+//                dynatable.sorts.add('지방의회', 1) // 1=ASCENDING, -1=DESCENDING
+//                dynatable.process();
+//                e.preventDefault();
+//            });
+//
+//            $('#myTable').click( function(e) {
+//                dynatable.sorts.clear();
+//                dynatable.process();
+//                e.preventDefault()
+//            });
+//        });
 
         // 지역선택
         function fn_ajax_brtc_code_list() {

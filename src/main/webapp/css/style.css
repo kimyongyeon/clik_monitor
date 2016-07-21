@@ -676,7 +676,7 @@ body {background:#1f1f1f;}
 #dynatable-search-myTable,
 #dynatable-search-myTable2,
 #dynatable-search-myTable3,
-#dynatable-search-myTable4 {display:none;}
+#dynatable-search-myTable4 {display:block;}
 .dynatable-per-page {float:right;}
 .dynatable-per-page select {height:26px;}
 .bottomTable {position:relative;}
@@ -1054,3 +1054,6 @@ body {background:#1f1f1f;}
 .dynatable-arrow {display:none;}
 /* json style end */
 /* style end */
+
+#myTable { background: black;}
+#myTable2 {background: black;}

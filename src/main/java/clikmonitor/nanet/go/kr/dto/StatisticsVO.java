@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StatisticsVO {
+    private String subRasmblyNmNo; // 의회번호
+    private String rasmblyNmNo; // 지방의회번호
+    private String subRasmblyNm; // 의회명
+    private String rasmblyNm; // 의회명
     private String cntcResultId = ""; //IS 연계_결과_ID
     private String numprCount = ""; //IS '대수_개수';
     private String sesnCount = ""; // IS '회기_개수';

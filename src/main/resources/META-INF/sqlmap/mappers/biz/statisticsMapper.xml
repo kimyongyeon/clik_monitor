@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 통계관리 조회 매퍼 -->
+<mapper namespace="clikmonitor.nanet.go.kr.mapper.StatisticsMapper">
+
+    <resultMap id="statisticsMap" type="statisticsVO"></resultMap>
+
+    <!--의회별 전송 데이터 목록 조회  -->
+    <select id="selectRasmblyDataSendList" parameterType="statisticsSearchVO" resultMap="statisticsMap">
+    <!--<select id="selectRasmblyDataSendList" parameterType="statisticsSearchVO" resultType="statisticsVO">-->
+        <![CDATA[
+        SELECT /*selectRasmblyDataSendList*/
+             SUBSTR(CNTC_RESULT_ID,1,6)
+            ,(SELECT LOASM_NM FROM ORGAN WHERE LOASM_CODE = SUBSTR(CNTC_RESULT_ID,1,6) ) rasmblyNm
+            ,CNTC_RESULT_ID /* '연계_결과_ID'*/
+            ,NUMPR_COUNT /* '대수_개수'*/
+            ,SESN_COUNT /* '회기_개수'*/
+            ,EST_COUNT /* '선거구_개수'*/
+            ,MTGNM_COUNT /* '회의명_개수'*/
+            ,OFCPS_COUNT /* '의원직위_개수'*/
+            ,ASEMBY_COUNT /* '의원_개수'*/
+            ,ASEMBYACT_COUNT /* '의원활동_개수'*/
+            ,BI_COUNT /* '의안_개수'*/
+            ,BIFILE_COUNT /* '의안파일_개수'*/
+            ,BIMINTS_COUNT /* '의안회의록_개수'*/
+            ,ITNCASEMBY_COUNT /* '발의의원_개수'*/
+            ,MINTS_COUNT /* '회의록_개수'*/
+            ,APNDX_COUNT /* '부록_개수'*/
+            ,MTR_COUNT /* '안건_개수'*/
+            ,SPKNG_COUNT /* '발언_개수'*/
+        FROM TAPI_TRANSPER Y
+        WHERE CNTC_RESULT_ID =
+            (SELECT MAX(CNTC_RESULT_ID)
+             FROM TAPI_TRANSPER X
+             WHERE SUBSTR(X.CNTC_RESULT_ID,1,6) = SUBSTR(Y.CNTC_RESULT_ID,1,6))
+		]]>
+        <if test="keyWordType == 1"> <!-- 기관유형 -->
+            <if test="brtcCode == 'intsttcl_000024'"> <!-- 기초 -->
+                AND SUBSTR(Y.CNTC_RESULT_ID,1,6) IN (
+                    SELECT LOASM_CODE AS LOASMCODE
+                    FROM ORGAN, COLGOVER
+                    WHERE INSTT_CL_CODE = 'INTSTTCL_000024'
+                    AND ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+                )
+            </if>
+            <if test="brtcCode == 'intsttcl_000023'"> <!-- 광역 -->
+                AND SUBSTR(Y.CNTC_RESULT_ID,1,6) IN (
+                    SELECT LOASM_CODE AS LOASMCODE
+                    FROM ORGAN, COLGOVER
+                    WHERE INSTT_CL_CODE != 'INTSTTCL_000024'
+                    AND ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+                )
+            </if>
+        </if>
+        <if test="keyWordType == 2"> <!-- 지역 -->
+          AND SUBSTR(Y.CNTC_RESULT_ID,1,3) IN (#{insttClCode})
+        </if>
+        <if test="keyWordType == 3"> <!-- 지방의회 -->
+            AND SUBSTR(Y.CNTC_RESULT_ID,1,6) IN (#{loasmCode})
+        </if>
+        ORDER BY SUBSTR(Y.CNTC_RESULT_ID,1,6) ASC
+    </select>
+    <!--의회별 전송 데이터 목록 엑셀저장  -->
+    <select id="selectRasmblyDataSendExcelExportList" resultMap="statisticsMap">
+    <!--<select id="selectRasmblyDataSendExcelExportList" resultType="statisticsVO">-->
+    <![CDATA[
+         SELECT /*selectRasmblyDataSendExcelExportList*/
+             SUBSTR(CNTC_RESULT_ID,1,6)
+            ,(SELECT LOASM_NM FROM ORGAN WHERE LOASM_CODE = SUBSTR(CNTC_RESULT_ID,1,6) ) rasmblyNm
+            ,CNTC_RESULT_ID /* '연계_결과_ID'*/
+            ,NUMPR_COUNT /* '대수_개수'*/
+            ,SESN_COUNT /* '회기_개수'*/
+            ,EST_COUNT /* '선거구_개수'*/
+            ,MTGNM_COUNT /* '회의명_개수'*/
+            ,OFCPS_COUNT /* '의원직위_개수'*/
+            ,ASEMBY_COUNT /* '의원_개수'*/
+            ,ASEMBYACT_COUNT /* '의원활동_개수'*/
+            ,BI_COUNT biCount/* '의안_개수'*/
+            ,BIFILE_COUNT /* '의안파일_개수'*/
+            ,BIMINTS_COUNT /* '의안회의록_개수'*/
+            ,ITNCASEMBY_COUNT /* '발의의원_개수'*/
+            ,MINTS_COUNT /* '회의록_개수'*/
+            ,APNDX_COUNT /* '부록_개수'*/
+            ,MTR_COUNT /* '안건_개수'*/
+            ,SPKNG_COUNT /* '발언_개수'*/
+        FROM TAPI_TRANSPER Y
+        WHERE CNTC_RESULT_ID =
+            (SELECT MAX(CNTC_RESULT_ID)
+             FROM TAPI_TRANSPER X
+             WHERE SUBSTR(X.CNTC_RESULT_ID,1,6) = SUBSTR(Y.CNTC_RESULT_ID,1,6))
+        ORDER BY SUBSTR(Y.CNTC_RESULT_ID,1,6) ASC
+		]]>
+    </select>
+    <!--항목별 최종전송 데이터 목록 조회 -->
+    <select id="selectRasmblyLastSendDataList" parameterType="statisticsSearchVO" resultMap="statisticsMap">
+    <!--<select id="selectRasmblyLastSendDataList" parameterType="statisticsSearchVO" resultType="statisticsVO">-->
+        <![CDATA[
+        SELECT /*selectRasmblyLastSendDataList*/
+              (SELECT LOASM_NM	FROM ORGAN WHERE ORGAN.LOASM_CODE = RASMBLY_ID) rasmblyNm
+            , SUBSTR(MAX(UP1),1,4) || '-' || SUBSTR(MAX(UP1),5,2) || '-' || SUBSTR(MAX(UP1),7,2) || ' ' || SUBSTR(MAX(UP1),9,2) || ':' || SUBSTR(MAX(UP1),11,2) || ':' || SUBSTR(MAX(UP1),13,2) billMinutesFrstRegistDt
+            , SUBSTR(MAX(UP2),1,4) || '-' || SUBSTR(MAX(UP2),5,2) || '-' || SUBSTR(MAX(UP2),7,2) || ' ' || SUBSTR(MAX(UP2),9,2) || ':' || SUBSTR(MAX(UP2),11,2) || ':' || SUBSTR(MAX(UP2),13,2) itemFrstRegistDt
+            , SUBSTR(MAX(UP3),1,4) || '-' || SUBSTR(MAX(UP3),5,2) || '-' || SUBSTR(MAX(UP3),7,2) || ' ' || SUBSTR(MAX(UP3),9,2) || ':' || SUBSTR(MAX(UP3),11,2) || ':' || SUBSTR(MAX(UP3),13,2) billFrstRegistDt
+            , SUBSTR(MAX(UP4),1,4) || '-' || SUBSTR(MAX(UP4),5,2) || '-' || SUBSTR(MAX(UP4),7,2) || ' ' || SUBSTR(MAX(UP4),9,2) || ':' || SUBSTR(MAX(UP4),11,2) || ':' || SUBSTR(MAX(UP4),13,2) minutesAppendixFrstRegistDt
+            , SUBSTR(MAX(UP5),1,4) || '-' || SUBSTR(MAX(UP5),5,2) || '-' || SUBSTR(MAX(UP5),7,2) || ' ' || SUBSTR(MAX(UP5),9,2) || ':' || SUBSTR(MAX(UP5),11,2) || ':' || SUBSTR(MAX(UP5),13,2) billFrstRegistDt
+            , SUBSTR(MAX(UP6),1,4) || '-' || SUBSTR(MAX(UP6),5,2) || '-' || SUBSTR(MAX(UP6),7,2) || ' ' || SUBSTR(MAX(UP6),9,2) || ':' || SUBSTR(MAX(UP6),11,2) || ':' || SUBSTR(MAX(UP6),13,2) minutesStatementFrstRegistDt
+            , RASMBLY_ID rasmblyNmNo
+        FROM (
+            SELECT AA.RASMBLY_ID, UP1, UP2, UP3, UP4, UP5, UP6 FROM
+               (SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP1  FROM MINUTES GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) AA -- 회의록
+              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP2 FROM ITEM GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) BB -- 안건
+              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP3 FROM MINUTES_ANSWER GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) CC -- 답변
+              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP4 FROM MINUTES_APPENDIX GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) DD -- 부록
+              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP5 FROM BILL GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) EE -- 의안
+         	  ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP6 FROM MINUTES_STATEMENT GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) FF -- 발언
+                WHERE AA.RASMBLY_ID = BB.RASMBLY_ID(+)
+                AND AA.RASMBLY_ID = CC.RASMBLY_ID(+)
+                AND AA.RASMBLY_ID = DD.RASMBLY_ID(+)
+                AND AA.RASMBLY_ID = EE.RASMBLY_ID(+)
+                 AND AA.RASMBLY_ID = FF.RASMBLY_ID(+)
+            )
+        GROUP BY RASMBLY_ID	ORDER BY RASMBLY_ID ASC
+		]]>
+    </select>
+
+    <!--항목별 최종전송 데이터 목록 엑셀저장  -->
+    <select id="selectRasmblyLastSendDataExcelExportList" resultMap="statisticsMap">
+    <!--<select id="selectRasmblyLastSendDataExcelExportList" resultType="statisticsVO">-->
+        <![CDATA[
+        SELECT /*selectRasmblyLastSendDataExcelExportList*/
+             (SELECT LOASM_NM	FROM ORGAN WHERE ORGAN.LOASM_CODE = RASMBLY_ID) rasmblyNm
+            , SUBSTR(MAX(UP1),1,4) || '-' || SUBSTR(MAX(UP1),5,2) || '-' || SUBSTR(MAX(UP1),7,2) || ' ' || SUBSTR(MAX(UP1),9,2) || ':' || SUBSTR(MAX(UP1),11,2) || ':' || SUBSTR(MAX(UP1),13,2) billMinutesFrstRegistDt
+            , SUBSTR(MAX(UP2),1,4) || '-' || SUBSTR(MAX(UP2),5,2) || '-' || SUBSTR(MAX(UP2),7,2) || ' ' || SUBSTR(MAX(UP2),9,2) || ':' || SUBSTR(MAX(UP2),11,2) || ':' || SUBSTR(MAX(UP2),13,2) itemFrstRegistDt
+            , SUBSTR(MAX(UP3),1,4) || '-' || SUBSTR(MAX(UP3),5,2) || '-' || SUBSTR(MAX(UP3),7,2) || ' ' || SUBSTR(MAX(UP3),9,2) || ':' || SUBSTR(MAX(UP3),11,2) || ':' || SUBSTR(MAX(UP3),13,2) billFrstRegistDt
+            , SUBSTR(MAX(UP4),1,4) || '-' || SUBSTR(MAX(UP4),5,2) || '-' || SUBSTR(MAX(UP4),7,2) || ' ' || SUBSTR(MAX(UP4),9,2) || ':' || SUBSTR(MAX(UP4),11,2) || ':' || SUBSTR(MAX(UP4),13,2) minutesAppendixFrstRegistDt
+            , SUBSTR(MAX(UP5),1,4) || '-' || SUBSTR(MAX(UP5),5,2) || '-' || SUBSTR(MAX(UP5),7,2) || ' ' || SUBSTR(MAX(UP5),9,2) || ':' || SUBSTR(MAX(UP5),11,2) || ':' || SUBSTR(MAX(UP5),13,2) billFrstRegistDt
+            , SUBSTR(MAX(UP6),1,4) || '-' || SUBSTR(MAX(UP6),5,2) || '-' || SUBSTR(MAX(UP6),7,2) || ' ' || SUBSTR(MAX(UP6),9,2) || ':' || SUBSTR(MAX(UP6),11,2) || ':' || SUBSTR(MAX(UP6),13,2) minutesStatementFrstRegistDt
+            , RASMBLY_ID rasmblyNmNo
+        FROM (
+            SELECT AA.RASMBLY_ID, UP1, UP2, UP3, UP4, UP5, UP6 FROM
+               (SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP1  FROM MINUTES GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) AA
+              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP2 FROM ITEM GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) BB
+              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP3 FROM MINUTES_ANSWER GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) CC
+              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP4 FROM MINUTES_APPENDIX GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) DD
+              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP5 FROM BILL GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) EE
+        	  ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP6 FROM MINUTES_STATEMENT GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) FF
+                WHERE AA.RASMBLY_ID = BB.RASMBLY_ID(+)
+                AND AA.RASMBLY_ID = CC.RASMBLY_ID(+)
+                AND AA.RASMBLY_ID = DD.RASMBLY_ID(+)
+                AND AA.RASMBLY_ID = EE.RASMBLY_ID(+)
+                AND AA.RASMBLY_ID = FF.RASMBLY_ID(+)
+            )
+        GROUP BY RASMBLY_ID	ORDER BY RASMBLY_ID ASC
+		]]>
+    </select>
+
+
+</mapper>

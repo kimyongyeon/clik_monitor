@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Configuration status="error">
+<Configuration status="INFO">
     <Appenders>
         <Console name="console">
             <PatternLayout pattern="%d %5p [%c] %m%n" />
         </Console>
     </Appenders>
-    
-    <Loggers>
-        <Logger name="egovframework" level="debug" additivity="false">
-            <AppenderRef ref="console" />
-        </Logger>
 
-        <logger name="jdbc.sqlonly">
+    <Loggers>
+
+        <logger name="jdbc.sqlonly" level="debug" >
             <AppenderRef ref="console" />
         </logger>
 
-        <Root level="error">
+        <logger name="clikmonitor.nanet.go.kr.restcontroller" level="debug" >
             <AppenderRef ref="console" />
-        </Root>         
+        </logger>
+
+        <root level="info">
+        </root>
+
     </Loggers>
 </Configuration>

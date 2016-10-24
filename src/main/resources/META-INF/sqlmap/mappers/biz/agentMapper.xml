@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 메인화면 Agent 목록 및 Agent 상세정보 매퍼 -->
+<mapper namespace="clikmonitor.nanet.go.kr.mapper.AgentMapper">
+
+    <resultMap id="agentMap" type="agentVO"></resultMap>
+
+    <!-- Agent 상태 정보 목록 조회 -->
+    <!--
+        1. SYSTEM_STTUS_CODE : NULL-정상(GREEN), 000-비정상(RED) : 화면표시
+        2. RASMBLY_NM : 의회명 : 화면표시
+        3. LAST_UPDT_DT : 최신 업데이트 일자 : 화면표시
+        4. RASMBLY_ID : 상세정보로 들어가기 위한 키 정보
+    -->
+    <select id="selectAgentStateList" parameterType="agentSearchVO" resultType="agentVO">
+		SELECT /* selectAgentStateList */
+			  COLGOVER.RASMBLY_ID rasmblyId
+			, COLGOVER.RASMBLY_NM rasmblyNm
+			, COLGOVER.SYSTEM_STTUS_CODE systemSttusCode
+			, COLGOVER.RASMBLY_STTUS_CODE rasmblySttusCode
+			, SUBSTR(TO_CHAR(COLGOVER.LAST_CNTC_DT,'YYYYMMDD'),1,4) || '-' || SUBSTR(TO_CHAR(COLGOVER.LAST_CNTC_DT,'YYYYMMDD'),5,2) || '-' || SUBSTR(TO_CHAR(COLGOVER.LAST_CNTC_DT,'YYYYMMDD'),7,2) lastUpdtDt
+			, COLGOVER.DELETE_DT deleteDt
+			, COLGOVER.ISVIEW isview
+			, SUBSTR(COLGOVER.RASMBLY_ID, 4,3) gubun
+		FROM COLGOVER, COLGOVER_SET
+		WHERE COLGOVER_SET.RASMBLY_ID(+) = COLGOVER.RASMBLY_ID
+		AND COLGOVER.ISVIEW = 'Y'
+		ORDER BY ORDR ASC
+	</select>
+
+    <!-- Agent 네트워크 현황 클릭시 서버정보 목록 조회 -->
+    <select id="selectAgentServerTableList" parameterType="agentSearchVO" resultMap="agentMap">
+
+        SELECT /* selectAgentServerTableList */
+             COLGOVER.RASMBLY_ID
+		   , COLGOVER.RASMBLY_NM
+		   , COLGOVER.SERVER_IP
+		   , COLGOVER_SET.INSTALL_YEAR
+  		   , COLGOVER_SET.SERVER
+  		   , COLGOVER_SET.OS
+  		   , COLGOVER_SET.WAS
+           , COLGOVER_SET.CPU
+  		   , COLGOVER_SET.RAM
+  		   , COLGOVER_SET.MODULE_INSTALL_PATH
+  		   , DECODE (COLGOVER.SYSTEM_STTUS_CODE,'000','정상',null,'설치안됨','비정상') AS SYSTEM_STTUS_CODE
+           , COLGOVER.LAST_UPDT_DT
+           , COLGOVER_SET.NOTE
+        FROM COLGOVER,
+             COLGOVER_SET
+        WHERE COLGOVER_SET.RASMBLY_ID(+) = COLGOVER.RASMBLY_ID
+          AND COLGOVER.ISVIEW = 'Y'
+        ORDER BY ORDR ASC
+
+	</select>
+
+    <select id="selectAgentUpdateOne" parameterType="agentSearchVO" resultMap="agentMap">
+        SELECT
+          RASMBLY_ID
+        , CMMND_EXC_DT as updateDate
+        FROM COUNCIL_SYSTEM_CONTROL
+        WHERE RASMBLY_ID = #{rasmblyId}
+        AND CMMND_CODE = 'REQ003' -- 업데이트 일자
+        AND ROWNUM = 1
+    </select>
+
+    <!-- Agent 상태 정보 상세 조회 -->
+    <select id="selectAgentInfoOne" parameterType="agentSearchVO" resultMap="agentMap">
+		SELECT /*selectAgentInfoOne*/
+     		 CST.RASMBLY_ID rasmblyId
+		   , CST.RASMBLY_NM rasmblyNm -- 의회명
+		   , CST.SYSTEM_STTUS_CODE systemSttusCode -- 상태코드
+		   , CST.NOTE note
+           , CR.LAST_CNTC_DT lastCntcDt
+		FROM COLGOVER_SET CST, COLGOVER CR
+	  	WHERE CST.RASMBLY_ID = CR.RASMBLY_ID
+	  	AND CST.RASMBLY_ID = #{rasmblyId}
+	  	AND ROWNUM = 1;
+	</select>
+
+    <!-- 최신일자별 부록 개수-->
+    <select id="selectMinutesAppendixList" parameterType="agentSearchVO" resultType="agentVO">
+
+    </select>
+
+    <!-- 최신일자별 회의록 개수-->
+    <select id="selectMinutesList" parameterType="agentSearchVO" resultType="agentVO">
+
+    </select>
+
+    <!-- 최신일자별 의안 개수-->
+    <select id="selectBillList" parameterType="agentSearchVO" resultType="agentVO">
+
+    </select>
+
+    <!-- 최신일자별 의원 개수-->
+    <select id="selectLamanList" parameterType="agentSearchVO" resultType="agentVO">
+
+    </select>
+
+    <!-- Agent 정보 등록 -->
+    <insert id="insertAgentInfoOne" parameterType="agentVO">
+    INSERT INTO /*insertAgentInfoOne*/ COLGOVER
+    (
+         COLGOVER_SET_ID
+        ,RASMBLY_ID
+        ,RASMBLY_NM
+        ,ISVIEW
+        ,SET_INTERVAL
+        ,SYSTEM_STTUS_CODE
+        ,SERVER
+        ,OS
+        ,WAS
+        ,CPU
+        ,RAM
+        ,MODULE_INSTALL_PATH
+        ,NOTE
+    )
+    VALUES
+    (
+        #{COLGOVER_SET_ID}
+        , #{RASMBLY_ID}
+        , #{RASMBLY_NM}
+        , #{ISVIEW}
+        , #{SET_INTERVAL}
+        , #{SYSTEM_STTUS_CODE}
+        , #{SERVER}
+        , #{OS}
+        , #{WAS}
+        , #{CPU}
+        , #{RAM}
+        , #{MODULE_INSTALL_PATH}
+        , #{NOTE}
+    )
+    </insert>
+
+    <!-- Agent 정보 수정 -->
+    <update id="updateAgentInfoOne" parameterType="agentVO">
+
+    </update>
+
+    <!-- Agent 정보 삭제 -->
+    <delete id="deleteAgentInfoOne" parameterType="agentVO">
+
+    </delete>
+
+    <!-- 지방의회 연계API 관리 - AGENT 설정 정보를 등록한다. -->
+    <insert id="insertCouncilSystemControl" parameterType="agentVO">
+        INSERT INTO COUNCIL_SYSTEM_CONTROL
+        (
+            REQST_NO
+            ,RASMBLY_ID
+            ,CMMND_NM
+            ,CMMND_CODE
+            ,EXE_CMMND
+            ,TRGET_FILE_PATH
+            ,TRGET_FILE_SIZE
+            ,LOG_FILE_NAME
+            ,LOG_FILE_LINE_CO
+            ,CALL_URL
+            ,CMMND_TRNSMIS_AT
+            ,CMMND_TRNSMIS_DT
+            ,CMMND_EXC_DT
+            ,CMMND_EXC_AT
+            ,CMMND_EXC_DATA
+            ,CMMND_EXC_CNFIRM_AT
+            ,FRST_REGISTER_ID
+            ,FRST_REGIST_DT
+            ,SET_INTERVAL
+            ,TRGET_FILE_STRE_PATH
+        )
+        VALUES
+        (
+            #{reqstNo}
+            ,#{rasmblyId}
+            ,(SELECT CODE_NM FROM COMMON_DETAIL_CODE WHERE CODE_ID = 'RIS030' AND CODE = #CMMND_CODE#)
+            ,#{cmmndCode}
+            ,#{exeCmmnd}
+            ,#{trgetFilePath}
+            ,#{trgetFileSize}
+            ,#{LOG_FILE_NAME}
+            ,#{logFileName}
+            ,#{callUrl}
+            ,#{cmmndTrnsmisAt}
+            ,#{cmmndTrnsmisDt}
+            ,#{cmmndExcDt}
+            ,#{cmmndExcAt}
+            ,#{cmmndExcData:CLOB}
+            ,#{cmmndExcCnfirmAt}
+            ,#{frstRegisterId}
+            ,SYSDATE
+            ,#{setInterval}
+            ,#{trgetFileStrePath}
+        )
+    </insert>
+
+
+</mapper>

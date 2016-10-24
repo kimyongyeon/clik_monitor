@@ -1,28 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:beans="http://www.springframework.org/schema/p"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 				http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
 				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<mvc:view-controller path="/" view-name="index" />
-
-	<mvc:resources mapping="/css/**" location="/css/**" />
-	<mvc:resources mapping="/assets/**" location="/assets/**" />
-	<mvc:resources mapping="/images/**" location="/images/**" />
-	<mvc:resources mapping="/img/**" location="/img/**" />
-	<mvc:resources mapping="/js/**" location="/js/**" />
-	<mvc:resources mapping="/font/**" location="/font/**" />
+	<!-- 리소스 url path에 접근 제안 해제 -->
+	<mvc:resources mapping="/css/**" location="/css/**"  cache-period="0"/>
+	<mvc:resources mapping="/assets/**" location="/assets/**"  cache-period="0"/>
+	<mvc:resources mapping="/images/**" location="/images/**" cache-period="0"/>
+	<mvc:resources mapping="/img/**" location="/img/**" cache-period="0"/>
+	<mvc:resources mapping="/js/**" location="/js/**" cache-period="0"/>
+	<mvc:resources mapping="/font/**" location="/font/**" cache-period="0"/>
 
 	<mvc:annotation-driven />
+
+	<!-- 화면에서 로직 처리없이 view만 보여줄 화면 -->
+	<mvc:view-controller path="/" view-name="index"></mvc:view-controller>
+	<!--<mvc:view-controller path="/login.do" view-name="login"></mvc:view-controller>-->
+	<!--<mvc:view-controller path="/main.do" view-name="main"></mvc:view-controller>-->
+	<!--<mvc:view-controller path="/statistics_list.do" view-name="biz/statistics_list"></mvc:view-controller>-->
+	<mvc:view-controller path="/range_setting_list.do" view-name="biz/range_setting_list"></mvc:view-controller>
+	<!--<mvc:view-controller path="/range_setting_edit.do" view-name="biz/range_setting_edit"></mvc:view-controller>-->
+	<mvc:view-controller path="/range_setting_reg.do" view-name="biz/range_setting_reg"></mvc:view-controller>
+	<mvc:view-controller path="/mail_list.do" view-name="biz/mail_list"></mvc:view-controller>
+	<mvc:view-controller path="/metadata_list.do" view-name="biz/metadata_list"></mvc:view-controller>
 
 	<context:component-scan base-package="egovframework, clikmonitor">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 
-	<!-- resource path 없으면 찾질 못한다. css, javascript 등...-->
+	<!-- interceptors 설정 -->
+	<!--<mvc:interceptors>-->
+		<!--<mvc:interceptor>-->
+			<!--<mvc:mapping path="/**"/>-->
+			<!--<mvc:exclude-mapping path="/login/**" />-->
+			<!--<mvc:exclude-mapping path="/assets/**" />-->
+			<!--<mvc:exclude-mapping path="/js/**" />-->
+			<!--<mvc:exclude-mapping path="/font/**" />-->
+			<!--<mvc:exclude-mapping path="/css/**" />-->
+			<!--<mvc:exclude-mapping path="/images/**" />-->
+			<!--<mvc:exclude-mapping path="/img/**" />-->
+			<!--<bean id="loginInterceptor" class="clikmonitor.nanet.go.kr.interceptor.LoginInterceptor"></bean>-->
+		<!--</mvc:interceptor>-->
+		<!--&lt;!&ndash; 로그인 후 백버튼 누르면 로그인 페이지로 이동하는 오류 수정 &ndash;&gt;-->
+		<!--<bean id="webContentInterceptor"-->
+			  <!--class="org.springframework.web.servlet.mvc.WebContentInterceptor">-->
+			<!--<property name="cacheSeconds" value="0" />-->
+			<!--<property name="useExpiresHeader" value="true" />-->
+			<!--<property name="useCacheControlHeader" value="true" />-->
+			<!--<property name="useCacheControlNoStore" value="true" />-->
+		<!--</bean>-->
+	<!--</mvc:interceptors>-->
+
+	 <!--resource path 없으면 찾질 못한다. css, javascript 등...-->
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
 		<property name = "alwaysUseFullPath" value = "true" />
 	</bean>
@@ -73,12 +107,8 @@
 		</property>
 	</bean>
 
-	<!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:viewClass="org.springframework.web.servlet.view.JstlView"
-	    p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" />-->
-	
 	<!-- Pagination Tag -->
     <bean id="imageRenderer" class="egovframework.sample.cmmn.EgovImgPaginationRenderer" />
-
     <bean id="paginationManager" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager">
         <property name="rendererType">
             <map>
@@ -87,16 +117,5 @@
         </property>
     </bean>
 	<!-- Pagination Tag -->
-
-	<!-- 로그인 후 백버튼 누르면 로그인 페이지로 이동하는 오류 수정 -->
-	<!--<mvc:interceptors>
-		<bean id="webContentInterceptor"
-			  class="org.springframework.web.servlet.mvc.WebContentInterceptor">
-			<property name="cacheSeconds" value="0" />
-			<property name="useExpiresHeader" value="true" />
-			<property name="useCacheControlHeader" value="true" />
-			<property name="useCacheControlNoStore" value="true" />
-		</bean>
-	</mvc:interceptors>-->
 
 </beans>

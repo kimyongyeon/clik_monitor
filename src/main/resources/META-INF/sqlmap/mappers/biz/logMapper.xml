@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 메인화면 에러로그 상세 및 목록 매퍼 -->
+<mapper namespace="clikmonitor.nanet.go.kr.mapper.LogMapper">
+
+    <resultMap id="logMap" type="logVO"></resultMap>
+
+    <sql id = "h_top">
+        <![CDATA[
+			SELECT  *
+            FROM	(
+            		SELECT 	ROWNUM RNUM, ALL_LIST.*
+            		FROM  	(
+        ]]>
+    </sql>
+
+    <sql id = "h_bottom">
+        <![CDATA[
+							) ALL_LIST
+					)
+			WHERE  	RNUM  > #{firstIndex}
+	        AND  	RNUM <= #{firstIndex} + #{recordCountPerPage}
+	    ]]>
+    </sql>
+
+    <!--로그 데이터 상세 정보 조회  -->
+    <select id="selectErrorLogInfoOne" parameterType="logSearchVO" resultMap="logMap">
+        <![CDATA[
+            SELECT /*selectErrorLogInfoOne*/
+               REQUST_INSTT_ID
+               , RASMBLY_NM
+               , TAR_LOG.SERVER_IP
+               , PROVD_INSTT_ID   /* 요청코드 */
+               , REQUST_RECPTN_TM  /* 요청일자 */
+               , RESULT_CODE  /* 결과코드*/
+               , RESULT_MSSAGE  /* 결과메세지 */
+            FROM TAR_LOG, COLGOVER
+            WHERE TAR_LOG.REQUST_INSTT_ID = COLGOVER.RASMBLY_ID
+            AND REQUST_ID = #{requstId} /* 오류메시지 아이디 */
+            AND ROWNUM = 1
+		]]>
+    </select>
+
+    <!--로그 데이터 목록 정보 조회  -->
+    <select id="selectErrorLogInfoList" parameterType="logSearchVO" resultMap="logMap">
+        <include refid="h_top" />
+        <![CDATA[
+            SELECT /*+ INDEX_DESC(TAR_LOG CLIK_TAR_LOG_CHART_IDX2) */
+                 REQUST_ID
+               , REQUST_INSTT_ID
+               , RASMBLY_NM
+               , TAR_LOG.SERVER_IP
+               , PROVD_INSTT_ID   /* 요청코드 */
+               , REQUST_RECPTN_TM  /* 요청일자 */
+               , RESULT_CODE  /* 결과코드*/
+               , CODE_NM  /* 결과코드명 */
+               , RESULT_MSSAGE  /* 결과메세지 */
+            FROM TAR_LOG, COLGOVER, COMMON_DETAIL_CODE
+            WHERE TAR_LOG.REQUST_INSTT_ID = COLGOVER.RASMBLY_ID
+            AND RESULT_CODE = CODE
+            AND CODE_ID = 'RIS007'
+            AND RESULT_CODE != '000'
+            AND RESULT_CODE != '104'
+--             AND OCCRRNC_DE BETWEEN TO_CHAR(TRUNC(SYSDATE,'YYYY'),'YYYYMMDD') AND TO_CHAR(LAST_DAY(ADD_MONTHS(TO_CHAR(TRUNC(SYSDATE,'YYYY'),'YYYYMMDD'),+11)),'YYYYMMDD')
+-- todo: 운영서버 반영시 아래 주석 풀어야 함.
+            AND OCCRRNC_DE BETWEEN TO_CHAR(TRUNC(SYSDATE+1)-TO_CHAR(SYSDATE,'D'),'YYYYMMDD') AND TO_CHAR(TRUNC(SYSDATE+1)-TO_CHAR(SYSDATE,'D'),'YYYYMMDD')
+            AND CNTC_ID IS NOT NULL
+		]]>
+        -- SELECT CODE, CODE_NM FROM COMMON_DETAIL_CODE WHERE CODE_ID = 'RIS007' -- 코드 테이블
+        <include refid="h_bottom" />
+    </select>
+
+    <select id="selectErrorLogInfoListTotalRecordCount" parameterType="logSearchVO" resultType="int">
+        SELECT SUM(CNT) FROM (
+            SELECT REQUST_INSTT_ID, COUNT(*) CNT
+            FROM TAR_LOG
+            WHERE RESULT_CODE != '000'
+            AND RESULT_CODE != '104'
+            AND OCCRRNC_DE BETWEEN TO_CHAR(TRUNC(SYSDATE+1)-TO_CHAR(SYSDATE,'D'),'YYYYMMDD') AND TO_CHAR(TRUNC(SYSDATE+1)-TO_CHAR(SYSDATE,'D'),'YYYYMMDD')
+            GROUP BY REQUST_INSTT_ID
+        )
+
+    </select>
+
+</mapper>

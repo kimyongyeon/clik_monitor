@@ -1,6 +1,6 @@
 package clikmonitor.nanet.go.kr.mapper;
 
-import clikmonitor.nanet.go.kr.dto.LoginVO;
+import clikmonitor.nanet.go.kr.vo.LoginVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 /**
@@ -15,5 +15,5 @@ public interface LoginMapper {
      * @param loginVO the login vo
      * @return int int
      */
-    int selectLoginOne(LoginVO loginVO); // 사용자 아이디/패스워드로 조회
+    LoginVO selectLoginOne(LoginVO loginVO); // 사용자 아이디/패스워드로 조회
 }

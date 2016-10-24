@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 메인화면 의회별 / 지역별 TreeView 매퍼 -->
+<mapper namespace="clikmonitor.nanet.go.kr.mapper.CommonMapper">
+
+    <select id="selectChartXdataList" parameterType="commonVO" resultType="commonVO">
+        SELECT
+            DECODE (REPLACE(REPLACE(REPLACE(LOASM_NM,'의회',''),'특별',''),'시','')
+               , '서울'    ,'서울'
+               , '부산광역' ,'부산'
+               , '대구광역' ,'대구'
+               , '인천광역' ,'인천'
+               , '광주광역' ,'광주'
+               , '대전광역' ,'대전'
+               , '울산광역' ,'울산'
+               , '세종자치' ,'세종'
+               , '경기도'  ,'경기'
+               , '강원도'  ,'강원'
+               , '충청북도' ,'충북'
+               , '충청남도' ,'충남'
+               , '전라북도' ,'전북'
+               , '전라남도' ,'전남'
+               , '경상북도' ,'경북'
+               , '경상남도' ,'경남'
+               , '제주자치도' ,'제주'
+               , '경기도 부천' ,'부천'
+               , '경기도 하남' ,'하남'
+               , '강원도 강릉' ,'강릉'
+               , '충청북도 청주' ,'청주'
+               , '충청남도 서산' ,'서산'
+               , '전라북도 정읍' ,'정읍'
+               , '전라남도 순천' ,'순천'
+               , '경상북도 상주' ,'상주'
+               , '경상남도 거제' ,'거제'
+               , '경상남도 김해' ,'김해'
+               ) RASMBLYNM,
+            LOASM_CODE AS CODE ,
+            LOASM_NM AS CODENM
+        FROM ORGAN, COLGOVER
+        WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+        AND ISVIEW = 'Y'
+        ORDER BY ORDR ASC
+    </select>
+
+	<!-- 지역별 의회 목록 조회 -->
+	<select id="selectAreaList" parameterType="commonVO" resultType="commonVO">
+		SELECT /* getAreaList : 지역별 의회 목록 조회 */
+           LOASM_CODE AS code,
+           LOASM_NM AS codenm,
+		  (SELECT CODE_ID_NM
+		   FROM COMMON_CODE
+		   WHERE CL_CODE='LMC'
+			 AND CODE_ID = BRTC_CODE) AS COMDENM,
+			   CTPRVNGUGUN_CODE AS CTPRVNGUGUNCODE,
+			   INSTT_CL_CODE AS INSTTCLCODE
+		FROM ORGAN,
+			 COLGOVER
+		WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+		AND ISVIEW = 'Y'
+		ORDER BY ORDR ASC, LOASM_CODE ASC
+	</select>
+
+	<!-- 기초별 의회 목록 조회 -->
+	<select id="selectBasicList" parameterType="commonVO" resultType="commonVO">
+		SELECT /* getBasicList : 기초별 의회 목록 조회 */
+           LOASM_NM AS codenm ,
+           LOASM_CODE AS code ,
+           CTPRVNGUGUN_CODE AS CTPRVNGUGUNCODE ,
+           INSTT_CL_CODE AS INSTTCLCODE
+		FROM ORGAN,
+			 COLGOVER
+		WHERE INSTT_CL_CODE = 'INTSTTCL_000024'
+		AND ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+		AND ISVIEW = 'Y'
+		ORDER BY ORDR ASC, LOASM_CODE ASC
+	</select>
+
+	<!-- 광역별 의회 목록 조회 -->
+	<select id="selectBroadList" parameterType="commonVO" resultType="commonVO">
+		SELECT /* getBroadList : 광역별 의회 목록 조회 */
+           LOASM_NM AS codenm,
+           LOASM_CODE AS code ,
+           CTPRVNGUGUN_CODE AS CTPRVNGUGUNCODE ,
+           INSTT_CL_CODE AS INSTTCLCODE
+		FROM ORGAN,
+			 COLGOVER
+		WHERE INSTT_CL_CODE != 'INTSTTCL_000024'
+		AND ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+		AND ISVIEW = 'Y'
+		ORDER BY ORDR ASC, LOASM_CODE ASC
+	</select>
+
+	<!-- 지역선택 콤보 조회 -->
+	<select id="selectBrtcCodeDetails" parameterType="commonSearchVO" resultType="commonVO">
+		<![CDATA[
+			SELECT CODE_ID AS code ,
+				   CODE_ID_NM AS codenm
+			FROM COMMON_CODE
+			WHERE CL_CODE = #{brtcCode}
+			  AND USE_AT = 'Y'
+			ORDER BY CODE_ORDR ASC
+		]]>
+	</select>
+	<!-- 의회명 콤보 조회 -->
+    <!-- brtcCode : 지역코드, 특이사항 : 서울이 02이라면 002 로 나옴. -->
+    <!-- insttClCode : intsttcl_000023:광역, intsttcl_000024:기초 -->
+	<select id="selectLoasmInfo" parameterType="commonSearchVO" resultType="commonVO">
+		<![CDATA[
+			SELECT LOASM_CODE AS code ,
+				   LOASM_NM AS codenm ,
+				   BRTC_CODE AS brtcCode ,
+				   CTPRVNGUGUN_CODE AS ctprvngugunCode ,
+				   INSTT_CL_CODE AS insttClCode
+			FROM ORGAN,
+				 COLGOVER
+			WHERE BRTC_CODE = #{insttClCode}
+			  AND INSTT_CL_CODE = #{brtcCode}
+			  AND ORGAN.LOASM_CODE = COLGOVER.rasmbly_id
+			ORDER BY ORDR ASC
+		 ]]>
+	</select>
+
+</mapper>

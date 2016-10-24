@@ -30,6 +30,7 @@
 		
 <!-- content 시작 -->
 <div id="content_pop">
+    ${exception.message}
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td align="center" valign="top">

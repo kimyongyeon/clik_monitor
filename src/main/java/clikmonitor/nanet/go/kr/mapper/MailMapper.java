@@ -1,7 +1,7 @@
 package clikmonitor.nanet.go.kr.mapper;
 
-import clikmonitor.nanet.go.kr.dto.MailSearchVO;
-import clikmonitor.nanet.go.kr.dto.MailVO;
+import clikmonitor.nanet.go.kr.vo.CommonSearchVO;
+import clikmonitor.nanet.go.kr.vo.MailVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 import java.util.List;
@@ -19,7 +19,14 @@ public interface MailMapper {
      * @param mailSearchVO : 발송일자(당일,1주일,1개월) , 검색항목, 페이지번호
      * @return : 번호, 제목, 발송일시
      */
-    List<MailVO> selectMailingSendPagingList(MailSearchVO mailSearchVO);
+    List<MailVO> selectMailingSendPagingList(CommonSearchVO mailSearchVO);
+
+    /**
+     * 메일링 설정내역 목록 조회
+     * @param mailSearchVO
+     * @return
+     */
+    List<MailVO> selectMailingSetPagingList(CommonSearchVO mailSearchVO);
 
     /**
      * 메일링 발송내역 목록 엑셀저장
@@ -27,7 +34,7 @@ public interface MailMapper {
      * @param mailSearchVO : 발송일자(당일,1주일,1개월) , 검색항목, 페이지번호
      * @return : 번호, 제목, 발송일시
      */
-    List<MailVO> selectMailingExcelExportList(MailSearchVO mailSearchVO);
+    List<MailVO> selectMailingExcelExportList(CommonSearchVO mailSearchVO);
 
     /**
      * 메일설정 저장

@@ -23,6 +23,14 @@ public class CommonUtil {
         String endDay; // 오늘종료일자
     }
 
+    public static String nullConvert(String src) {
+        if(isEmpty(src)) {
+            return "";
+        } else {
+            return src.trim();
+        }
+    }
+
     /**
      * 객체 NULL 체크
      *

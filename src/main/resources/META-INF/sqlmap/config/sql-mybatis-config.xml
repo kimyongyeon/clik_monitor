@@ -2,31 +2,36 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
-    
-    <typeAliases>
+
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"></setting>
+    </settings>
+
+	<typeAliases>
+		<!-- egov vo -->
     	<typeAlias alias="empVO" type="egovframework.sample.emp.service.EmpVO" />
     	<typeAlias alias="deptVO" type="egovframework.sample.dept.service.DeptVO" />
     	<typeAlias alias="searchVO" type="egovframework.sample.cmmn.SearchVO" />
 
-		<!-- 여기서부터 추가 -->
-		<typeAlias alias="loginVO" type="clikmonitor.nanet.go.kr.dto.LoginVO" />
-		<typeAlias alias="commonVO" type="clikmonitor.nanet.go.kr.dto.CommonVO" />
-		<typeAlias alias="commonSearchVO" type="clikmonitor.nanet.go.kr.dto.CommonSearchVO" />
-		<typeAlias alias="agentVO" type="clikmonitor.nanet.go.kr.dto.AgentVO" />
-
-		<typeAlias alias="statisticsVO" type="clikmonitor.nanet.go.kr.dto.StatisticsVO" />
-		<typeAlias alias="statisticsSearchVO" type="clikmonitor.nanet.go.kr.dto.StatisticsSearchVO" />
-		<typeAlias alias="rangeVO" type="clikmonitor.nanet.go.kr.dto.RangeVO" />
-
-
+		<!-- monitor vo -->
+		<typeAlias alias="agentVO" type="clikmonitor.nanet.go.kr.vo.AgentVO" />
+		<typeAlias alias="agentSearchVO" type="clikmonitor.nanet.go.kr.vo.AgentSearchVO" />
+		<typeAlias alias="chartSearchVO" type="clikmonitor.nanet.go.kr.vo.ChartSearchVO" />
+		<typeAlias alias="chartVO" type="clikmonitor.nanet.go.kr.vo.ChartVO" />
+		<typeAlias alias="commonSearchVO" type="clikmonitor.nanet.go.kr.vo.CommonSearchVO" />
+		<typeAlias alias="commonVO" type="clikmonitor.nanet.go.kr.vo.CommonVO" />
+		<typeAlias alias="loginVO" type="clikmonitor.nanet.go.kr.vo.LoginVO" />
+		<typeAlias alias="logVO" type="clikmonitor.nanet.go.kr.vo.LogVO" />
+		<typeAlias alias="logSearchVO" type="clikmonitor.nanet.go.kr.vo.LogSearchVO" />
+		<typeAlias alias="mailSearchVO" type="clikmonitor.nanet.go.kr.vo.MailSearchVO" />
+		<typeAlias alias="mailVO" type="clikmonitor.nanet.go.kr.vo.MailVO" />
+		<typeAlias alias="metaDataSearchVO" type="clikmonitor.nanet.go.kr.vo.MetaDataSearchVO" />
+		<typeAlias alias="metaDataVO" type="clikmonitor.nanet.go.kr.vo.MetaDataVO" />
+		<typeAlias alias="rangeSearchVO" type="clikmonitor.nanet.go.kr.vo.RangeSearchVO" />
+		<typeAlias alias="rangeVO" type="clikmonitor.nanet.go.kr.vo.RangeVO" />
+		<typeAlias alias="statisticsSearchVO" type="clikmonitor.nanet.go.kr.vo.StatisticsSearchVO" />
+		<typeAlias alias="statisticsVO" type="clikmonitor.nanet.go.kr.vo.StatisticsVO" />
 
     </typeAliases>
-    
-<!-- 
-	<mappers>
-        <mapper resource="META-INF/sqlmap/mappers/mysql/department_mysql.xml" />
-        <mapper resource="META-INF/sqlmap/mappers/mysql/employee_mysql.xml" />
-   </mappers> 
- -->
- 
+
 </configuration>

@@ -56,7 +56,7 @@ var syruppay = {
                 
                 option.options.push(_option);
             });
-            console.log(JSON.stringify(option));
+            //console.log(JSON.stringify(option));
             myChart.setOption(option);
             return chartList;
          },

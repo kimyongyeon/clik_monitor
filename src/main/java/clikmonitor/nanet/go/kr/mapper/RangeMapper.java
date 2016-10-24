@@ -1,7 +1,7 @@
 package clikmonitor.nanet.go.kr.mapper;
 
-import clikmonitor.nanet.go.kr.dto.RangeSearchVO;
-import clikmonitor.nanet.go.kr.dto.RangeVO;
+import clikmonitor.nanet.go.kr.vo.CommonSearchVO;
+import clikmonitor.nanet.go.kr.vo.RangeVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 import java.util.List;
@@ -14,12 +14,21 @@ import java.util.List;
 public interface RangeMapper {
 
     /**
-     * 임계값 설정 조회
+     * 임계값 설정 페이징 조회
      *
      * @param rangeSearchVO : 지방의회, 최종수정일(당일,1주일,1개월), 페이지번호
      * @return 의회, 지방의회, 응답시간, 요청처리율, 최종수정일
      */
-    List<RangeVO> selectRangeSetPagingList(RangeSearchVO rangeSearchVO);
+    List<RangeVO> selectRangeSetPagingList(CommonSearchVO rangeSearchVO);
+
+    List<RangeVO> selectRangeExcelExportList(CommonSearchVO rangeSearchVO);
+
+    /**
+     * 임계값 설정 상세조회
+     * @param rangeSearchVO
+     * @return
+     */
+    RangeVO selectRangeSetDetail(CommonSearchVO rangeSearchVO);
 
     /**
      * 임계값 설정 엑셀저장 : export
@@ -27,7 +36,7 @@ public interface RangeMapper {
      * @param rangeSearchVO the range search vo
      * @return list list
      */
-    List<RangeVO> selectRangeSetExcelExportList(RangeSearchVO rangeSearchVO);
+    List<RangeVO> selectRangeSetExcelExportList(CommonSearchVO rangeSearchVO);
 
     /**
      * 임계값 설정 등록

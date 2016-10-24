@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 로그인 관리 매퍼 -->
+<mapper namespace="clikmonitor.nanet.go.kr.mapper.LoginMapper">
+
+	<!-- 로그인 처리 -->
+	<select id="selectLoginOne" parameterType="loginVO" resultType="loginVO">
+
+		<![CDATA[
+			SELECT /* loginProc : 로그인 처리 */
+			      MNGR_ID as id, PKG_OBFUS.DECRYPT(PASSWORD,'NAEODOCZ') as pw
+			  FROM MANAG_USER
+			 WHERE MNGR_ID = #{id}
+		]]>
+
+	</select>
+
+
+</mapper>

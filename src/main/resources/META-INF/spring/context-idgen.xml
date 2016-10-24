@@ -31,4 +31,17 @@
 		<property name="cipers" value="8" />
 		<property name="fillChar" value="0" />
 	</bean>
+
+    <!-- 오류신고 START-->
+    <bean name="councilSystemContrlIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrService" destroy-method="destroy">
+        <property name="dataSource" ref="dataSource" />
+        <property name="strategy"   ref="councilSystemContrlStrategy" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"	   	value="cn_serial"/>
+        <property name="tableName"	value="SYSTEM_CONTROL"/>
+    </bean>
+    <bean name="councilSystemContrlStrategy" class="egovframework.rte.fdl.idgnr.impl.strategy.EgovIdGnrStrategyImpl">
+        <property name="fillChar" value="0" />
+    </bean>
+    <!-- 오류신고 END-->
 </beans>

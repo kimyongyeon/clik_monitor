@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--— 확장자를 이용해 패턴을 걸때는 /**/*.해당 확장자 로 할 것(Ant Pattern 규칙) —-->
+    <http pattern="/**/*.js" security="none"/>
+    <http pattern="/**/*.css" security="none"/>
+    <http pattern="/images/*" security="none"/>
+    <http pattern="/img/*" security="none"/>
+
+    <!-- /login/login.do 가 들어왔을때 보안을 적용하지 않는다.-->
+    <http pattern="/login.do" security="none" /> <!-- 로그인 페이지 -->
+    <http pattern="/idSaveProc.do" security="none" /> <!-- 아이디 쿠키 저장 -->
+
+    <http auto-config="false" access-denied-page="/login.do?denied=true" disable-url-rewriting="true">
+        <intercept-url pattern="/**" access="ROLE_USER"/>
+
+        <form-login
+                login-page="/login.do"
+                authentication-success-handler-ref="loginSuccessHandler"
+                authentication-failure-handler-ref="loginFailureHandler"
+        />
+        <logout logout-success-url="/login.do"
+            delete-cookies="JSESSIONID"
+        />
+
+    </http>
+
+    <beans:bean id="loginSuccessHandler" class="clikmonitor.nanet.go.kr.login.LoginSuccessHandler"></beans:bean>
+    <beans:bean id="loginFailureHandler" class="clikmonitor.nanet.go.kr.login.LoginFailureHandler"></beans:bean>
+    <beans:bean id="clikMonUserService" class="clikmonitor.nanet.go.kr.login.ClikMonUserService"></beans:bean>
+    <beans:bean id="encoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
+
+    <!-- 실 DB와 연동시 아래 내용 열어야 함 -->
+    <authentication-manager>
+        <authentication-provider user-service-ref="clikMonUserService">
+            <password-encoder ref="encoder" />
+        </authentication-provider>
+    </authentication-manager>
+
+    <!-- 데이터베이스 연결하지 않고 메모리 DB를 사용할 경우 아래로 테스트 -->
+    <!--<authentication-manager>-->
+        <!--<authentication-provider>-->
+            <!--<user-service>-->
+                <!--<user name="user" password="1234" authorities="ROLE_USER"/>-->
+                <!--<user name="admin" password="1234" authorities="ROLE_ADMIN"/>-->
+            <!--</user-service>-->
+        <!--</authentication-provider>-->
+    <!--</authentication-manager>-->
+
+</beans:beans>

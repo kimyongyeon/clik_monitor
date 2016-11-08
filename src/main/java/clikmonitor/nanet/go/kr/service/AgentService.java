@@ -26,7 +26,11 @@ public interface AgentService {
      */
     List<AgentVO> getAgentStateInfoList(CommonSearchVO agentVO); // Agent 상태 정보 목록 조회
 
+    List<AgentVO> selectAgentSetStateList(CommonSearchVO agentVO); // Agent 상태 설정 정보 목록 조회
+
     List<AgentVO> getAgentServerTableList(CommonSearchVO agentVO); // Agent 상태 정보 목록 조회
+
+    int selectAgentSetStateListCount(CommonSearchVO agentVO); // Agent 설정 상태 정보 총 개수
 
     /**
      * Gets agent info detail.
@@ -34,7 +38,7 @@ public interface AgentService {
      * @param agentVO the agent vo
      * @return the agent info detail
      */
-    AgentVO  getnAgentInfoDetail(CommonSearchVO agentVO); // Agent 정보 상세 조회
+    AgentVO getAgentInfoDetail(CommonSearchVO agentVO); // Agent 정보 상세 조회
 
     AgentVO  selectAgentUpdateOne(CommonSearchVO agentVO); // Agent 정보 상세 조회
 
@@ -53,6 +57,8 @@ public interface AgentService {
      * @param agentVO the agent vo
      */
     void editAgentInfo(AgentVO agentVO); // Agent 정보 수정
+
+    void updateAgentNoteOne(AgentVO agentVO); // Agent 노트 정보 수정.
 
     /**
      * Remove agent info.
@@ -98,6 +104,21 @@ public interface AgentService {
 
         private AgentVO agentVO;
         private CommonSearchVO commonSearchVO;
+
+        @Override
+        public int selectAgentSetStateListCount(CommonSearchVO agentVO) {
+            return agentMapper.selectAgentSetStateListCount(agentVO);
+        }
+
+        @Override
+        public List<AgentVO> selectAgentSetStateList(CommonSearchVO agentVO) {
+            return agentMapper.selectAgentSetStateList(agentVO);
+        }
+
+        @Override
+        public void updateAgentNoteOne(AgentVO agentVO) {
+            agentMapper.updateAgentNoteOne(agentVO);
+        }
 
         @Override
         public void insertCouncilSystemControl(AgentVO agentVO) {
@@ -236,7 +257,7 @@ public interface AgentService {
          * @return
          */
         @Override
-        public AgentVO getnAgentInfoDetail(CommonSearchVO agentVO) {
+        public AgentVO getAgentInfoDetail(CommonSearchVO agentVO) {
             if(agentVO.getRasmblyId() == null) {
                 return null;
             }

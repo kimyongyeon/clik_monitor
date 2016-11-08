@@ -1,3 +1,40 @@
+// 환경설정
+var v_table_list = new Vue({
+    el: '#tpl-table-list',
+    data: {
+        items: [],
+        prev : false,
+        firstPageNoOnPageList : 0,
+        lastPageNoOnPageList : 0,
+        next : false,
+        page : 0,
+        prevPage : 0,
+        nextPage : 0
+    },
+    methods: {
+        fetchData: function(url, data, page){
+            commonClass.fnAjaxCallback(url, data, function(data){
+                
+                var firstPageNoOnPageList = data.paginationInfo.firstPageNoOnPageList;
+                var lastPageNoOnPageList = data.paginationInfo.lastPageNoOnPageList;
+                var recordCountPerPage = data.paginationInfo.recordCountPerPage;
+                var totalRecordCount = data.paginationInfo.totalRecordCount;
+                var prev = firstPageNoOnPageList === 1 ? false : true;
+                var next = lastPageNoOnPageList * recordCountPerPage >= totalRecordCount ? false : true;
+                Vue.set(v_table_list, 'items', data.list);
+                Vue.set(v_table_list, 'firstPageNoOnPageList', firstPageNoOnPageList - 1);
+                Vue.set(v_table_list, 'lastPageNoOnPageList', lastPageNoOnPageList);
+                Vue.set(v_table_list, 'prev', prev);
+                Vue.set(v_table_list, 'next', next);
+                Vue.set(v_table_list, 'page', page);
+                Vue.set(v_table_list, 'prevPage', firstPageNoOnPageList - 1);
+                Vue.set(v_table_list, 'nextPage', lastPageNoOnPageList + 1);
+                $("#myTable4 img").hide();
+            });
+        }
+    }
+});
+
 var onCreateClass = {
     init: function () {
 
@@ -6,11 +43,19 @@ var onCreateClass = {
         //달력 소스(jQuery UI)
         $("#datepicker1, #datepicker2").datepicker(commonClass.fnDatePickerUiInit());
 
-        this.fnDateToday();
-        this.fnSearch();
+        this.fnDateMonth();
+        this.fnSearch(1);
 
-        $(".menu").css("color", "none");
-        $(".menu_4").css("color", "#d84d2c");
+        commonClass.fnMenuStyle("meta");
+
+        // 검색어 입력후 엔터
+        $("input").keydown(function(e){
+            if(e.which === 13) {
+                e.preventDefault();
+                onCreateClass.fnSearch();
+            }
+        });
+
     },
     fnExcel: function() {
         var startDate = $("#datepicker1").val();
@@ -26,55 +71,29 @@ var onCreateClass = {
         
         location.href = "/excelDownload.do" + params;
     },
-    fnSearch: function() {
-        this.fnAjaxTableList();
+    fnSearch: function(page) {
+        this.fnAjaxTableList(page);
     },
-    fnAjaxTableList: function() {
+    fnAjaxTableList: function(page) {
+
+        page = page || 1;
 
         var url = "getMetaDataList.do";
         var startDate = $("#datepicker1").val();
         var endDate = $("#datepicker2").val();
         var region = $("#instt_cl_code_div option:selected").val(); // 지역명
         var siteNm = $("#site-title").val(); // 사이트명
-        startDate = "2015-01-01";
+        startDate = startDate.replace('-','');
+        endDate = endDate.replace('-','');
         var data = {
             startDate: startDate,
             endDate: endDate,
             region: region,
             siteNm: siteNm,
+            "pageIndex": page,
+            "firstIndex":page
         };
-        var selector = 'myTable4';
-        commonClass.fnAjaxCallback(url, data, function(data){
-            var myRecords = [];
-            for(var i=0; i<data.length; i++) {
-                myRecords.push(
-                    {
-                        "번호": data[i]['num'],
-                        "지역": data[i]['area'],
-                        "사이트명": data[i]['seednm'],
-                        "사이트ID": data[i]['seedid'],
-                        "사이트URL": data[i]['seedurl'],
-                        "자료유형": data[i]['doctypeName'],
-                        "게시판명": data[i]['sitenm'],
-                        "게시판URL": data[i]['url'],
-                        "최종등록일": data[i]['regdate'],
-                    }
-                );
-            }
-            // header 설정
-            var fields =  [
-                {name: "번호", type: "text", width: 50, align: "center"},
-                {name: "지역", type: "text", width: 100, align: "center"},
-                {name: "사이트명", type: "text", width: 255, align: "center"},
-                {name: "사이트ID", type: "text", width: 50, align: "center"},
-                {name: "사이트URL", type: "text", width: 300, align: "left"},
-                {name: "자료유형", type: "text", width: 100, align: "center"},
-                {name: "게시판명", type: "text", width: 100, align: "center"},
-                {name: "게시판URL", type: "text", width: 400, align: "left"},
-                {name: "최종등록일", type: "text", width: 100, align: "center"},
-            ];
-            commonClass.jsGridInit(selector, myRecords, fields);
-        });
+        v_table_list.fetchData(url, data, page);
     },
     fnDateToday: function() {
         commonClass.fnToday("datepicker", 0);

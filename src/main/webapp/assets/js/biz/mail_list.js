@@ -1,3 +1,35 @@
+// 메일목록
+var v_mail_list = new Vue({
+    el: '#tpl-mail-list',
+    data: {
+        items: []
+    },
+    methods: {
+        fetchData: function(url, data){
+            commonClass.fnAjaxCallback(url, data, function(data){
+                Vue.set(v_mail_list, 'items', data);
+                $("#myTable5 img").hide();
+            });
+        }
+    }
+});
+
+// 발송내역
+var v_send_list = new Vue({
+    el: '#tpl-send-list',
+    data: {
+        items: []
+    },
+    methods: {
+        fetchData: function(url, data){
+            commonClass.fnAjaxCallback(url, data, function(data){
+                Vue.set(v_send_list, 'items', data)
+                $("#myTable4 img").hide();
+            });
+        }
+    }
+});
+
 var onCreateClass = {
     init: function () {
 
@@ -18,12 +50,25 @@ var onCreateClass = {
         // 검색어 입력후 엔터
         $("#keyWordText").keydown(function(e){
             if(e.which === 13) {
+                e.preventDefault();
                 onCreateClass.btnSearch();
             }
         });
+        $("#keyWordText2").keydown(function(e){
+            if(e.which === 13) {
+                e.preventDefault();
+                onCreateClass.btnMailListSearch();
+            }
+        });
+        $("input").keydown(function(e){
+            if(e.which === 13) {
+                e.preventDefault();
+            }
+        });
+        commonClass.fnMenuStyle("mail");
 
-        $(".menu").css("color", "none");
-        $(".menu_5").css("color", "#d84d2c");
+        this.mailInit(); // 메일링관리 탭 초기화
+
     },
     btnSearch: function() {
         this.fnAjaxTableList();
@@ -35,18 +80,22 @@ var onCreateClass = {
         var url = "getJstree.do";
         var data = {};
         commonClass.fnAjaxCallback(url, data, function(data){
-            var areas1 = {
-                areas1: data.wide
-            };
-            var areas2 = {
-                areas2: data.basic
-            };
-            var htmlText = commonClass.getHtmlText("areas1-template");
-            $("#areas1_div").html(htmlText(areas1)); // 광역
-            var htmlText = commonClass.getHtmlText("areas2-template");
-            $("#areas2_div").html(htmlText(areas2)); // 기초
-            onCreateClass.fnAllChecked();
 
+            // 광역
+            var example1 = new Vue({
+                el: '#areas',
+                data: {
+                    wide: data.wide
+                }
+            });
+            // 기초
+            var example2 = new Vue({
+                el: '#areas2',
+                data: {
+                    basic: data.basic
+                }
+            });
+            onCreateClass.fnAllChecked();
         });
     },
     fnAllChecked: function() {
@@ -86,27 +135,7 @@ var onCreateClass = {
             keyWordText: keyWordText,
             keyWordType: keyWordType
         };
-        var selector = 'myTable4';
-
-        commonClass.fnAjaxCallback(url, data, function(data){
-            var myRecords = [];
-            for(var i=0; i<data.length; i++) {
-                myRecords.push(
-                    {
-                        "번호": data[i]['no'],
-                        "제목": data[i]['title'], 
-                        "발송일자": data[i]['sendDate'],
-                    }
-                );
-            }
-            // header 설정
-            var fields =  [
-                {name: "번호", type: "text", width: 255, align: "center"},
-                {name: "제목", type: "text", width: 255, align: "center"},
-                {name: "발송일자", type: "text", width: 255, align: "center"},
-            ];
-            commonClass.jsGridInit(selector, myRecords, fields);
-        });
+        v_send_list.fetchData(url, data);
     },
     fnAjaxTableMailList: function() {
 
@@ -121,49 +150,68 @@ var onCreateClass = {
             keyWordText: keyWordText,
             keyWordType: keyWordType
         };
-        var selector = 'myTable5';
+        v_mail_list.fetchData(url, data);
+    },
+    mailInit: function() {
+        /*메일링 관리*/
+        var tab0001 = $(".listTab01");
+        var tab0002 = $(".listTab02");
+        var tab0003 = $(".listTab03");
+        $(".mail_list").show();
+        $(".send_list").hide();
+        $(".mail_set").hide();
+        $(tab0003).addClass("active");
 
-        commonClass.fnAjaxCallback(url, data, function(data){
+        $(tab0001).on("click", function (e) {
+            e.preventDefault();
+            $(tab0001).addClass("active");
+            $(tab0002).removeClass("active");
+            $(tab0003).removeClass("active");
 
-            var myRecords = [];
-            for(var i=0; i<data.length; i++) {
-                myRecords.push(
-                    {
-                        "번호": data[i]['no'] || '',
-                        "받는사람": data[i]['receiver'] || '',
-                        "제목": "<a href='#' onclick='onCreateClass.fnDetail("+JSON.stringify(data[i])+")'>" + data[i]['title']+ "</a>",
-                        "지방의회": data[i]['rasmlyIds'] || '',
-                        "등록일": data[i]['insertDate'] || '',
-                    }
-                );
-            }
-            // header 설정
-            var fields =  [
-                {name: "번호", type: "text", width: 255, align: "center"},
-                {name: "받는사람", type: "text", width: 255, align: "center"},
-                {name: "제목", type: "text", width: 255, align: "center"},
-                {name: "지방의회", type: "text", width: 255, align: "center"},
-                {name: "등록일", type: "text", width: 255, align: "center"},
-            ];
-            commonClass.jsGridInit(selector, myRecords, fields);
+            $(".mail_list").hide();
+            $(".send_list").show();
+            $(".mail_set").hide();
+        });
+
+        $(tab0002).on("click", function (e) {
+            e.preventDefault();
+
+            $("#receiver").val("");
+            $("#mailTitle").val("");
+            $("#emailId").val("");
+            $("#areas").val("");
+            $("#areas2").val("");
+            
+            $(tab0002).addClass("active");
+            $(tab0001).removeClass("active");
+            $(tab0003).removeClass("active");
+            $(".mail_list").hide();
+            $(".send_list").hide();
+            $(".mail_set").show();
+        });
+
+        $(tab0003).on("click", function (e) {
+            e.preventDefault();
+            $(tab0003).addClass("active");
+            $(tab0001).removeClass("active");
+            $(tab0002).removeClass("active");
+            $(".mail_list").show();
+            $(".send_list").hide();
+            $(".mail_set").hide();
         });
     },
+    fnList: function() {
+        var tab0003 = $(".listTab03");
+        var tab0001 = $(".listTab01");
+        var tab0002 = $(".listTab02");
+        $(tab0003).addClass("active");
+        $(tab0001).removeClass("active");
+        $(tab0002).removeClass("active");
+        $(".mail_list").show();
+        $(".send_list").hide();
+        $(".mail_set").hide();
+    },
     fnDetail: function(m) {
-
-        var tab0001 = $("#subRightBox .topTable .adminTab02 ul li.listTab01 a");
-        var tab0002 = $("#subRightBox .topTable .adminTab02 ul li.listTab02 a");
-        var tab0003 = $("#subRightBox .topTable .adminTab02 ul li.listTab03 a");
-
-        $(tab0002).addClass("hover01");
-        $(tab0001).removeClass("hover01");
-        $(tab0003).removeClass("hover01");
-
-        // $(".bottomTable > .tab04Box").hide();
-        // $(".topTable > table.table03").hide();
-        $(".topTable > .btnSearch01").hide();
-        $(".mail_list").hide();
-        // $(".bottomTable > .tab05Box").show();
-        // $(".bottomTable > .tab05Box").show();
 
         $("#receiver").val(m.receiver);
         $("#mailTitle").val(m.title);
@@ -171,14 +219,30 @@ var onCreateClass = {
 
         var array = m.rasmlyIds.split(",");
 
-        $("#areas").val(array[0]);
+        $("#areas option").each(function()
+        {
+            var str = $(this).val() + "";
+            str = str.substr(0, 3);
+            var str2 = array[0] + "";
+            str2 = str2.substr(0, 3);
+            if(str === str2) {
+                $("#areas").val($(this).val());
+                return;
+            }
+        });
+        // $("#areas").val(array[0]);
         $("#areas2").val(array[0]);
-        // $("input:checkbox").prop("checked", false);
-        //
-        // for (var i=0; i<array.length; i++) {
-        //     $("#" + array[i]).prop("checked", true);
-        // }
 
+        var tab0003 = $(".listTab03");
+        var tab0001 = $(".listTab01");
+        var tab0002 = $(".listTab02");
+        $(tab0003).removeClass("active");
+        $(tab0001).removeClass("active");
+        $(tab0002).addClass("active");
+
+        $(".mail_list").hide();
+        $(".send_list").hide();
+        $(".mail_set").show();
     },
     fnDateToday: function() {
         commonClass.fnToday("datepicker", 0);
@@ -199,7 +263,7 @@ var onCreateClass = {
         commonClass.fnToday2("datepicker", -14);
     },
     fnPopupSave: function() { // 저장 확인 팝업
-        $(".savePop").show();
+        $(".q-popup-layout").show();
     },
     fnAjaxCheckboxDataCreate: function(t, o) {
         if(t.filter(":checked").val()) { // 체크 된거
@@ -224,37 +288,46 @@ var onCreateClass = {
         var areas1 = [];
         var areas2 = [];
 
-        // 받는사람 이메일
-        // $(".listTable02").find("tbody > tr").find(":checkbox").filter("[id^=chk0]").each(function(){
-        //     onCreateClass.fnAjaxCheckboxDataCreate($(this), recvs);
-        // });
-        // // 광역의회
-        // $("#areas1_div").find(":checkbox").each(function(){
-        //     onCreateClass.fnAjaxCheckboxDataCreate($(this), areas1);
-        // });
-        // // 기초의회
-        // $("#areas2_div").find(":checkbox").each(function(){
-        //     onCreateClass.fnAjaxCheckboxDataCreate($(this), areas2);
-        // });
-        
-        var emailId = $("#emailId").val();
-        var receiver = $("#receiver").val();
+        var emailId = $("#receiver").val() || '';
+        var title = $("#mailTitle").val()  || '';
 
         areas1.push($("#areas option:selected").val());
         areas2.push($("#areas2 option:selected").val());
 
+        if(emailId == '') {
+            alert("이메일은 필수 항목 입니다.");
+            $("#receiver").focus();
+            $(".q-popup-layout").hide();
+            return;
+        }
+        if(title == '') {
+            alert("제목은 필수 항목 입니다.");
+            $("#mailTitle").focus();
+            $(".q-popup-layout").hide();
+            return;
+        }
+        if(areas1 == '' && areas2 == '' ) {
+            alert("기초의회, 광역의회는 필수 항목 입니다.");
+            $("#areas").focus();
+            $(".q-popup-layout").hide();
+            return;
+        }
+
         var data = {
             emailId: emailId || '', // 이메일아이디
-            receiver: receiver, // 받는사람
-            title: $("#mailTitle").val(), // 제목
+            receiver: emailId, // 받는사람
+            title: title, // 제목
             areas1: areas1, // 광역
             areas2: areas2, // 기초
         };
         commonClass.fnAjaxCallback(url, data, function(data){
-            $(".savePop").hide();
+            $(".q-popup-layout").hide();
+
+            onCreateClass.fnList();
+
         }, "post");
     },
     fnCancel: function() { // 저장 취소
-        $(".savePop").hide();
+        $(".q-popup-layout").hide();
     }
 }

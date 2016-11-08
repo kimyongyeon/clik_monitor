@@ -19,6 +19,8 @@ public interface LogMapper {
      */
     LogVO selectErrorLogInfoOne(CommonSearchVO logVO);
 
+    LogVO selectErrorLogButtonShowHideOne(CommonSearchVO logVO);
+
     /**
      * 로그 데이터 목록 정보 조회
      * @param logVO

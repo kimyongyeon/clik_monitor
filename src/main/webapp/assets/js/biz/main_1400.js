@@ -466,10 +466,10 @@ var agentClass = {
      * Agent 지방의회 팝업 이벤트
      * @param code : 지방의회 코드
      */
-    fnAreaPopup: function (rasmblyId) {
+    fnAgentDetailPopup: function (rasmblyId) {
         $(".agentServerInfo").addClass("openPop");
         commonClass.screenPop(); // block 스크린 팝업
-        this.fnAjaxAreaDetail(rasmblyId); // ajax 지방의회 서버 데이터 대입
+        this.fnAjaxAgentInfoDetail(rasmblyId); // ajax 지방의회 서버 데이터 대입
         chart_bar2(rasmblyId); // Agent 차트
     }
     /**
@@ -498,7 +498,7 @@ var agentClass = {
      * Agent 지방의회 서버 상세
      * @param code : 지방의회 코드
      */
-    , fnAjaxAreaDetail: function (rasmblyId) {
+    , fnAjaxAgentInfoDetail: function (rasmblyId) {
         var url = "getAreaDetail.do";
         var data = {
             rasmblyId: rasmblyId

@@ -21,10 +21,10 @@ public class CommonSearchVO {
     private String loasmCode;
 
     // 페이징 관련
-    private int currentPage=1;
+    private int currentPage = 1;
     private int pageIndex = 1;
-    private int pageUnit;
-    private int pageSize;
+    private int pageUnit = 10;
+    private int pageSize = 10;
     private int firstIndex = 1;
     private int lastIndex = 1;
     private int recordCountPerPage = 10;

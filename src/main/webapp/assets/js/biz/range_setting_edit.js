@@ -5,21 +5,47 @@ var onCreateClass = {
     },
     fnUiInit: function() {
     },
-    fnEdit: function() { // 수정
-        $("#editPop").css("display", "block");
+    fnEditShow: function() { // 수정
+        $("#q-popup-layout-edit").css("display", "block");
     },
-    fnDelete: function() { // 삭제
-        $("#delPop").css("display", "block");
+    fnDeleteShow: function() { // 삭제
+        $("#q-popup-layout-del").css("display", "block");
     },
     fnCancel: function() { // 취소
         location.href = "/range_setting_list.do";
     },
     fnEditProc: function() {
         var url = "getRangeSettingEditProc.do";
-        var rasmblyId = $("#rasmblyId").val() // 지방의회 pk
-        var colgoverSetId = $("#colgoverSetId").val(); // pk
-        var setInterval = $("#setInterval").val(); // 응답시간
-        var reqProcessingRatio = $("#reqProcessingRatio").val(); // 서비스 요청 처리율
+        var rasmblyId = $("#rasmblyId").val() || ''; // 지방의회 
+        var colgoverSetId = $("#colgoverSetId").val() || ''; // pk
+        var setInterval = $("#setInterval").val() || 0; // 응답시간
+        var reqProcessingRatio = $("#reqProcessingRatio").val() || 0; // 서비스 요청 처리율
+
+        if(rasmblyId == '') {
+            alert("의회는 필수 항목 입니다.");
+            $("#rasmblyId").focus();
+            $("#q-popup-layout-edit").hide();
+            return;
+        }
+        if(colgoverSetId == '') {
+            alert("기본키는 필수 항목 입니다.");
+            $("#colgoverSetId").focus();
+            $("#q-popup-layout-edit").hide();
+            return;
+        }
+        if(setInterval == '') {
+            alert("응답시간은 필수 항목 입니다.");
+            $("#setInterval").focus();
+            $("#q-popup-layout-edit").hide();
+            return;
+        }
+        if(reqProcessingRatio == '') {
+            alert("서비스요청처리율은 필수 항목 입니다.");
+            $("#reqProcessingRatio").focus();
+            $("#q-popup-layout-edit").hide();
+            return;
+        }
+        
         var data = {
             rasmblyId: rasmblyId
             , colgoverSetId: colgoverSetId
@@ -33,12 +59,26 @@ var onCreateClass = {
         }, "put");
     },
     fnPopupClose: function() {
-        $(".uploadPop").css("display", "none");
+        $(".q-popup-layout").css("display", "none");
     },
     fnDelProc: function() {
         var url = "getRangeSettingDelProc.do";
-        var rasmblyId = $("#rasmblyId").val() // 지방의회 pk
-        var colgoverSetId = $("#colgoverSetId").val(); // pk
+        var rasmblyId = $("#rasmblyId").val() || '';// 지방의회 pk
+        var colgoverSetId = $("#colgoverSetId").val() || ''; // pk
+
+        if(rasmblyId == '') {
+            alert("의회는 필수 항목 입니다.");
+            $("#rasmblyId").focus();
+            $("#q-popup-layout-del").hide();
+            return;
+        }
+        if(colgoverSetId == '') {
+            alert("기본키는 필수 항목 입니다.");
+            $("#colgoverSetId").focus();
+            $("#q-popup-layout-del").hide();
+            return;
+        }
+        
         var data = {
             rasmblyId: rasmblyId
             , colgoverSetId:colgoverSetId

@@ -30,4 +30,5 @@ public class MailVO {
     private String emailId; // 이메일번호
     private String receiver; // 받는사람
     private String rasmlyIds; // 지방의회들
+    private String rasmlyNm; // 지방의회명
 }

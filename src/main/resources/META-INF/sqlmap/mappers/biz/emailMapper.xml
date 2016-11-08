@@ -29,12 +29,18 @@
         <if test="keyWordType == 1">
             AND TITLE LIKE '%' || #{keyWordText} || '%'
         </if>
+        <if test="keyWordType == 2">
+            AND RECEIVER LIKE '%' || #{keyWordText} || '%'
+        </if>
     </sql>
 
     <sql id="email_set_where">
         WHERE INSERT_DATE BETWEEN #{startDate} AND TO_CHAR(SYSDATE,'YYYY-MM-DD HH:MI')
         <if test="keyWordType == 1">
             AND TITLE LIKE '%' || #{keyWordText} || '%'
+        </if>
+        <if test="keyWordType == 2">
+            AND RECEIVER LIKE '%' || #{keyWordText} || '%'
         </if>
     </sql>
 
@@ -71,6 +77,12 @@
           , RECEIVER
           , TITLE
           , RASMLY_IDS
+          , (SELECT LOASM_NM AS RASMBLYNM
+            FROM ORGAN, COLGOVER
+            WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+            AND ISVIEW = 'Y'
+            AND LOASM_CODE = EMAIL_SET.RASMLY_IDS
+            AND ROWNUM = 1) AS RASMLY_NM
           , INSERT_DATE
         FROM EMAIL_SET
 

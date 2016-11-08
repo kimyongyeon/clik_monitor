@@ -41,6 +41,24 @@
             AND ROWNUM = 1
 		]]>
     </select>
+    <select id="selectErrorLogButtonShowHideOne" parameterType="logSearchVO" resultMap="logMap">
+        <![CDATA[
+        SELECT /*selectErrorLogInfoOne*/
+            REQUST_INSTT_ID
+            , RASMBLY_NM
+            , TAR_LOG.SERVER_IP
+            , PROVD_INSTT_ID   /* 요청코드 */
+            , REQUST_RECPTN_TM  /* 요청일자 */
+            , RESULT_CODE  /* 결과코드*/
+            , RESULT_MSSAGE  /* 결과메세지 */
+        FROM TAR_LOG, COLGOVER
+        WHERE TAR_LOG.REQUST_INSTT_ID = COLGOVER.RASMBLY_ID
+        AND REQUST_INSTT_ID = #{requstInsttId} /* 지방의회 아이디 */
+        AND REQUST_RECPTN_TM LIKE TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+        AND RESULT_CODE != '000'
+        AND ROWNUM = 1
+        ]]>
+    </select>
 
     <!--로그 데이터 목록 정보 조회  -->
     <select id="selectErrorLogInfoList" parameterType="logSearchVO" resultMap="logMap">

@@ -36,7 +36,8 @@
 		   , COLGOVER.RASMBLY_NM rasmblyNm
            , COLGOVER_SET.SET_INTERVAL setInterval
            , REQ_PROCESSING_RATIO reqProcessingRatio
-           , COLGOVER.LAST_UPDT_DT lastCntcDt
+           /*, COLGOVER.LAST_UPDT_DT lastCntcDt*/
+           , TO_CHAR(COLGOVER.LAST_CNTC_DT, 'YYYY-MM-DD') LASTCNTCDT
         FROM COLGOVER, COLGOVER_SET
         WHERE 1 = 1
         AND COLGOVER_SET.RASMBLY_ID(+) = COLGOVER.RASMBLY_ID
@@ -47,12 +48,13 @@
     <select id="selectRangeSetPagingList" parameterType="rangeSearchVO" resultType="rangeVO">
         <!--<include refid="h_top" />-->
         <![CDATA[
-        SELECT /*+ INDEX(COLGOVER_SET COLGOVER_SET_PK) */
+        SELECT /* selectRangeSetPagingList */
              COLGOVER.RASMBLY_ID rasmblyId
 		   , COLGOVER.RASMBLY_NM rasmblyNm
            , COLGOVER_SET.SET_INTERVAL setInterval
            , REQ_PROCESSING_RATIO reqProcessingRatio
-           , COLGOVER.LAST_UPDT_DT lastCntcDt
+             /*, COLGOVER.LAST_UPDT_DT lastCntcDt*/
+           , TO_CHAR(COLGOVER.LAST_CNTC_DT, 'YYYY-MM-DD') LASTCNTCDT
         FROM COLGOVER, COLGOVER_SET
 		]]>
         WHERE 1 = 1
@@ -70,9 +72,6 @@
         <if test="keyWordType == 3"> <!-- 지방의회 -->
             AND SUBSTR(COLGOVER_SET.RASMBLY_ID,1,6) IN (#{loasmCode})
         </if>
---         AND COLGOVER_SET.RASMBLY_ID(+) = COLGOVER.RASMBLY_ID
---         AND COLGOVER.ISVIEW = 'Y'
-
         <!--<include refid="h_bottom" />-->
         <include refid="range_where" />
     </select>
@@ -96,14 +95,14 @@
     <!-- 임계값 설정 전체 레코드 수 -->
     <select id="selectRangeSetRecordTotalCount" parameterType="rangeSearchVO" resultType="int" >
 
-        SELECT 	/*selectRangeSetRecordTotalCount*/COUNT(1)
+        SELECT 	/* selectRangeSetRecordTotalCount */ COUNT(1)
         FROM	COLGOVER_SET, COLGOVER
         <include refid="range_where" />
 
     </select>
 
     <insert id="insertRangeSetProc" parameterType="rangeVO">
-        INSERT INTO /*insertRangeSetProc*/COLGOVER_SET
+        INSERT INTO /* insertRangeSetProc */ COLGOVER_SET
         (
            COLGOVER_SET_ID
          , RASMBLY_ID /* '지방의회_ID'*/
@@ -120,7 +119,7 @@
     </insert>
 
     <update id="updateRangeSetProc" parameterType="rangeVO">
-        UPDATE /*updateRangeSetProc*/COLGOVER_SET SET
+        UPDATE /* updateRangeSetProc */ COLGOVER_SET SET
            SET_INTERVAL = #{setInterval}
          , REQ_PROCESSING_RATIO = #{reqProcessingRatio}
         WHERE RASMBLY_ID = #{rasmblyId}
@@ -128,7 +127,7 @@
     </update>
 
     <delete id="deleteRangeSetProc" parameterType="rangeVO">
-        DELETE FROM /*deleteRangeSetProc*/COLGOVER_SET WHERE RASMBLY_ID = #{rasmblyId} AND COLGOVER_SET_ID = #{colgoverSetId}
+        DELETE FROM /* deleteRangeSetProc */ COLGOVER_SET WHERE RASMBLY_ID = #{rasmblyId} AND COLGOVER_SET_ID = #{colgoverSetId}
     </delete>
 
 

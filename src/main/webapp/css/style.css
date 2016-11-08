@@ -36,7 +36,7 @@ button {cursor: pointer;}
 .main-menu-right { float: right; height: 30px; margin-right: 25px;}
 .main-menu-right span { color:white; float: left; margin:20px; font-weight: bold;}
 .main-menu-right a button{ width:100px; height: 45px; margin: 5px; font-weight: bold;}
-.main-search-button { width: 211px; height: 29px;}
+.main-search-button { width: 211px; height: 35px; background: #777; color: #fff; border: none;}
 
 /* 푸터 */
 footer { position: relative; background: #000; height: 4.9em; margin-top: 4.9em;}
@@ -50,23 +50,24 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .ml-5 {margin-left: 5px;}
 .fl {float: left;}
 .fr {float: right;}
-.hover { color: yellow !important; width: 100% !important; height: 100% !important; background: #3d3d3d !important;}
-.hover01 { color: #fff !important; width: 100% !important; height: 100% !important; background: #080808 !important;}
+.hover { color: white !important;}
+.active {border: 1px solid #fff;}
+.active a {color: #fff !important;}
 .block { display: block !important;}
 .none { display: none !important;}
 .screen {background: #444;opacity: 0.8;position: fixed;width: 100%;height: auto;z-index: 2;display: none;}
 .openPop {display: block !important;}
-.ellipsis { width: 250px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
-/* 버튼 */
-.default-button {border-radius: 0px; background: gray; color: #fff;}
-.edit-button { border-radius: 0px; width: 100px; height: 26px; background: green; color: #fff;}
-.insert-button { border-radius: 0px; width: 100px; height: 26px; background: #2b669a; color: #fff;}
-.excel-button { border-radius: 0px; width: 100px; height: 26px; background: green; color: #fff;}
-.search-button { border-radius: 0px;width: 100px; height: 26px; background: green; color: #fff;}
+.ellipsis { width: 250px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; margin-left:5px;}
+
+.default-button {background: #3d3d3d; border:1px solid #fff; border-radius: 2px; color: #fff; }
+.edit-button { background: #3d3d3d; border:1px solid #fff; border-radius: 2px; width: 100px; height: 26px; color: white;}
+.insert-button { background: #3d3d3d; border:1px solid #fff; border-radius: 2px; width: 100px; height: 26px; color: white;}
+.excel-button { background: #3d3d3d; border:1px solid #fff; border-radius: 2px; width: 100px; height: 26px; color: white;}
+.search-button { background: #3d3d3d; border:1px solid #fff; border-radius: 2px;width: 100px; height: 26px; color: white;}
 /* 테이블 */
-.table { width: 1275px; border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; table-layout: fixed; word-break: break-all;}
+.table { width: 100%; border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; table-layout: fixed; word-break: break-all; background: white;}
 .table tr th { width: 100%; height: 38px; text-align: center; background: #3d3d3d; border-top: solid 1px #898989; border-bottom: solid 1px #898989; font-size: 12pt; line-height: 38px; padding-left: 10px;    border-left: none; color: #fff;}
-.table tr td { border-right: none; border-bottom: solid 1px #898989; border-top: solid 1px #898989; padding-left: 10px; line-height: 38px; font-size: 10pt;}
+.table tr td { border-right: none; border-bottom: solid 1px #898989; border-top: solid 1px #898989; padding-left: 10px; line-height: 20px; font-size: 10pt; text-align: center;}
 .none-line-table { border: 0 none; width: 100%; border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; table-layout: fixed;}
 .none-line-table tr td { padding: 5px; border: 0px;}
 
@@ -80,7 +81,7 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 #content { overflow: hidden;}
 
 /* 사이드 왼쪽 */
-#sideBar { width: 13%; height: auto; float: left; margin-left: 0.5%; margin-top: 1%; background: #3d3d3d; webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;}
+#sideBar { width: 13%; height: auto; float: left; margin-left: 0.5%; margin-top: 1%; background: #3d3d3d; webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; padding-bottom: 20px;}
 #sideBar .tab01 .sideBar_radioBox { margin-bottom: 15px; overflow: hidden; background: #3d3d3d;}
 #sideBar .tab01 .sideBar_radioBox ul {padding: 7px 0 19px; overflow: hidden; border-bottom: solid 1px #64666a;}
 #sideBar .tab01 .sideBar_radioBox ul li { float: left; padding: 8px 0 0; margin-left: 15px;}
@@ -89,19 +90,21 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .sideBar_tabMenu { width: 100%; height: 60px;  margin-top: 10px;}
 .sideBar_tabMenu ul { overflow: hidden;}
 .sideBar_tabMenu ul li { float: left; width: 50%;}
-.sideBar_tabMenu ul li a { text-align: center; display: block; line-height: 60px; font-size: 16px; color: #fff; width: 100%; height: 100%; background: #262626;}
-.sideBar_tabMenu ul li a:hover { color: #fff; width: 100%; height: 100%; background: #262626;}
+.sideBar_tabMenu ul li a { text-align: center; display: block; line-height: 60px; font-size: 16px; color: #777; width: 100%; height: 100%;}
+.sideBar_tabMenu ul li a:hover { color: #fff; width: 100%; height: 100%; }
 
-#areas1_div, #areas2_div, .box01 { margin-top: 10px; }
+/* 메인화면 오른쪽 레이아웃 박스 */
 #rightBox { float: left; width: 85%; overflow: hidden; margin-left: 0.5%; margin-top: 1%;}
-#errorBox { position: absolute; top: 0; left: 0; width: 100%;}
 
+/* 메인화면 작게 나오는 error 팝업 */
+#errorBox { position: absolute; top: 0; left: 0; width: 100%;}
 #rightBox .errorPop { width: 100%; height: 40px; background: yellow; border-bottom: solid 1px #eee;}
 #rightBox .errorPop .txtTitle { float: left; padding-left: 20px;}
 #rightBox .errorPop .txtTitle a { color: red; font-size: 14px; line-height: 40px; float: left;}
 #rightBox .errorPop .closeBtn { float: right;}
 #rightBox .errorPop .closeBtn a { display: block; width: 50px; height: 40px; line-height: 40px; font-weight: bold; font-size: 14px;}
 
+/* Agent 상태 목록 (PC모양) */
 #rightBox .topBox { width: auto !important; height: 111px; border: solid 1px #898989 !important; margin-right: 10px !important; overflow-y: hidden; background: #000; position: relative;}
 #rightBox .topBox h1 { color:white; position: absolute;top: 37px;right: 25px; cursor: pointer;}
 #rightBox .topBox h1 img { width:30px; height:30px;}
@@ -124,11 +127,10 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 #rightBox .topBox .bottomNemo ul.list li a span.listTxt { display: block; width: 100%; text-align: center; line-height: 18px; font-size: 11px; font-family: "NotoSansCJKkrDemiLight"; color: #fff;}
 #rightBox .topBox .bottomNemo ul.list li.lastArea a .listBox { text-align: center; line-height: 90px; font-size: 50px; color: #fff;}
 
+/* 차트 영역 */
 #rightBox .middleBox { width: 100%; margin-top: 20px; overflow: hidden;}
 #rightBox .middleBox .fullBox { height: 46px; margin-bottom: 20px; width: 100%;}
 #rightBox .middleBox .fullBox .fullSub { width: auto !important; height: 46px; border: solid 1px #898989 !important; margin-right: 10px !important; background: #000; cursor: pointer;   position: relative;}
-#network-img { display: block;}
-#network-img-1400 { display: none;}
 #rightBox .middleBox .rightTopBox { float: left; width: 49%;}
 #rightBox .middleBox .rightTopBox .leftTopBox { width: 100%; margin-bottom: 20px; position: relative;}
 #rightBox .middleBox .rightTopBox .leftBottomBox { width: 100%; position: relative;}
@@ -136,19 +138,42 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 #rightBox .middleBox .rightBottomBox .leftTopBox { position: relative; width: 100%; margin-bottom: 20px;}
 #rightBox .middleBox .rightBottomBox .leftBottomBox { width: 100%; position: relative;}
 #rightBox .bottomBox { position: relative; width: 100%; margin-top: 20px;}
+.fullSub img#pipe-01{ position: absolute; top: 0; left: 690px;}
+.fullSub img#pipe-02{ position: absolute; top: 0; left: 690px;}
+.fullSub img#pipe-03{ position: absolute; top: 0; left: 690px;}
 
-/* 차트 */
+/* 네트워크 이미지(총알) */
+#network-img { display: block;}
+#network-img-1400 { display: none;}
+
+/* 하이차트 */
 #highcharts-11 { width: auto !important; border: solid 1px #898989 !important;}
 #highcharts-8 { width: 100% !important;}
 #highcharts-0 { width: 100% !important;}
 
-#chart_scatter { width: 100%; height: 300px; border: solid 1px #898989 !important; margin-right: 10px !important;}
+/* 차트 레이아웃 영역 */
+#chart_scatter { width: 100%; height: 300px; border: solid 1px #898989 !important; margin-right: 10px !important; background: #39393b;}
+#chart_cloumn { width: 100%; height: 300px; margin-right: 10px !important; border: solid 1px #898989 !important; background: #39393b;}
 #chart_bar { width: 100%; height: 300px; margin-right: 10px !important; border: solid 1px #898989 !important;}
-#chart_bar2{width:100%; height: 350px;}
-#chart_cloumn { width: 100%; height: 300px; margin-right: 10px !important; border: solid 1px #898989 !important;}
-#chart_cloumn2 { width: auto !important; border: solid 1px #898989; margin-right: 10px !important;}
+#chart_bar2{width:1000px; height: 250px;}
+#chart_cloumn2 { width: 99%; !important; border: solid 1px #898989; margin-right: 10px !important; height: 400px;}
 #chart_spline { width: 100%; height: 300px; border: solid 1px #898989 !important; margin-right: 10px !important;}
 
+.chart_loding {
+    display: table;
+    width: 100%;
+}
+.chart_loding i {
+    color: white; display: table-cell; text-align: center; vertical-align: middle;
+}
+.chart_loding img {
+    position: absolute; top: 40%; left: 50%;;
+}
+.BottomTable img {
+    position: absolute; top: 40%; left: 50%; margin-left: -300px;
+}
+
+/* 월별 데이터 항목 차트에 레젠드 */
 .tran-legend { position: absolute; border: 1px solid gray; width: 185px; top:85%; height: 38px; left:40%; background: black;}
 .tran-legend ul li { float:left; color:white; margin-left: 25px; margin-top:15px;}
 .tran-legend ul li:nth-child(1) { margin-left: 9px;}
@@ -156,15 +181,15 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .tran-legend ul li:nth-child(2) i { color: #90ee7e; background-color: #90ee7e;}
 .tran-legend ul li:nth-child(3) i { color: #f45b5b; background-color: #f45b5b;}
 
-.button-chart-menu { -webkit-border-radius:2px; -moz-border-radius:2px; border-radius:2px; font-size: 12px; background-color: gray; color: white; border: none; text-align: center; text-decoration: none; display: inline-block; width: 125px !important; height: 38px;}
+/* 차트 버튼 위치 */
+.button-chart-menu { -webkit-border-radius:2px; -moz-border-radius:2px; border-radius:2px; font-size: 12px; background-color: #38383a; color: white; border: none; text-align: center; text-decoration: none; display: inline-block; width: 125px !important; height: 38px;}
 .button-position-absolute { position: absolute; z-index:1;}
 .button-chart-cloumn2-top-left {top: 89%;left: calc(100% - 937px);}
 .button-chart-cloumn2-top-right {top: 89%;right: calc(100% - 934px);}
 .button-chart-cloumn-top-left {top: 85%;left: calc(100% - 524px);}
 .button-chart-cloumn-top-right {top: 85%;right: calc(100% - 522px);}
 
-
-/* 로그데이터 팝업 start */
+/* 로그데이터 팝업 */
 .logData { width: 1063px; height: 755px; border: solid 1px #666; margin: 0 auto;  padding: 0 20px;  position: fixed; z-index: 9999; top: 30px; left: 10%; background: #fff9ec; display: none;}
 .logData .top { height: 50px; position: relative; padding-top: 20px; padding-left: 20px; padding-bottom: 10px;}
 .logData .top .closeBtn { position: absolute; top: 20px; right: 20px;}
@@ -186,118 +211,27 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .logData .bottom span.btnSet { padding-top: 20px; width: 104px; height: 60px; display: block; margin: 0 auto;}
 .logData .bottom span.btnSet span.leftBtn { display: block; margin-right: 10px; width: 100px; height: 50px; float: left;}
 .logData .bottom span.btnSet a { display: block; float: left; width: 100px; height: 50px; line-height: 50px; font-size: 18px; text-align: center; border: solid 1px #666;}
-/* 로그데이터 팝업 end */
 
+/* 서브 화면 */
 #container #subRightBox { width: calc(100% - 30%); padding-top: 15px; padding-left: 15px; padding-bottom: 4.9em;}
-#container #subRightBox .titleArea { position: relative;}
-#container #subRightBox h2 { border-bottom: solid 1px #000; padding-bottom: 10px; font-size: 30px; line-height: 30px; margin-bottom: 30px;}
+#container #subRightBox .titleArea { position: relative; color:white;}
+#container #subRightBox h2 { border-bottom: solid 1px #fff; padding-bottom: 10px; font-size: 30px; line-height: 30px; margin-bottom: 30px;}
 #container #subRightBox .location { position: absolute; right: 0; top: 10px;}
 #container #subRightBox .titleArea .location ul { overflow: hidden;}
 #container #subRightBox .titleArea .location ul li { float: left; padding-right: 20px;}
 #container #subRightBox .titleArea .location ul li.end { padding-right: 0;}
-#container #subRightBox .titleArea .location ul li a { display: block; font-size: 12px; line-height: 12px; color: #000;}
+#container #subRightBox .titleArea .location ul li a { display: block; font-size: 12pt; line-height: 12px; color: #fff;}
 #container #subRightBox .locationTitle { color: #fff; height: 38px; font-size: 20px; line-height: 38px;}
-#subRightBox .topTable .adminTab01 { width: 100%; height: 50px;}
-#subRightBox .topTable .adminTab01 ul { overflow: hidden;}
-#subRightBox .topTable .adminTab01 ul li { float: left; width: 50%;}
-#subRightBox .topTable .adminTab01 ul li a { display: block; border: solid 1px #000; height: 40px; line-height: 40px; text-align: center; background: #222; color: #000; font-size: 15px; color: #c9c4c4;}
 
-#subRightBox .topTable table tr td .select02 span { float: left; padding-left: 10px; line-height: 20px;}
-#subRightBox .topTable .btnSearch { float: right; width: 100%; height: 32px; margin-top: 10px; padding-top: 10px; border-top: solid 1px #000;}
-#subRightBox .topTable .btnSearch a { display: block; background: #000; color: #fff; font-size: 15px; line-height: 32px; text-align: center; width: 78px; height: 32px; float: right;}
-#subRightBox .BottomTable { margin-top: 10px;}
-#subRightBox .BottomTable .tab01Box { width: 100%; display: block;}
+#subRightBox .BottomTable { margin-top: 10px; width: 100%; overflow: auto; overflow-y: hidden; text-align: center;}
+#subRightBox .BottomTable .tab01Box { width: 100%; display: block; overflow-x: auto; overflow-y: hidden;}
 #subRightBox .BottomTable .tab01Box table.listTable01 { border: 0 none; width: 100%; border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;}
 #subRightBox .BottomTable .tab01Box table.listTable01 tr th { height: 38px; font-size: 14px; line-height: 38px; width: 200px; border: solid 1px #898989; color: #fff; background: #3d3d3d url("../img/bg.gif") no-repeat center right; cursor: pointer;}
 #subRightBox .BottomTable .tab01Box table.listTable01 tr td { height: 38px; border: solid 1px #898989; text-align: right; color: #fff; font-size: 13px;}
 #subRightBox .BottomTable .tab01Box table.listTable01 tr td .count { margin: 0 5px;}
 #subRightBox .BottomTable .tab01Box table.listTable01 tr td.tableTxtAlign { text-align: center;}
 
-/* 임계값 설정 start */
-#container #subRightBox .titleArea { position: relative;}
-#container #subRightBox h2 { border-bottom: solid 1px #000; padding-bottom: 10px; font-size: 30px; line-height: 30px;  margin-bottom: 30px;}
-#container #subRightBox .titleArea .location ul { overflow: hidden;}
-#container #subRightBox .titleArea .location ul li { float: left; padding-right: 20px;}
-#container #subRightBox .titleArea .location ul li.end { padding-right: 0;}
-#container #subRightBox .titleArea .location ul li a { display: block; font-size: 15px; line-height: 15px;}
-#subRightBox .topTable table.table01 { border: 0 none; width: 100%; border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; background: #343434; color: #fff;}
-#subRightBox .topTable table.table01 tr th { text-align: center; background: #3d3d3d; border-top: solid 1px #898989; border-bottom: solid 1px #898989; height: 38px; font-size: 14px; line-height: 38px; padding-left: 10px; width: 200px; border-left: none; color: #fff;}
-#subRightBox .topTable table.table01 tr td { border-right: none; border-bottom: solid 1px #898989; border-top: solid 1px #898989; padding: 3px;}
-#subRightBox .topTable table.table01 tr td .selectBox { width: 34%; height: 30px; padding: 10px 0 0 10px; float: left;}
-#subRightBox .topTable table.table01 tr td .select01 { float: left; margin-right: 2px;}
-#subRightBox .topTable table.table01 tr td .select01 .select01 { float: left; width: 100px; height: 24px; border: solid 1px #e8e8e8;}
-#subRightBox .topTable table.table01 tr td .select01 span { float: left; padding-left: 10px; line-height: 20px; padding-right: 30px;}
-#subRightBox .topTable table.table01 tr td .select02 { float: left; margin-right: 10px;}
-#subRightBox .topTable table.table01 tr td .select02 .select02 { float: left; width: 100px;height: 24px;border: solid 1px #e8e8e8;}
-#subRightBox .topTable table.table01 tr td .select02 span {float: left;padding-left: 10px;line-height: 20px;}
-#subRightBox .topTable table.table01 tr td .select03 {float: left;}
-#subRightBox .topTable table.table01 tr td .select03 .select03 {float: left;width: 100px;height: 24px;border: solid 1px #e8e8e8;}
-#subRightBox .topTable table.table01 tr td .select03 span { float: left;padding-left: 10px;line-height: 20px;padding-right: 30px;}
-#subRightBox .topTable table.table01 tr td .inputTxt01 { padding-left: 10px;}
-#subRightBox .topTable table.table01 tr td .inputTxt01 input { width: 335px; height: 24px; border: solid 1px #e8e8e8;}
-#subRightBox .topTable table.table01 tr td .select04 .select01 { float: left; width: 100px; height: 24px; border: solid 1px #e8e8e8;}
-#subRightBox .topTable table.table01 tr td span.calendar01,#subRightBox .topTable table.table01 tr td span.pado { display: block; float: left;}
-#subRightBox .topTable table.table01 tr td span.pado { padding: 7px 10px 0;}
-#subRightBox .topTable table.table01 tr td span.calendar01 { padding: 0 0 0 10px;}
-#subRightBox .topTable table.table01 tr td span.calendar01 input { width: 200px; height: 24px; border: solid 1px #e8e8e8; padding: 0 10px; margin-right: 10px;}
-#subRightBox .topTable table.table01 tr td span.calendar01 * {vertical-align: middle;}
-#subRightBox .topTable table.table01 tr td span.calendarBtn {display: block;padding: 0 0 0 20px;width: auto;float: left;}
-#subRightBox .topTable table.table01 tr td .calendarBtn input {display: block;background: #3d3d3d;color: #fff;font-size: 15px;line-height: 26px;text-align: center;width: 78px;height: 26px;float: left;border: none;argin-right: 10px;}
-#subRightBox .topTable table.table01 tr td .select05 .select01 {float: left;width: 100px;height: 24px;border: solid 1px #e8e8e8;}
-#subRightBox .topTable table.table01 tr td .selectBox input {width: 1000px;height: 24px;border: solid 1px #e8e8e8;padding: 0 10px;}
-#subRightBox .topTable .btn {float: right;width: 78px; height: 32px;margin-top: 10px;}
-#subRightBox .topTable .btn a {display: block;background: #3d3d3d;color: #fff;font-size: 15px;line-height: 32px;text-align: center;width: 100%;height: 32px;float: left;}
-.bottomTable {position: relative;top: -95px;}
-.mail_list, .mail_set, .send_list {position: relative;margin-bottom: 10%;}
-/* 임계값 설정 end */
-
-/* 임계값 설정 등록 start */
-#subRightBox .topTable .btnArea {width: 100%;height: 32px;margin-top: 10px;position: relative;}
-#subRightBox .topTable .settingBtn {width: auto;height: 32px;position: absolute;right: 0;top: 0;}
-#subRightBox .topTable .settingBtn a {display: block;background: #000;color: #fff;font-size: 15px;line-height: 32px;text-align: center;width: 78px;height: 32px;float: left;margin-left: 10px;}
-#subRightBox .topTable .settingBtn .uploadBtn a {background: #40675a;}
-/* 임계값 설정 등록 end */
-
-/* 임계값 설정 수정 start */
-#subRightBox .topTable table.table01 tr td span.chk01 {float: left;padding: 0 0 0 10px;display: block;}
-#subRightBox .topTable table.table01 tr td span.chk01 input {float: left;}
-#subRightBox .topTable table.table01 tr td span.chk01 label {float: left;}
-#subRightBox .topTable .threebtn {float: right;width: 264px;height: 32px;margin-top: 10px;}
-#subRightBox .topTable .threebtn a {display: block;background: #000;color: #fff;font-size: 15px;line-height: 32px;text-align: center;width: 78px;height: 32px;float: left;margin-left: 10px;}
-#subRightBox .topTable .threebtn .editBtn a {background: #89c424;}
-#subRightBox .topTable .threebtn .deletedBtn a {background: #a96060;}
-/* 임계값 설정 수정 end */
-
-/* 메일링 관리 start */
-#container #subRightBox .titleArea {position: relative;}
-#container #subRightBox h2 {border-bottom: solid 1px #000;padding-bottom: 10px;font-size: 30px;line-height: 30px;margin-bottom: 30px;}
-#container #subRightBox .titleArea .location ul {overflow: hidden;}
-#container #subRightBox .titleArea .location ul li {float: left;padding-right: 20px;}
-#container #subRightBox .titleArea .location ul li.end {padding-right: 0;}
-#container #subRightBox .titleArea .location ul li a {display: block;font-size: 15px;line-height: 15px;}
-#subRightBox .topTable .adminTab02 {width: 100%;height: 50px;}
-#subRightBox .topTable .adminTab02 ul {overflow: hidden;}
-#subRightBox .topTable .adminTab02 ul li {float: left;width: 33.33%;}
-#subRightBox .topTable .adminTab02 ul li a {display: block;border: solid 1px #000;height: 40px;line-height: 40px;text-align: center;background: #222;color: #000;font-size: 15px;color: #fff;}
-/* 메일링 관리 end */
-
-/* 메타데이터 관리 start */
-#container #subRightBox .titleArea {position: relative;}
-#container #subRightBox h2 {border-bottom: solid 1px #898989;padding-bottom: 10px;font-size: 30px;line-height: 30px;margin-bottom: 30px;color: #fff;}
-#container #subRightBox .titleArea .location ul {overflow: hidden;}
-#container #subRightBox .titleArea .location ul li {float: left;padding-right: 20px;color: #fff;}
-#container #subRightBox .titleArea .location ul li.end {padding-right: 0;}
-#container #subRightBox .titleArea .location ul li a {display: block;font-size: 15px;line-height: 15px;color: #fff;}
-/* 메타데이터 관리 end */
-
-/* 1280 X 760 팝업 */
-.layer-pop-1280-760 {width: 1280px;height: 760px;padding:10px;border: solid 1px #666;z-index: 3;background: #fff;display: none;}
-.layer-pop-1280-760 .top {height: 50px;position: relative;padding-top: 20px;padding-left: 20px;padding-bottom: 10px;}
-.layer-pop-1280-760 .top h1 {float: left;padding-top: 10px;}
-.layer-pop-1280-760 .top .closeBtn {position: absolute;top: 20px;right: 20px;}
-.layer-pop-1280-760 .top .closeBtn a {font-size: 20px;line-height: 20px;font-weight: bold;}
-.layer-pop-1280-760 table tr th:nth-child(1){width: 100px;}
-
+/* 페이징 처리 */
 .pagination {display: inline-block;padding-left: 0;margin: 20px 0;border-radius: 4px;}
 .pagination > li {display: inline;}
 .pagination > li > a, .pagination > li > span {position: relative;float: left;padding: 6px 12px;margin-left: -1px;line-height: 1.42857143;color: #337ab7;text-decoration: none;background-color: #fff;border: 1px solid #ddd;font-size: 9px;}
@@ -312,8 +246,18 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .pagination-sm > li > a, .pagination-sm > li > span { padding: 5px 10px; font-size: 12px; line-height: 1.5;}
 .pagination-sm > li:first-child > a, .pagination-sm > li:first-child > span {border-top-left-radius: 3px; border-bottom-left-radius: 3px;}
 .pagination-sm > li:last-child > a, .pagination-sm > li:last-child > span { border-top-right-radius: 3px; border-bottom-right-radius: 3px;}
+.pagination .active {border: none !important;}
 
-.flotingBox { position:fixed;right:0; bottom:0; z-index:99999; width:800px; height:289px;background:#fff;float:right;}
+/* 1280 X 760 팝업 */
+.layer-pop-1280-760 {width: 1280px;height: 760px;padding:10px;border: solid 1px #666;z-index: 3;background: #fff;display: none;}
+.layer-pop-1280-760 .top {height: 50px;position: relative;padding-top: 20px;padding-left: 20px;padding-bottom: 10px;}
+.layer-pop-1280-760 .top h1 {float: left;padding-top: 10px;}
+.layer-pop-1280-760 .top .closeBtn {position: absolute;top: 20px;right: 20px;}
+.layer-pop-1280-760 .top .closeBtn a {font-size: 20px;line-height: 20px;font-weight: bold;}
+.layer-pop-1280-760 table tr th:nth-child(1){width: 100px;}
+
+/* 800 X 289 이동 팝업 */
+.popup {position:fixed;right:0; bottom:0; z-index:99999; width:800px; height:289px;background:#fff;float:right; display: none;}
 .popup .top { height: 16px; position: relative; padding-top: 20px; padding-left: 20px; padding-bottom: 10px;}
 .popup .top .closeBtn { position: absolute;top: 11px; right: 20px;}
 .popup .top .closeBtn a { font-size: 20px; line-height: 20px; font-weight: bold;}
@@ -328,9 +272,232 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .popup .bottom { border-top: solid 1px #333;}
 .popup .bottom a { display: block; margin: 15px auto 0; width: 100px; height: 50px; line-height: 50px; font-size: 18px; text-align: center; border: solid 1px #666;}
 
-.deletePop, .eidtPop, .savePop, .uploadPop { border: solid 1px #eee; display: none; width: 300px; height: 100px; background: #fff; position: absolute; top: 50%; left: 50%; margin-top: -50px; margin-left: -150px;}
-.deletePop p, .eidtPop p, .savePop p,.uploadPop p { text-align: center; color: #000; padding: 20px;}
-.deletePop .btnSet, .eidtPop .btnSet, .savePop .btnSet, .uploadPop .btnSet { width: 220px; margin: 0 auto;}
-.deletePop .btnSet a, .eidtPop .btnSet a, .savePop .btnSet a, .uploadPop .btnSet a { float: left; display: block; width: 100px; height: 30px; color: #fff; background: #000; line-height: 30px; text-align: center; margin-right: 10px;}
+/* 작은 팝업 */
+.q-popup-layout {border: solid 1px #eee; display: none; width: 300px; height: 100px; background: #fff; position: absolute; top: 50%; left: 50%; margin-top: -50px; margin-left: -150px;}
+.q-popup-layout p {text-align: center; color: #000; padding: 20px;}
+.q-popup-layout .btnSet {width: 220px; margin: 0 auto;}
+.q-popup-layout .btnSet a {float: left; display: block; width: 100px; height: 30px; color: #fff; background: #000; line-height: 30px; text-align: center; margin-right: 10px;
+}
 
-#agent_server_state_info_popup .middle {height:650px; overflow-y:scroll;}
+/* Agent 상태서버정보 팝업 */
+#tpl-agent-server-state-info-list .middle {height:650px; overflow-y:scroll;}
+
+/* Agent 서버정보 팝업 */
+.agentServerInfo table th { background: #f9f9f9; color: black;}
+.agentServerInfo .none-line-table button { height: 50px; background: #3d3d3d; border: 1px solid white; color: white;}
+/*.agentServerInfo .none-line-table button:hover { height: 50px; background: rgb(255, 100, 69); border: 1px solid rgb(255, 100, 69); color: white;}*/
+.agent-server-info-memo { width: 100%;  height: 100%;  padding-top: 5px;}
+.agent-server-info-memo .left { width: 80%; float: left;}
+.agent-server-info-memo .right { width: 11%; float: right; padding-bottom: 5px;}
+.agent-server-info-memo .right button { height: 77px; background: #3d3d3d; border: 1px solid white; color: white;}
+/*.agent-server-info-memo .right button:hover { height: 77px; background: rgb(255, 100, 69); border: 1px solid rgb(255, 100, 69); color: white;}*/
+
+
+#agent_server_info_popup .tab {width: 99%; height: auto; overflow: hidden; background: white; margin-left: 5px;}
+#agent_server_info_popup .tab ul.tab_menu {width: 100%; height: auto;}
+#agent_server_info_popup .tab ul.tab_menu li {width: 49.6%; float: left; list-style: none;}
+#agent_server_info_popup .tab ul li:nth-child(1) button {width: 100%; height: 50px; background: white; color: #383838; border:1px solid black; border-bottom: 1px solid white;}
+#agent_server_info_popup .tab ul li:nth-child(2) button {width: 102%; height: 50px; background: white; color: #888; border: none; border-bottom: 1px solid black;}
+#agent_server_info_popup nav {text-align: center;}
+
+#agent_server_info_popup .tab .tab-box-1 {background: white; height: 350px; margin-top: 49px; border: 1px solid #333; border-top: none; overflow: auto; width:100%;}
+#agent_server_info_popup .tab .tab-box-1 .line {margin-bottom: 5px;}
+#agent_server_info_popup .tab .tab-box-1 table { width: 1000px; height: auto; margin-left: 100px; border: 1px solid #ddd;}
+#agent_server_info_popup .tab .tab-box-1 table th { background: #f9f9f9; text-align: center; height: 39px; width:100px;}
+#agent_server_info_popup .tab .tab-box-1 table td { color: #383838; text-align: center; height: 39px;}
+
+#agent_server_info_popup .tab .tab-box-2 {display: none; height: 350px; margin-top: 49px; }
+#agent_server_info_popup .tab .tab-box-2 #chart_bar2 { margin-top:100px; margin-left: 127px; border: 3px solid gray;}
+#agent_server_info_popup .tab .tab-box-2 .line {margin-bottom: 5px;}
+#agent_server_info_popup .tab .tab-box-2 {height: 300px;}
+
+/* 공통 탭 */
+.common-tab { width: 100%; height: 50px; margin-bottom: 5px;}
+.common-tab-2 { width: 100%; height: 50px; margin-bottom: 5px;}
+.common-tab-3 { width: 100%; height: 50px; margin-bottom: 5px;}
+.common-tab ul li { display: table; float: left; cursor: pointer; border-radius: 2px; background: none; height: 100%; margin-right: 2px;}
+.common-tab ul li.end { margin-right: 3px;}
+.common-tab li a { display: table-cell; color: #999; text-align: center; vertical-align: middle; font-size: 13pt;}
+.common-tab-2 li { width: 49.7%;}
+.common-tab-3 li { width: 33.1%;}
+/* 검색조건 */
+.common-search-table { width: 100%; table-layout: fixed; background: white;}
+.common-search-table tr th {
+    width: 10%;
+    height: 40px;
+    font-weight: bold;
+    background: #3d3d3d;
+    border: none;
+    color: white;
+}
+
+.common-search-table tr td {
+    width: 70%;
+    background: #3d3d3d;
+    border: none;
+    color: white;
+}
+
+/* select 박스 레이아웃 */
+.selectBox select {
+    float: left;
+    margin-right: 5px;
+}
+
+/* laout 통합 */
+.lw-100 {
+    margin-right: 5px;
+    width: 100%;
+}
+
+.fl-mr-5 {
+    float: left;
+    margin-right: 5px;
+}
+
+.fr-mr-5 {
+    float: right;
+    margin-right: 5px;
+}
+
+/* 가로테이블(상세화면 같은거 */
+.common-table-h {
+    table-layout: fixed;
+    width: 100%;
+    background: white;
+    color: black;
+    padding: 1em;
+}
+
+.common-table-h tr th {
+    background: #f9f9f9;
+    width: 10%;
+    height: 40px;
+}
+
+.common-table-h tr td {
+    background: white;
+    width: 90%;
+}
+
+.common-table-h tr td * {
+    float: left;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+/* 연계API서버 업데이트 팝업 */
+.agent-update-layer-popup {
+    width: 600px;
+    height: 300px;
+    background: white;
+    display: none;
+    z-index: 4;
+    position: absolute;
+    left: 379px;
+    top: 235px;
+    border: 1px solid black;
+}
+.agent-update-layer-popup .header {
+    width:100%;
+    height:50px;
+}
+.agent-update-layer-popup .header span {
+    background: slategrey;
+    float: right;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    cursor: pointer;
+}
+.agent-update-layer-popup .header span:after {
+    content: "X";
+    font-size: 20px;
+    line-height: 27px;
+    font-weight: bold;
+}
+.agent-update-layer-popup .content {
+    width: 70%;
+    height: 50px;
+    padding: 1em;
+    margin: 0 auto;
+}
+.agent-update-layer-popup .content h1{
+    width: 100%;
+    float: left;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.agent-update-layer-popup .content hr{
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.agent-update-layer-popup .content .inner div {
+    width: 100%;
+    line-height: 30px;
+    clear: both;
+}
+
+.agent-update-layer-popup .content .inner div span{
+    margin-left: 15px;
+    float: left;
+}
+
+.agent-update-layer-popup .content .inner input{
+    width: 340px;
+}
+
+.agent-update-layer-popup .content .inner button{
+    border-radius: 2px;
+    width: 60px;
+    height: 30px;
+}
+
+.agent-update-layer-popup .content .inner button:nth-child(1){
+    background: #4585f4;
+    color: white;
+}
+
+.agent-update-layer-popup .content .inner button:nth-child(2){
+    background: #dd5351;
+    color: white;
+}
+
+.agent-update-layer-popup .content .inner div:last-child span{
+    margin-left: 15px;
+    float: right;
+}
+
+.outer {
+    width: 100%;
+    display: table;
+}
+
+.inner {
+    width: 100%;
+    display: table-cell;
+    text-align: center;
+}
+
+.w-1700 {
+    width: 1700px;
+}
+
+.overflow-auto {
+    overflow: auto;
+}
+
+.log-row {
+    cursor: pointer;
+}
+
+#log_button_flag {
+    float: right;
+    margin-right: 50px;
+}
+
+#log_button_flag .edit-button{
+    height: 40px;
+}

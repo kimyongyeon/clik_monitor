@@ -13,35 +13,6 @@ function redirectDetail(searchProdId){
  * 검색어 조회함수
  ******************************************************** */		
 $(document).ready(function () {
-//    $("#searchProdName").autocomplete({
-//        source: function(request,response) {
-//            $.ajax({
-//                url: "/searchItem.do",
-//                type: "POST",
-//                dataType: "json",
-//                data: {"searchProdName":$("#searchProdName").val().replace(/ /g, '').replace(/[^(가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9)]/gi,""),"strd_ym":$("#strd_ym").val(),"searchCount":$("#searchCount").val()},
-//                success: function (data) {
-//                    response($.map(data.keyword, function (item) {
-//                        return { label: item.int_prod_nm, value: item.int_prod_id };
-//                    }));
-//                }               
-//            });
-//        },
-//        focus: function( event, ui ) {
-//            $("#searchProdId").val( ui.item.value);
-//            return false;
-//        },        
-//        select: function(event, ui)
-//        {
-//        	$(this).val(ui.item.label);
-//            $("#searchProdId").val(ui.item.value);
-//            redirectDetail(ui.item.value);
-//            return false;
-//        },         
-//        message: {
-//            noResults: "", results: ""
-//        }
-//    });
 });
 
 /* ********************************************************

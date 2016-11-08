@@ -140,38 +140,6 @@
                 </div>
             </div>
         </div>
-
-        <%--<h1 class="loginTitle">지방의회 모니터링 시스템 - 로그인 </h1>--%>
-        <%--<div class="loginArea">--%>
-
-            <%--<table width="100%">--%>
-                <%--<tr>--%>
-                    <%--<td>&nbsp;</td>--%>
-                    <%--<td colspan="2" class="idSave">--%>
-                        <%--<span><input id="idSaveChk" name="idSaveChk" tabindex="3" type="checkbox"--%>
-                                     <%--<c:if test="${fn:length(userid) > 0}">checked="checked"</c:if> /><label--%>
-                                <%--for="idSaveChk">아이디 저장</label></span></td>--%>
-                    <%--<td>&nbsp;</td>--%>
-                <%--</tr>--%>
-                <%--<tr>--%>
-                    <%--<td>&nbsp;</td>--%>
-                    <%--<td class="labelId">--%>
-                        <%--<label for="j_username">아이디</label><input tabindex="1" id="j_username" name="j_username"--%>
-                                                                  <%--value="${userid}" type="text" style="width: 300px"/>--%>
-                    <%--</td>--%>
-                    <%--<td rowspan="2" class="btn">--%>
-                        <%--<input type="submit" value="로그인" style="cursor: pointer" id="btnLogin"/></td>--%>
-                    <%--<td>&nbsp;</td>--%>
-                <%--</tr>--%>
-                <%--<tr>--%>
-                    <%--<td>&nbsp;</td>--%>
-                    <%--<td class="labelPw">--%>
-                        <%--<label for="j_password">패스워드</label><input tabindex="2" id="j_password" name="j_password"--%>
-                                                                   <%--type="password" style="width: 300px"/></td>--%>
-                    <%--<td>&nbsp;</td>--%>
-                <%--</tr>--%>
-            <%--</table>--%>
-        <%--</div>--%>
     </form>
 
 <script type="text/javascript" src="<c:url value="/assets/js/biz/common.js"/>"></script>

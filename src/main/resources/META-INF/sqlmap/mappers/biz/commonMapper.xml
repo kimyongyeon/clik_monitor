@@ -45,20 +45,42 @@
 
 	<!-- 지역별 의회 목록 조회 -->
 	<select id="selectAreaList" parameterType="commonVO" resultType="commonVO">
-		SELECT /* getAreaList : 지역별 의회 목록 조회 */
-           LOASM_CODE AS code,
-           LOASM_NM AS codenm,
-		  (SELECT CODE_ID_NM
-		   FROM COMMON_CODE
-		   WHERE CL_CODE='LMC'
-			 AND CODE_ID = BRTC_CODE) AS COMDENM,
-			   CTPRVNGUGUN_CODE AS CTPRVNGUGUNCODE,
-			   INSTT_CL_CODE AS INSTTCLCODE
-		FROM ORGAN,
-			 COLGOVER
-		WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
-		AND ISVIEW = 'Y'
-		ORDER BY ORDR ASC, LOASM_CODE ASC
+-- 		SELECT /* getAreaList : 지역별 의회 목록 조회 */
+--            LOASM_CODE AS code,
+--            LOASM_NM AS codenm,
+-- 		  (SELECT CODE_ID_NM
+-- 		   FROM COMMON_CODE
+-- 		   WHERE CL_CODE='LMC'
+-- 			 AND CODE_ID = BRTC_CODE) AS COMDENM,
+-- 			   CTPRVNGUGUN_CODE AS CTPRVNGUGUNCODE,
+-- 			   INSTT_CL_CODE AS INSTTCLCODE
+-- 		FROM ORGAN,
+-- 			 COLGOVER
+-- 		WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+-- 		AND ISVIEW = 'Y'
+-- 		ORDER BY ORDR ASC, LOASM_CODE ASC
+        WITH ORDR_LIST AS (
+          SELECT RASMBLY_AREA_CODE ,ORDR FROM COLGOVER WHERE <![CDATA[ ORDR <= 17 ]]>
+        )
+        SELECT * /* getAreaList : 지역별 의회 목록 조회 */ FROM (
+            SELECT ROWNUM, AA.CODE, AA.CODENM
+                , AA.ORDR
+                ,CASE SUBSTR(AA.CODE,1,3) WHEN AA.RASMBLY_AREA_CODE THEN (SELECT ORDR FROM ORDR_LIST WHERE RASMBLY_AREA_CODE = SUBSTR(AA.CODE,1,3) ) ELSE ROWNUM END ORDR2
+            FROM (
+                SELECT /* GETAREALIST : 지역별 의회 목록 조회 */
+                LOASM_CODE AS CODE,
+                LOASM_NM AS CODENM,
+                (SELECT CODE_ID_NM FROM COMMON_CODE  WHERE CL_CODE='LMC'  AND CODE_ID = BRTC_CODE) AS COMDENM,
+                CTPRVNGUGUN_CODE AS CTPRVNGUGUNCODE,
+                INSTT_CL_CODE AS INSTTCLCODE,
+                RASMBLY_AREA_CODE,
+                ORDR
+            FROM ORGAN, COLGOVER
+            WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+            AND ISVIEW = 'Y'
+            ORDER BY LOASM_CODE ASC, ORDR ASC
+            ) AA
+        ) ORDER BY ORDR2, ORDR
 	</select>
 
 	<!-- 기초별 의회 목록 조회 -->

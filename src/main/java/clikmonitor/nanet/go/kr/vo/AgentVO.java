@@ -3,6 +3,7 @@ package clikmonitor.nanet.go.kr.vo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class AgentVO {
     private String rasmblyNm; // 의회명
     private String rasmblyId; // 의회코드
+    private String rasmblyCode; // 의회코드
     private String systemSttusCode; // Agent 상태
     private String rasmblySttusCode; // 의회상태코드
     private String serverNm; // 서버명
@@ -31,6 +33,7 @@ public class AgentVO {
     private String moduleInstallPath; // 모듈설치경로
     private String isview; // 화면 출력 여부
     private String note; // 비고
+    private String memo;
     private String reqProcessingRatio; // 요청처리율
     private String setInterval; // 응답률
     private String gubun; // 기초, 광역
@@ -56,5 +59,6 @@ public class AgentVO {
     private String frstRegisterId;
     private String frstRegistDt;
     private String trgetFileStrePath;
+    private MultipartFile files;
 
 }

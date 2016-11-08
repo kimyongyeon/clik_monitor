@@ -1,77 +1,134 @@
 var console = console || {log: function() {} };
-// 프로그레스 바
-$(document).ajaxStart(function () {
-    $.blockUI({
-        css: {
-            border: 'none',
-            padding: '15px',
-            '-webkit-border-radius': '10px',
-            '-moz-border-radius': '10px'
+var v_log_data_list = new Vue({
+    el: '#tpl-log-data-list',
+    data: {
+        items: [],
+        prev : false,
+        firstPageNoOnPageList : 0,
+        lastPageNoOnPageList : 0,
+        next : false,
+        page : 0,
+        prevPage : 0,
+        nextPage : 0
+    },
+    methods: {
+        fetchData: function(url, data, page){
+            commonClass.fnAjaxCallback(url, data, function(data){
+                var firstPageNoOnPageList = data.paginationInfo.firstPageNoOnPageList;
+                var lastPageNoOnPageList = data.paginationInfo.lastPageNoOnPageList;
+                var recordCountPerPage = data.paginationInfo.recordCountPerPage;
+                var totalRecordCount = data.paginationInfo.totalRecordCount;
+                var prev = firstPageNoOnPageList === 1 ? false : true;
+                var next = lastPageNoOnPageList * recordCountPerPage >= totalRecordCount ? false : true;
+                Vue.set(v_log_data_list, 'items', data.list);
+                Vue.set(v_log_data_list, 'firstPageNoOnPageList', firstPageNoOnPageList - 1);
+                Vue.set(v_log_data_list, 'lastPageNoOnPageList', lastPageNoOnPageList);
+                Vue.set(v_log_data_list, 'prev', prev);
+                Vue.set(v_log_data_list, 'next', next);
+                Vue.set(v_log_data_list, 'page', page);
+                Vue.set(v_log_data_list, 'prevPage', firstPageNoOnPageList - 1);
+                Vue.set(v_log_data_list, 'nextPage', lastPageNoOnPageList + 1);
+            });
+        },
+        comma: function (numbers) {
+            return commonClass.fnComma(numbers);
+        },
+        dataFormat: function(strDate) {
+            return commonClass.fnStringToDate(strDate);
+        },
+        activeOn: function(event) {
+            var par = $(event.target).parent();
+            $(".log-row").css("background", "");
+            par.css("background", "red");
         }
-    });
+    }
 });
 
-$(document).ajaxStop(function () {
-    $.unblockUI();
+var v_log_data_detail = new Vue({
+    el: '#tpl-log-data-detail',
+    data: {
+        item: []
+    },
+    methods: {
+        fetchData: function(url, data){
+            commonClass.fnAjaxCallback(url, data, function(data){
+                Vue.set(v_log_data_detail, 'item', data);
+                $(".logData").addClass("openPop");
+            });
+        },
+        comma: function (numbers) {
+            return commonClass.fnComma(numbers);
+        },
+        dataFormat: function(strDate) {
+            return commonClass.fnStringToDate(strDate);
+        }
+    }
 });
-// 프로그레스 바
 
 var commonClass = {
     init: function() { // 초기화
         this.fnAjaxBrtcCodeList(); // 기관유형
         this.fnErrorLogListClose(); // 에러목록페이지 닫기
+
+        var option = {
+            beforeSubmit : function() {
+                alert('서브밋 직전입니다!');
+            },
+            success : function() {
+                alert('전송 성공!');
+            }
+        };
+        $("#apiServerUpdateForm").ajaxForm(option);
+
+        $(".log-row").css("cursor", "pointer");
+        $(".log-row").on("click", function () {
+            $(".log-row").css("background", "");
+            $(this).css("background", "red");
+        });
+
     },
     mainInit: function() {
         this.tabsInit(); // 통계관리 탭 초기화
-        this.mailInit(); // 메일링관리 탭 초기화
+    },
+    fnIsObjectNullCheck: function(data) {
+        // true : null, false : not null
+        return Object.keys(data).length === 0;
     },
     tabCurrentIdx : "1",
     fnAgentStart : function(){
-        alert("Agent 구동을 시작을 요청 합니다.");
-        var url = "/insertCouncilSystemControl.do";
-        var data = {
-            cmmndCode: "REQ001",
-            rasmblyId: $("#rasmblyId").val()
-        }
-        this.fnAjaxCallback(url, data, function(data) {
-            alert(data);
-        });
+        var rasmblyId = $("#rasmblyId").val();
+        $("#rasmblyCode").val(rasmblyId);
+        $("#cmmndCode").val("REQ001");
+        $("#apiServerUpdateForm").submit();
     },
     fnAgentEnd : function(){
-        alert("Agent 구동을 정지를 요청 합니다.");
-        var url = "/insertCouncilSystemControl.do"
-        var data = {
-            cmmndCode: "REQ002",
-            rasmblyId: $("#rasmblyId").val()
-        }
-        this.fnAjaxCallback(url, data, function(data) {
-            alert(data);
-        });
+        var rasmblyId = $("#rasmblyId").val();
+        $("#rasmblyCode").val(rasmblyId);
+        $("#cmmndCode").val("REQ002");
+        $("#apiServerUpdateForm").submit();
+
     },
     fnAgentRollback : function(){
         alert("Agent 구동을 롤백을 요청 합니다.");
-        // var url = "/insertCouncilSystemControl.do"
-        // this.fnAjaxCallback(url, data, function(data) {
-        //     alert(data);
-        // });
+        // TODO: 차후 개발 해야 함.
     },
     fnAgentUpdate : function(){
-        alert("Agent 구동을 업데이트를 요청 합니다.");
-        var url = "/insertCouncilSystemControl.do"
-        var data = {
-            cmmndCode: "REQ003",
-            rasmblyId: $("#rasmblyId").val()
-        }
-        this.fnAjaxCallback(url, data, function(data) {
-            alert(data);
-        });
+        $(".agent-update-layer-popup").show();
+    },
+    fnAgentSetProc: function() {
+        var rasmblyId = $("#rasmblyId").val();
+        $("#rasmblyCode").val(rasmblyId);
+        $("#apiServerUpdateForm").submit();
+    },
+    fnAgentSetClose: function() {
+        $(".agent-update-layer-popup").hide();
     },
     fnMemoReg: function() {
-        alert("메모 합니다.");
-        // var url = "/insertCouncilSystemControl.do"
-        // this.fnAjaxCallback(url, data, function(data) {
-        //     alert(data);
-        // });
+        var rasmblyId = $("#rasmblyId").val();
+        $("#rasmblyCode").val(rasmblyId);
+        $("#memo").val($("#note").val());
+        $("#cmmndCode").val("NOTE_UPDATE");
+        $("#apiServerUpdateForm").submit();
     },
     tabsInit: function() {
         var tab01 = $("#sideBar > .sideBar_tabMenu > ul > li.list01 > a");
@@ -102,70 +159,6 @@ var commonClass = {
             $("#aTreeBox").show();
 
             commonClass.tabCurrentIdx = 2;
-        });
-    },
-    mailInit: function() {
-        /*메일링 관리*/
-        var tab0001 = $("#subRightBox .topTable .adminTab02 ul li.listTab01 a");
-        var tab0002 = $("#subRightBox .topTable .adminTab02 ul li.listTab02 a");
-        var tab0003 = $("#subRightBox .topTable .adminTab02 ul li.listTab03 a");
-        // $(".bottomTable > .tab04Box").css("display", "none");
-        // $(".bottomTable > .tab05Box").css("display", "none");
-        // $(".topTable > .table03").css("display", "none");
-        $(".mail_list").show();
-        $(".send_list").hide();
-        $(".mail_set").hide();
-        $(tab0003).addClass("hover01");
-
-        $(tab0001).on("click", function (e) {
-            e.preventDefault();
-            $(tab0001).addClass("hover01");
-            $(tab0002).removeClass("hover01");
-            $(tab0003).removeClass("hover01");
-
-            $(".mail_list").hide();
-            $(".send_list").show();
-            $(".mail_set").hide();
-
-            // $(".bottomTable > .tab04Box").show();
-            // $(".topTable > table.table03").show();
-            // $(".topTable > .btnSearch01").show();
-            // $(".mail_list").hide();
-            // $(".bottomTable > .tab05Box").hide();
-            // $(".bottomTable > .tab05Box").hide();
-        });
-
-        $(tab0002).on("click", function (e) {
-            e.preventDefault();
-            $(tab0002).addClass("hover01");
-            $(tab0001).removeClass("hover01");
-            $(tab0003).removeClass("hover01");
-            $(".mail_list").hide();
-            $(".send_list").hide();
-            $(".mail_set").show();
-
-            // $(".bottomTable > .tab04Box").hide();
-            // $(".topTable > table.table03").hide();
-            // $(".topTable > .btnSearch01").hide();
-            // $(".mail_list").hide();
-            // $(".bottomTable > .tab05Box").show();
-            // $(".bottomTable > .tab05Box").show();
-        });
-
-        $(tab0003).on("click", function (e) {
-            e.preventDefault();
-            $(tab0003).addClass("hover01");
-            $(tab0001).removeClass("hover01");
-            $(tab0002).removeClass("hover01");
-            $(".mail_list").show();
-            $(".send_list").hide();
-            $(".mail_set").hide();
-
-            // $(".bottomTable > .tab04Box").hide();
-            // $(".topTable > table.table03").hide();
-            // $(".topTable > .btnSearch01").hide();
-            // $(".bottomTable > .tab05Box").hide();
-            // $(".bottomTable > .tab05Box").hide();
         });
     },
     screenPop: function() {
@@ -205,37 +198,21 @@ var commonClass = {
             location.href = "/main.do";
         }
     },
-    jsGridInit: function(selector, data, fields) {
-        $("#" + selector).jsGrid({
-              width: "100%"
-            , height: "auto"
-            , sorting: true
-            // , paging: true
-            // , pageSize: 10
-            // , pageButtonCount: 5
-            , data: data
-            , fields: fields
-        });
-    },
-    fnPaging: function(currentPageNo) {
-        /* ********************************************************
-         * 페이징
-         ******************************************************** */
-        var varForm = document.listForm;
-        varForm.pageIndex.value = currentPageNo;
-        varForm.target = "_self";
-        varForm.action = "#";
-        varForm.submit();
-    },
     fnAjaxCallback: function(url, data, callback, type) {
         type = type || 'GET';
         type = type.toUpperCase();
+
+        var deferred = $.Deferred();
+
         var promise = $.ajax({
             url: url,
             type: type, // default : get
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
-            data: (type === "GET") ? jQuery.param(data) : JSON.stringify(data)
+            data: (type === "GET") ? jQuery.param(data) : JSON.stringify(data),
+            success: function(d) {
+                deferred.resolve(d);
+            }
         });
 
         promise.done(function(data) {
@@ -384,66 +361,69 @@ var commonClass = {
         str = String(str);
         return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
     },
-    fnErrorLogListClose: function () {
-        $(".flotingBox").hide();
+    /**
+     * 에러정보상세
+     * @param requstId
+     */
+    fnLogDetailData: function (requstId) {
+        $(".agentServerInfo").removeClass("openPop");
+
+        var url = "getLogDataInfo.do";
+        var data = {
+            requstId: requstId || ''
+        };
+        v_log_data_detail.fetchData(url, data);
+    },
+    /**
+     * 에러정보상세 닫기
+     */
+    fnLogDataClose: function () {
+        $(".logData").removeClass("openPop");
+        $(".screen").css("display", "none");
     },
     /**
      * 에러정보목록
      * @param currentPage
      */
     fnLogDataList : function(page) {
-       
         page = page || 1;
         var url = "getLogDataList.do?currentPage=" + page;
-        var data = {};
-        commonClass.fnAjaxCallback(url, data, function (data) {
-
-            // 페이지 시작
-            var firstPageNoOnPageList = data.paginationInfo.firstPageNoOnPageList;
-            var lastPageNoOnPageList = data.paginationInfo.lastPageNoOnPageList;
-            var recordCountPerPage = data.paginationInfo.recordCountPerPage;
-            var totalRecordCount = data.paginationInfo.totalRecordCount;
-            var prev = firstPageNoOnPageList === 1 ? false : true;
-            var next = lastPageNoOnPageList * recordCountPerPage >= totalRecordCount ? false : true;
-
-            var pageHtml = "";
-            if (prev) {
-                var currentPage = firstPageNoOnPageList - 1;
-                pageHtml += "<li><a href='#' onclick='commonClass.fnLogDataList(" + currentPage + ")'>&laquo;</a><li>";
-            }
-
-            for (var i = firstPageNoOnPageList; i < lastPageNoOnPageList; i++) {
-                var currentPage = i;
-                if (page === i) {
-                    pageHtml += "<li class='active'><a href='#' onclick='commonClass.fnLogDataList(" + currentPage + ")'>" + i + "</a><li>";
-                } else {
-                    pageHtml += "<li><a href='#' onclick='commonClass.fnLogDataList(" + currentPage + ")'>" + i + "</a><li>";
-                }
-
-            }
-
-            if (next) {
-                var currentPage = lastPageNoOnPageList + 1;
-                pageHtml += "<li><a href='#' onclick='commonClass.fnLogDataList(" + currentPage + ")'>&raquo;</a><li>";
-            }
-
-            $(".error_log_info_list").empty();
-            $(".error_log_info_list").html(pageHtml);
-            // 페이지 종료
-
-
-            var htmlText = commonClass.getHtmlText("logdata_list_popup-template");
-
-            $(".logData_list_popup").html(htmlText(data));
-            $(".logData_list_popup table tr td.dateFormat").each(function (index) {
-                var temp = $(this).text();
-                $(this).text(commonClass.fnStringToDate(temp));
-            });
-
-            $(".log-row").on("click", function () {
-                $(".log-row").css("background", "");
-                $(this).css("background", "beige");
-            });
-        });
+        var data = {
+            "pageIndex": page
+        };
+        v_log_data_list.fetchData(url, data, page);
+    },
+    /**
+     * 에러정보목록 닫기
+     */
+    fnErrorLogListClose: function () {
+        $(".popup").hide();
+    },
+    fnMenuStyle: function(sel) {
+        if(sel === "main") {
+            $(".menu").css("color", "none");
+            $(".menu_1").css("color", "#d84d2c");
+            $(".main-menu-left ul li:nth-child(1)").css("border-bottom", "5px solid rgb(255, 100, 69)");
+        } else if (sel === 'stat') {
+            $(".menu").css("color", "none");
+            $(".menu_2").css("color", "#d84d2c");
+            $(".main-menu-left ul li:nth-child(2)").css("border-bottom", "5px solid rgb(255, 100, 69)");
+        } else if (sel === 'meta') {
+            $(".menu").css("color", "none");
+            $(".menu_4").css("color", "#d84d2c");
+            $(".main-menu-left ul li:nth-child(3)").css("border-bottom", "5px solid rgb(255, 100, 69)");
+        } else if (sel === 'mail') {
+            $(".menu").css("color", "none");
+            $(".menu_5").css("color", "#d84d2c");
+            $(".main-menu-left ul li:nth-child(4)").css("border-bottom", "5px solid rgb(255, 100, 69)");
+        } else if (sel === 'range') {
+            $(".menu").css("color", "none");
+            $(".menu_3").css("color", "#d84d2c");
+            $(".main-menu-left ul li:nth-child(5)").css("border-bottom", "5px solid rgb(255, 100, 69)");
+        } else {
+            $(".menu").css("color", "none");
+            $(".menu_1").css("color", "#d84d2c");
+            $(".main-menu-left ul li:nth-child(1)").css("border-bottom", "5px solid rgb(255, 100, 69)");
+        }
     }
 };

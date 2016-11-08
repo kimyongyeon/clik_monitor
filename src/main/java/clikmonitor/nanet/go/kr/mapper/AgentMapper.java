@@ -20,6 +20,10 @@ public interface AgentMapper {
      */
     List<AgentVO> selectAgentStateList(CommonSearchVO agentVO); // Agent 상태 정보 목록
 
+    List<AgentVO> selectAgentSetStateList(CommonSearchVO agentVO); // Agent 설정 상태 정보 목록
+
+    int selectAgentSetStateListCount(CommonSearchVO agentVO); // Agent 설정 상태 정보 총 개수
+
     /**
      * Agent 상태 정보 상세
      *
@@ -49,6 +53,8 @@ public interface AgentMapper {
      * @param agentVO the agent vo
      */
     void updateAgentInfoProc(AgentVO agentVO); // Agent 정보 수정
+
+    void updateAgentNoteOne(AgentVO agentVO); // Agent 정보 수정
 
     /**
      * Agent 정보 삭제

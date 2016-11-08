@@ -18,5 +18,6 @@ public class ChartSearchVO extends CommonSearchVO {
     private String[] dataTypeList; // 희의록, 부록, 의안, 의원 선택항목
     private String searchRamblyKeyword;
     private String searchDataTypeKeyword;
+    private String[] cntcIdList;
 
 }

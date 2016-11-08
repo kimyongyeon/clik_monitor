@@ -16,10 +16,10 @@
     <!-- /login/login.do 가 들어왔을때 보안을 적용하지 않는다.-->
     <http pattern="/login.do" security="none" /> <!-- 로그인 페이지 -->
     <http pattern="/idSaveProc.do" security="none" /> <!-- 아이디 쿠키 저장 -->
+    <!--<http pattern="/insertCouncilSystemControl.do" security="none" /> &lt;!&ndash; Agent 파일 업로드 &ndash;&gt;-->
 
-    <http auto-config="false" access-denied-page="/login.do?denied=true" disable-url-rewriting="true">
+    <http auto-config="false" access-denied-page="/login.do?denied=true" disable-url-rewriting="false">
         <intercept-url pattern="/**" access="ROLE_USER"/>
-
         <form-login
                 login-page="/login.do"
                 authentication-success-handler-ref="loginSuccessHandler"
@@ -28,7 +28,6 @@
         <logout logout-success-url="/login.do"
             delete-cookies="JSESSIONID"
         />
-
     </http>
 
     <beans:bean id="loginSuccessHandler" class="clikmonitor.nanet.go.kr.login.LoginSuccessHandler"></beans:bean>

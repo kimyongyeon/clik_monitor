@@ -17,14 +17,17 @@
         <link href="<c:url value="/assets/font-awesome-4.6.3/css/font-awesome.min.css"/>" rel="stylesheet"> <!-- awesome -->
         <!-- javascript -->
 		<script type="text/javascript" src="<c:url value="/assets/jquery/dist/jquery.min.js"/>"></script> <!-- jquery -->
-		<%--<script type="text/javascript" src="<c:url value="/assets/js/jquery.min.js"/>"></script> <!-- jquery -->--%>
-        <script type="text/javascript" src="<c:url value="/assets/js/biz/common.js"/>"></script> <!-- 내가 만든 공통함수 -->
-        <script type="text/javascript" src="<c:url value="/assets/js/biz/main.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/assets/js/jquery.form.js"/>"></script> <!-- ajaxForm  -->
         <script type="text/javascript" src="<c:url value="/assets/jquery-ui-1.11.1/jquery-ui.js"/>"></script> <!-- 달력 -->
         <script type="text/javascript" src="<c:url value="/assets/jsgrid-1.5.1/jsgrid.min.js"/>"></script> <!-- 그리드 -->
         <script type="text/javascript" src="<c:url value="/assets/js/jquery_blockUI.js"/>"></script> <!-- 프로그레스바 -->
-		<script type="text/javascript" src="<c:url value="/assets/js/underscore-min.js"/>"></script> <!-- 언더스코어 라이브러리 콜렉션 관리 -->
-		<script type="text/javascript" src="<c:url value="/assets/js/handlebars-v4.0.5.js"/>"></script> <!-- 핸들바 -->
+        <script type="text/javascript" src="<c:url value="/assets/js/underscore-min.js"/>"></script> <!-- 언더스코어 라이브러리 콜렉션 관리 -->
+        <script type="text/javascript" src="<c:url value="/assets/js/handlebars-v4.0.5.js"/>"></script> <!-- 핸들바 -->
+        <script type="text/javascript" src="<c:url value="/assets/js/vue.min.js"/>"></script> <!-- vuejs -->
+
+        <script type="text/javascript" src="<c:url value="/assets/js/biz/common.js"/>"></script> <!-- 내가 만든 공통함수 -->
+        <script type="text/javascript" src="<c:url value="/assets/js/biz/main.js"/>"></script>
+
 		<%--<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -45,19 +48,17 @@
                     <ul>
                         <li><a class="menu menu_1" href="#" onclick="commonClass.page_go('main');">대쉬보드</a></li>
                         <li><a class="menu menu_2" href="#" onclick="commonClass.page_go('stat');">통계관리</a></li>
-                        <li><a class="menu menu_3" href="#" onclick="commonClass.page_go('range');">임계값관리</a></li>
                         <li><a class="menu menu_4" href="#" onclick="commonClass.page_go('meta');">지방정책정보</a></li>
                         <li><a class="menu menu_5" href="#" onclick="commonClass.page_go('mail');">메일링관리</a></li>
+                        <li><a class="menu menu_3" href="#" onclick="commonClass.page_go('range');">환경설정</a></li>
                     </ul>
                 </div>
                 <div class="main-menu-right">
                     <span>접속ID : ${sessionScope.username}</span>
-                    <a href="<%= request.getContextPath() %>/j_spring_security_logout"><button class="default-button">Logout</button></a>
+                    <a href="<%= request.getContextPath() %>/j_spring_security_logout"><button class="default-button"><i class="fa fa-unlock-alt" aria-hidden="true"></i> Logout</button></a>
                 </div>
 
             </div>
-
-            <%@ include file="/WEB-INF/jsp/hbs/main_script.jsp" %>
             <!--content area-->
             <tiles:insertAttribute name="content"/>
             <!--//content area-->

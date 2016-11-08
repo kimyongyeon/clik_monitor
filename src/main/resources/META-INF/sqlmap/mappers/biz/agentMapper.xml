@@ -20,6 +20,7 @@
 			, COLGOVER.SYSTEM_STTUS_CODE systemSttusCode
 			, COLGOVER.RASMBLY_STTUS_CODE rasmblySttusCode
 			, SUBSTR(TO_CHAR(COLGOVER.LAST_CNTC_DT,'YYYYMMDD'),1,4) || '-' || SUBSTR(TO_CHAR(COLGOVER.LAST_CNTC_DT,'YYYYMMDD'),5,2) || '-' || SUBSTR(TO_CHAR(COLGOVER.LAST_CNTC_DT,'YYYYMMDD'),7,2) lastUpdtDt
+			/*, DECODE(LAST_UPDT_DT, NULL, '일자없음',SUBSTR(REPLACE(LAST_UPDT_DT,'/',''),1,4) ||'-'|| SUBSTR(REPLACE(LAST_UPDT_DT,'/',''),5,2) ||'-'|| SUBSTR(REPLACE(LAST_UPDT_DT,'/',''),7,2) ) lastUpdtDt*/
 			, COLGOVER.DELETE_DT deleteDt
 			, COLGOVER.ISVIEW isview
 			, SUBSTR(COLGOVER.RASMBLY_ID, 4,3) gubun
@@ -78,24 +79,47 @@
 	  	AND ROWNUM = 1;
 	</select>
 
-    <!-- 최신일자별 부록 개수-->
-    <select id="selectMinutesAppendixList" parameterType="agentSearchVO" resultType="agentVO">
+    <sql id = "h_top">
+        <![CDATA[
+			SELECT  *
+            FROM	(
+            		SELECT 	ROWNUM RNUM, ALL_LIST.*
+            		FROM  	(
+        ]]>
+    </sql>
 
+    <sql id = "h_bottom">
+        <![CDATA[
+							) ALL_LIST
+					)
+			WHERE  	RNUM  > #{firstIndex}
+	        AND  	RNUM <= #{firstIndex} + #{recordCountPerPage}
+	    ]]>
+    </sql>
+
+    <sql id="range_where">
+    </sql>
+
+    <!-- Agent 상태정보 히스토리 -->
+    <select id="selectAgentSetStateList" parameterType="agentSearchVO" resultType="agentVO">
+      <include refid="h_top" />
+      SELECT
+            CMMND_NM
+          , CMMND_TRNSMIS_DT
+          , CMMND_EXC_DT
+          , FRST_REGIST_DT
+          , RASMBLY_ID
+      FROM COUNCIL_SYSTEM_CONTROL WHERE RASMBLY_ID = #{rasmblyId}
+      <include refid="h_bottom" />
+      ORDER BY FRST_REGIST_DT DESC
     </select>
 
-    <!-- 최신일자별 회의록 개수-->
-    <select id="selectMinutesList" parameterType="agentSearchVO" resultType="agentVO">
-
-    </select>
-
-    <!-- 최신일자별 의안 개수-->
-    <select id="selectBillList" parameterType="agentSearchVO" resultType="agentVO">
-
-    </select>
-
-    <!-- 최신일자별 의원 개수-->
-    <select id="selectLamanList" parameterType="agentSearchVO" resultType="agentVO">
-
+    <!-- Agent 상태정보 히스토리 -->
+    <select id="selectAgentSetStateListCount" parameterType="agentSearchVO" resultType="int">
+        SELECT
+          COUNT(*)
+        FROM COUNCIL_SYSTEM_CONTROL
+        WHERE RASMBLY_ID = #{rasmblyId}
     </select>
 
     <!-- Agent 정보 등록 -->
@@ -135,8 +159,10 @@
     </insert>
 
     <!-- Agent 정보 수정 -->
-    <update id="updateAgentInfoOne" parameterType="agentVO">
-
+    <update id="updateAgentNoteOne" parameterType="agentVO">
+      UPDATE COLGOVER_SET
+      SET note = #{note}
+      WHERE RASMBLY_ID=#{rasmblyId};
     </update>
 
     <!-- Agent 정보 삭제 -->
@@ -172,25 +198,25 @@
         VALUES
         (
             #{reqstNo}
-            ,#{rasmblyId}
-            ,(SELECT CODE_NM FROM COMMON_DETAIL_CODE WHERE CODE_ID = 'RIS030' AND CODE = #CMMND_CODE#)
-            ,#{cmmndCode}
-            ,#{exeCmmnd}
-            ,#{trgetFilePath}
-            ,#{trgetFileSize}
-            ,#{LOG_FILE_NAME}
-            ,#{logFileName}
-            ,#{callUrl}
-            ,#{cmmndTrnsmisAt}
-            ,#{cmmndTrnsmisDt}
-            ,#{cmmndExcDt}
-            ,#{cmmndExcAt}
-            ,#{cmmndExcData:CLOB}
-            ,#{cmmndExcCnfirmAt}
-            ,#{frstRegisterId}
+            ,#{rasmblyId, jdbcType=VARCHAR}
+            ,(SELECT CODE_NM FROM COMMON_DETAIL_CODE WHERE CODE_ID = 'RIS030' AND CODE = #{cmmndCode})
+            ,#{cmmndCode, jdbcType=VARCHAR}
+            ,#{exeCmmnd, jdbcType=VARCHAR}
+            ,#{trgetFilePath, jdbcType=VARCHAR}
+            ,#{trgetFileSize, jdbcType=VARCHAR}
+            ,#{logFileName, jdbcType=VARCHAR}
+            ,#{logFileLineCo, jdbcType=VARCHAR}
+            ,#{callUrl, jdbcType=VARCHAR}
+            ,#{cmmndTrnsmisAt, jdbcType=VARCHAR}
+            ,#{cmmndTrnsmisDt, jdbcType=DATE}
+            ,#{cmmndExcDt, jdbcType=DATE}
+            ,#{cmmndExcAt, jdbcType=VARCHAR}
+            ,#{cmmndExcData, jdbcType=CLOB}
+            ,#{cmmndExcCnfirmAt, jdbcType=VARCHAR}
+            ,#{frstRegisterId, jdbcType=VARCHAR}
             ,SYSDATE
-            ,#{setInterval}
-            ,#{trgetFileStrePath}
+            ,#{setInterval, jdbcType=VARCHAR}
+            ,#{trgetFileStrePath, jdbcType=VARCHAR}
         )
     </insert>
 

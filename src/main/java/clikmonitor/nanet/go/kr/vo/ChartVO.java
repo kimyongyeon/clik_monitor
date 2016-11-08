@@ -18,6 +18,7 @@ public class ChartVO {
     private String rasmblyNm;
     private String dt;
     private String ordr;
+    private String cntcId;
 
     // Agent 서버 정보 바 차트 X축 날짜
     private String x1; // 회의록

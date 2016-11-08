@@ -9,12 +9,12 @@
 
         <div id="subRightBox">
             <div class="titleArea">
-                <h2><i class="fa fa-cog" aria-hidden="true"></i>  임계값 관리</h2>
+                <h2><i class="fa fa-cog  fa-spin" aria-hidden="true"></i>  환경설정</h2>
                 <div class="location">
                     <ul>
                         <li><a href="/main.do"><i class="fa fa-home" aria-hidden="true"></i> HOME</a></li>
                         <li> > </li>
-                        <li class="end"><a href="#">임계값 설정</a></li>
+                        <li class="end"><a href="#">환경설정</a></li>
                     </ul>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                 임계값 등록
             </div>
             <div class="topTable">
-                <table class="table01">
+                <table class="common-table-h">
                     <tr>
                         <th scope="row">지방의회</th>
                         <td>
@@ -52,37 +52,38 @@
                     <tr>
                         <th scope="row">응답시간</th>
                         <td>
-                            <span class="inputTxt01" style="color:white;"><input type="text" id="setInterval" name="setInterval" title="응답시간" style="width:100px;"/> 예) 0 ~ 600 </span>
+                            <span class="inputTxt01" ><input type="text" id="setInterval" name="setInterval" title="응답시간" /> 예) 0 ~ 600 </span>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row">서비스 요청 처리율</th>
                         <td>
-                            <span class="inputTxt01" style="color:white;"><input type="text" id="reqProcessingRatio" name="reqProcessingRatio" title="서비스 요청 처리율" style="width:100px;"/> 예) 0 ~ 600 </span>
+                            <span class="inputTxt01" ><input type="text" id="reqProcessingRatio" name="reqProcessingRatio" title="서비스 요청 처리율" /> 예) 0 ~ 600 </span>
                         </td>
                     </tr>
-                    <tr>
+                    <%--<tr>
                         <th scope="row">알람설정</th>
                         <td>
                             <span class="chk01"><input type="checkbox" id="chk01" checked disabled/><label for="chk01">이메일</label></span>
                         </td>
-                    </tr>
+                    </tr>--%>
                 </table>
-                <div class="btnArea">
-                    <div class="settingBtn">
-                        <span class="uploadBtn">
-                            <a href="#" onclick="onCreateClass.fnInsert();">등록</a>
-                            <a href="#" onclick="onCreateClass.fnCancel();">취소</a>
-                            <%--<a href="/range_setting_edit.do">임시수정화면이동</a>--%>
-                        </span>
+            </div>
+
+            <div class="BottomTable">
+                <div class="tab01Box">
+                    <div class="fr">
+                        <button class="edit-button" onclick="onCreateClass.fnInsert();">등록</button>
+                        <button class="edit-button" onclick="onCreateClass.fnCancel();">취소</button>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
 
-    <div class="uploadPop">
+    <div class="q-popup-layout">
         <p>등록하시겠습니까?</p>
         <div class="btnSet">
             <a href="#" onclick="onCreateClass.fnInertProc();">예</a><a href="#" onclick="onCreateClass.fnPopupClose();">아니오</a>

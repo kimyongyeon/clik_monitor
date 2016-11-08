@@ -20,7 +20,7 @@
         <![CDATA[
 							) ALL_LIST
 					)
-			WHERE  	RNUM  >= #{firstIndex}
+			WHERE  	RNUM  > #{firstIndex}
 	        AND  	RNUM <= #{firstIndex} + #{recordCountPerPage}
 	    ]]>
     </sql>
@@ -45,7 +45,7 @@
             , WEBROBOT_CONTENTS.URL -- 게시판 URL
             , WEBROBOT_CONTENTS.REGDATE -- 최종등록
         FROM WEBROBOT_CONTENTS
-        WHERE WEBROBOT_CONTENTS.CUD_CODE != '3'	AND WEBROBOT_CONTENTS.DOCTYPE != '140'
+        WHERE WEBROBOT_CONTENTS.CUD_CODE != 'D'	AND WEBROBOT_CONTENTS.DOCTYPE != '140'
 
         <include refid="meta_where" />
     </select>
@@ -65,9 +65,10 @@
             , (SELECT DOCTYPE_NAME	FROM OUTDOCTYPE WHERE DOCTYPE = WEBROBOT_CONTENTS.DOCTYPE) DOCTYPE_NAME -- 자료유형
             , WEBROBOT_CONTENTS.SITENM -- 게시판명
             , WEBROBOT_CONTENTS.URL -- 게시판 URL
-            , WEBROBOT_CONTENTS.REGDATE -- 최종등록
+            /*, WEBROBOT_CONTENTS.REGDATE -- 최종등록*/
+            , SUBSTR(WEBROBOT_CONTENTS.REGDATE,1,4)||'-'||SUBSTR(WEBROBOT_CONTENTS.REGDATE,5,2)||'-'||SUBSTR(WEBROBOT_CONTENTS.REGDATE,7,2) REGDATE
         FROM WEBROBOT_CONTENTS
-        WHERE WEBROBOT_CONTENTS.CUD_CODE != '3'	AND WEBROBOT_CONTENTS.DOCTYPE != '140'
+        WHERE WEBROBOT_CONTENTS.CUD_CODE != 'D'	AND WEBROBOT_CONTENTS.DOCTYPE != '140'
 
         <include refid="meta_where" />
 
@@ -85,7 +86,7 @@
 			FROM
 				WEBROBOT_CONTENTS
 			WHERE
-				CUD_CODE != '3'
+				CUD_CODE != 'D'
 				AND DOCTYPE != '140'
 	        	]]>
 

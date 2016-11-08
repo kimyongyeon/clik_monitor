@@ -17,6 +17,8 @@ public interface LogService {
 
     LogVO selectErrorLogInfoOne(CommonSearchVO logVO);
 
+    LogVO selectErrorLogButtonShowHideOne(CommonSearchVO logVO);
+
     int selectErrorLogInfoListTotalRecordCount(CommonSearchVO logVO);
 
     @Service("logService")
@@ -24,6 +26,11 @@ public interface LogService {
 
         @Resource(name = "logMapper")
         LogMapper logMapper;
+
+        @Override
+        public LogVO selectErrorLogButtonShowHideOne(CommonSearchVO logVO) {
+            return logMapper.selectErrorLogButtonShowHideOne(logVO);
+        }
 
         /**
          * 에러로그 목록

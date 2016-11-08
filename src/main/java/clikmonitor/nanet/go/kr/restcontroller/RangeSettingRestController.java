@@ -11,9 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by kimyongyeon on 2016-08-22.
@@ -32,8 +30,10 @@ public class RangeSettingRestController {
     @RequestMapping(value = "/getRangeSettingList.do"
             , headers = HttpHeaders.ACCEPT + "=" + MediaType.APPLICATION_JSON_UTF8_VALUE
             , method = RequestMethod.POST)
-    public List<RangeVO> getRangeSettingList(@RequestBody RangeSearchVO rangeSearchVO) {
-        return rangeService.getRangeSetPagingList(rangeSearchVO);
+    public Map getRangeSettingList(@RequestBody RangeSearchVO rangeSearchVO) {
+        Map map = new HashMap();
+        map.put("list", rangeService.getRangeSetPagingList(rangeSearchVO));
+        return map;
     }
 
     /**

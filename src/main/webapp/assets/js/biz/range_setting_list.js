@@ -1,3 +1,19 @@
+// 환경설정
+var v_table_list = new Vue({
+    el: '#tpl-table-list',
+    data: {
+        items: []
+    },
+    methods: {
+        fetchData: function(url, data){
+            commonClass.fnAjaxCallback(url, data, function(data){
+                Vue.set(v_table_list, 'items', data.list);
+                $("#myTable3 img").hide();
+            },'post');
+        }
+    }
+});
+
 var onCreateClass = {
     init: function() {
         
@@ -12,14 +28,18 @@ var onCreateClass = {
         //달력 소스(jQuery UI)
         $("#datepicker1, #datepicker2").datepicker(commonClass.fnDatePickerUiInit());
         this.fnDateToday();
-        $(".menu").css("color", "none");
-        $(".menu_3").css("color", "#d84d2c");
+        
+        commonClass.fnMenuStyle("range");
     },
     btnExcelSave: function() {
         location.href = "/excelDownload.do?keyWordType=2";
     },
     btnSearch: function() {
         this.fnAjaxTableList();
+    },
+    btnEvent: function() {
+        commonClass.fnLogDataList(1);
+        $(".popup").show();
     },
     fnDateToday: function() {
         commonClass.fnToday("datepicker", 0);
@@ -61,32 +81,6 @@ var onCreateClass = {
         var url = "getRangeSettingList.do";
         var brtcCode = $('select[name=brtcCode] option:selected').val(); // 
         var sdata = this.fnSearchCodition();
-        // sdata.startDate = $("#datepicker1").val();
-        // sdata.endDate = $("#datepicker2").val();
-        commonClass.fnAjaxCallback(url, sdata, function(data){
-            var myRecords = [];
-            var selector = 'myTable3';
-            for(var i=0; i<data.length; i++) {
-                myRecords.push(
-                    {
-                        //"의회": data[i]['subRasmblyNm'],
-                        "지방의회": "<a href=/range_setting_edit.do?rasmblyId="+data[i]['rasmblyId']+">" + data[i]['rasmblyNm'] + "</a>", // "&lta href=/range_setting_edit.do&gt서울특별시&lt/&gt"
-                        "응답시간": data[i]['setInterval'],
-                        "요청처리율": data[i]['reqProcessingRatio'],
-                        "최종수정일": commonClass.fnStringToDate(data[i]['lastCntcDt']),
-                    }
-                );
-            }
-            // header 설정
-            var fields =  [
-                //{name: "의회", type: "text", width: 255, align: "center"},
-                {name: "지방의회", type: "text", width: 100, align: "center"},
-                {name: "응답시간", type: "text", width: 100, align: "center"},
-                {name: "요청처리율", type: "text", width: 100, align: "center"},
-                {name: "최종수정일", type: "text", width: 100, align: "center"},
-            ];
-
-            commonClass.jsGridInit(selector, myRecords, fields);
-        },'post');
+        v_table_list.fetchData(url, sdata);
     }
 };

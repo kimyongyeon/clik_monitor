@@ -197,6 +197,8 @@
             </div>
         </div>
 
+        <script type="text/javascript" src="<c:url value="/assets/js/vue.min.js"/>"></script> <!-- vuejs -->
+        <script type="text/javascript" src="<c:url value="/assets/js/biz/common.js"/>"></script> <!-- 내가 만든 공통함수 -->
         <script type="text/javascript" src="<c:url value="/assets/js/biz/mail_list.js"/>"></script>
 
     </tiles:putAttribute>

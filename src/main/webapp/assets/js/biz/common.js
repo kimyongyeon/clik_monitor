@@ -1,4 +1,27 @@
-var console = console || {log: function() {} };
+var v_combo_data_list = new Vue({
+    el: '#tpl_commbo_list',
+    data: {
+        commonList_1: [],
+        commonList_2: [],
+        commonList_3: []
+    },
+    methods: {
+        fetchData: function(url, data){
+            commonClass.fnAjaxCallback(url, data, function(data){
+                if(url == '/getBrtcCodeList.do') {
+                    Vue.set(v_combo_data_list, 'commonList_1', data);
+                }
+                if(url == '/getInsttClCodeList.do') {
+                    Vue.set(v_combo_data_list, 'commonList_2', data);
+                }
+                if(url == '/getLoasmInfo.do') {
+                    Vue.set(v_combo_data_list, 'commonList_3', data);
+                }
+            });
+        }
+    }
+});
+
 var v_log_data_list = new Vue({
     el: '#tpl-log-data-list',
     data: {
@@ -232,14 +255,17 @@ var commonClass = {
     fnAjaxBrtcCodeList: function() { // 기관유형 : 공통함수에서 초기화용으로 사용하고 화면에서 호출되는 부분이 없음.
         var url = "/getBrtcCodeList.do";
         var data = {};
-        this.fnAjaxCallback(url, data, function(data) {
-            var commonList = {
-                commonList: data
-            };
-            var htmlText = commonClass.getHtmlText("brtc-code-template");
-            $("#brtc_code_div").html(htmlText(commonList)); // 기관유형 selectBox UI 만들기
-            commonClass.fnAjaxInsttClCodeList(); // 지역선택 selectBox UI 만들기 함수 call
-        });
+
+        v_combo_data_list.fetchData(url,data);
+
+        // this.fnAjaxCallback(url, data, function(data) {
+        //     var commonList = {
+        //         commonList: data
+        //     };
+        //     var htmlText = commonClass.getHtmlText("brtc-code-template");
+        //     $("#brtc_code_div").html(htmlText(commonList)); // 기관유형 selectBox UI 만들기
+        //     commonClass.fnAjaxInsttClCodeList(); // 지역선택 selectBox UI 만들기 함수 call
+        // });
     },
     fnAjaxInsttClCodeList: function() { // 지역선택 : 기관유형 EventHandle
 
@@ -254,17 +280,20 @@ var commonClass = {
 
         var url = "/getInsttClCodeList.do";
         var data = {brtcCode: 'LMC'};
-        this.fnAjaxCallback(url, data, function(data) {
-            var commonList = {
-                commonList: data
-            };
-            var htmlText = commonClass.getHtmlText("instt-cl-code-template");
-            $("#instt_cl_code_div").html(htmlText(commonList)); // 지역선택 selectBox UI 만들기
-            // 초기화
-            $('select[name=insttClCode] option:selected').val(''); // 지역선택 selectBox 초기화
-            $('select[name=loasmCode]').attr('disabled',true); // 지방의회선택 비활성화
-            $('select[name=loasmCode] option:selected').val(''); // 지방의회 초기화
-        },"post");
+
+        v_combo_data_list.fetchData(url,data);
+
+        // this.fnAjaxCallback(url, data, function(data) {
+        //     var commonList = {
+        //         commonList: data
+        //     };
+        //     var htmlText = commonClass.getHtmlText("instt-cl-code-template");
+        //     $("#instt_cl_code_div").html(htmlText(commonList)); // 지역선택 selectBox UI 만들기
+        //     // 초기화
+        //     $('select[name=insttClCode] option:selected').val(''); // 지역선택 selectBox 초기화
+        //     $('select[name=loasmCode]').attr('disabled',true); // 지방의회선택 비활성화
+        //     $('select[name=loasmCode] option:selected').val(''); // 지방의회 초기화
+        // },"post");
     },
     fnAjaxLoasmCodeList: function() { // 지방의회선택 : 지역 EventHandle
         var url = "/getLoasmInfo.do";
@@ -275,14 +304,17 @@ var commonClass = {
             brtcCode: brtcCode.toUpperCase(),
             insttClCode: insttClCode
         };
-        this.fnAjaxCallback(url, data, function(data) {
-            var commonList = {
-                commonList: data
-            };
-            var htmlText = commonClass.getHtmlText("loasm_code-template");
-            // 초기화
-            $("#loasm_code_div").html(htmlText(commonList)); // 지방의회선택 selectBox UI 만들기
-        }, 'post');
+
+        v_combo_data_list.fetchData(url,data);
+
+        // this.fnAjaxCallback(url, data, function(data) {
+        //     var commonList = {
+        //         commonList: data
+        //     };
+        //     var htmlText = commonClass.getHtmlText("loasm_code-template");
+        //     // 초기화
+        //     $("#loasm_code_div").html(htmlText(commonList)); // 지방의회선택 selectBox UI 만들기
+        // }, 'post');
     },
     // 당일 : fnToday(0)
     // 1주일 : fnToday(-7)

@@ -55,6 +55,8 @@ var onCreateClass = {
                 onCreateClass.fnSearch();
             }
         });
+        
+        $("#loasm_code_div").hide();
 
     },
     fnExcel: function() {

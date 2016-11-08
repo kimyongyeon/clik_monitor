@@ -21,26 +21,9 @@
                 <tr>
                     <th scope="row">지방의회</th>
                     <td>
-                        <%@ include file="/WEB-INF/jsp/hbs/combo_list_script.jsp" %>
+
                         <div class="lw-100 fl-mr-5">
-                            <div class="selectBox" id="brtc_code_div">
-                                <select class="select01">
-                                    <option value="">기관유형 선택</option>
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                            <div class="selectBox" id="instt_cl_code_div">
-                                <select class="select02">
-                                    <option value="">지역선택</option>
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                            <div class="selectBox" id="loasm_code_div">
-                                <select class="select03">
-                                    <option value="">지방의회선택</option>
-                                    <option value=""></option>
-                                </select>
-                            </div>
+                            <%@ include file="/WEB-INF/jsp/hbs/combo_list_script.jsp" %>
                             <div class="fr-mr-5">
                                 <button class="search-button" onclick="onCreateClass.btnSearch()"><i class="fa fa-search" aria-hidden="true"></i> 검색</button>
                                 <button class="insert-button" onclick="commonClass.page_go('range_setting_reg');">등록</button>
@@ -84,6 +67,8 @@
     </div>
 
     <%@ include file="/WEB-INF/jsp/common/error_info_list_popup.jsp" %>
+    <script type="text/javascript" src="<c:url value="/assets/js/vue.min.js"/>"></script> <!-- vuejs -->
+    <script type="text/javascript" src="<c:url value="/assets/js/biz/common.js"/>"></script> <!-- 내가 만든 공통함수 -->
     <script type="text/javascript" src="<c:url value="/assets/js/biz/range_setting_list.js"/>"></script>
 
 

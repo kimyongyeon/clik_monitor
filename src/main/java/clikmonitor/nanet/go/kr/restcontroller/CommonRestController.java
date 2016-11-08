@@ -50,8 +50,8 @@ public class CommonRestController {
      */
     @RequestMapping(value = "/getInsttClCodeList.do"
             , headers = HttpHeaders.ACCEPT + "=" + MediaType.APPLICATION_JSON_UTF8_VALUE
-            , method = RequestMethod.POST)
-    public List<CommonVO> getInsttClCodeList(@RequestBody CommonSearchVO commonSearchVO) {
+            , method = RequestMethod.GET)
+    public List<CommonVO> getInsttClCodeList(@ModelAttribute(value = "commonSearchVO") CommonSearchVO commonSearchVO) {
         return commonService.selectBrtcCodeDetails(commonSearchVO);
     }
 
@@ -63,8 +63,8 @@ public class CommonRestController {
      */
     @RequestMapping(value = "/getLoasmInfo.do"
             , headers = HttpHeaders.ACCEPT + "=" + MediaType.APPLICATION_JSON_UTF8_VALUE
-            , method = RequestMethod.POST)
-    public List<CommonVO> getLoasmInfo(@RequestBody  CommonSearchVO commonSearchVO) {
+            , method = RequestMethod.GET)
+    public List<CommonVO> getLoasmInfo(@ModelAttribute(value = "commonSearchVO") CommonSearchVO commonSearchVO) {
         return commonService.selectLoasmInfo(commonSearchVO);
     }
 

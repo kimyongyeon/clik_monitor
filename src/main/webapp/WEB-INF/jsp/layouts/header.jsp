@@ -11,7 +11,7 @@
         <!-- css -->
         <link href="<c:url value="/css/jquery-ui.css"/>" rel="stylesheet">
         <link href="<c:url value="/css/style.css"/>" rel="stylesheet"> <!-- 공통 style.css -->
-        <link rel="stylesheet" media="(max-width: 1366px)" href="<c:url value="/css/style_1400.css"/>" />
+        <%--<link rel="stylesheet" media="(max-width: 1366px)" href="<c:url value="/css/style_1400.css"/>" />--%>
         <link href="<c:url value="/assets/jsgrid-1.5.1/jsgrid.min.css"/>" rel="stylesheet"> <!-- 그리드 테이블 css -->
         <link href="<c:url value="/assets/jsgrid-1.5.1/jsgrid-theme.min.css"/>" rel="stylesheet"> <!-- 그리드 테마 -->
         <link href="<c:url value="/assets/font-awesome-4.6.3/css/font-awesome.min.css"/>" rel="stylesheet"> <!-- awesome -->
@@ -22,11 +22,8 @@
         <script type="text/javascript" src="<c:url value="/assets/jsgrid-1.5.1/jsgrid.min.js"/>"></script> <!-- 그리드 -->
         <script type="text/javascript" src="<c:url value="/assets/js/jquery_blockUI.js"/>"></script> <!-- 프로그레스바 -->
         <script type="text/javascript" src="<c:url value="/assets/js/underscore-min.js"/>"></script> <!-- 언더스코어 라이브러리 콜렉션 관리 -->
-        <script type="text/javascript" src="<c:url value="/assets/js/handlebars-v4.0.5.js"/>"></script> <!-- 핸들바 -->
-        <script type="text/javascript" src="<c:url value="/assets/js/vue.min.js"/>"></script> <!-- vuejs -->
-
-        <script type="text/javascript" src="<c:url value="/assets/js/biz/common.js"/>"></script> <!-- 내가 만든 공통함수 -->
-        <script type="text/javascript" src="<c:url value="/assets/js/biz/main.js"/>"></script>
+        <%--<script type="text/javascript" src="<c:url value="/assets/js/handlebars-v4.0.5.js"/>"></script> <!-- 핸들바 -->--%>
+        <%--<script type="text/javascript" src="<c:url value="/assets/js/biz/main.js"/>"></script>--%>
 
 		<%--<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -67,6 +64,9 @@
 		<script type="text/javascript">
             commonClass.mainInit();
 		</script>
+
+        <%--<script type="text/javascript" src="<c:url value="/assets/js/vue.min.js"/>"></script> <!-- vuejs -->
+        <script type="text/javascript" src="<c:url value="/assets/js/biz/common.js"/>"></script> <!-- 내가 만든 공통함수 -->--%>
 
 	<tiles:insertAttribute name="javascript.footer"/>
         <footer>

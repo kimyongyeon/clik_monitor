@@ -14,6 +14,7 @@ import java.util.List;
 public interface MetaService {
 
     List<MetaDataVO> selectMetaDataPagingList(CommonSearchVO metaSearchVO);
+    List<MetaDataVO> selectSiteList(CommonSearchVO metaSearchVO);
     List<MetaDataVO> selectMetaExcelExportList(CommonSearchVO metaSearchVO);
     int selectMetaDataRecordTotalCount(CommonSearchVO metaSearchVO);
 
@@ -22,6 +23,11 @@ public interface MetaService {
 
         @Resource(name = "metaDataMapper")
         MetaDataMapper metaDataMapper;
+
+        @Override
+        public List<MetaDataVO> selectSiteList(CommonSearchVO metaSearchVO) {
+            return metaDataMapper.selectSiteList(metaSearchVO);
+        }
 
         @Override
         public List<MetaDataVO> selectMetaExcelExportList(CommonSearchVO metaSearchVO) {

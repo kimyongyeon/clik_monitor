@@ -36,6 +36,7 @@
                         </div>--%>
                     </div>
                     <div class="topBox" id="tpl-agent-server-info-list">
+                        <div id="rasmblyId_empty"><h1>선택된 의회가 없습니다.</h1></div>
                         <h1 id="btnExpend"><img id="agent-open-close" src="/img/agent_open.png" alt="열기"></h1>
                         <div class="topNemo">
                             <!-- Agent 서버정보 광역의회 목록 -->
@@ -88,9 +89,14 @@
                         <div class="rightBottomBox">
                             <div class="leftTopBox">
                                 <!-- 전체요청 평균 건수-->
+                                <div id="chart_column_title"><h1>(1개월)</h1></div>
                                 <div id="chart_cloumn" class="chart_loding"><img src="/img/loading.gif" alt=""></div>
-                                <button class="chart-column-postion button-chart-menu button-position-absolute button-chart-cloumn-top-left" onclick="chartClass.btnLeftClick();">광역시의회</button>
+                                <div id="chart_cloumn_1" class="chart_loding"><img src="/img/loading.gif" alt=""></div>
+                                <button class="chart-column-postion button-chart-menu button-position-absolute button-chart-cloumn-top-left" onclick="chartClass.btnLeftClick();">광역의회</button>
                                 <button class="chart-column-postion button-chart-menu button-position-absolute button-chart-cloumn-top-right" onclick="chartClass.btnRightClick();">시의회</button>
+                                <button class="button-chart-menu button-position-absolute btn-month-6 btn-month" onclick="chartClass.btnMonthClick(6);">6개월</button>
+                                <button class="button-chart-menu button-position-absolute btn-month-3 btn-month" onclick="chartClass.btnMonthClick(3);">3개월</button>
+                                <button class="button-chart-menu button-position-absolute btn-month-1 btn-month" onclick="chartClass.btnMonthClick(1);">1개월</button>
                             </div>
                             <div class="leftBottomBox">
                                 <!-- 연계파일 저장용량 모니터링 -->
@@ -101,9 +107,14 @@
                     </div>
                     <div class="bottomBox">
                         <!-- 데이터 수집 현황 -->
-                        <div id="chart_cloumn2" class="chart_loding"><img src="/img/loading.gif" alt=""></div>
-                        <button class="chart-column-postion2 button-chart-menu button-position-absolute button-chart-cloumn2-top-left" onclick="chartClass.btnLeftClick();">광역시의회</button>
+                        <div id="chart_cloumn2" ></div>
+                        <div class="chart_column2_screen">
+                            <div class="chart_cloumn2_loding"><img src="/img/loading.gif" alt=""></div>
+                        </div>
+                        <button class="chart-column-postion2 button-chart-menu button-position-absolute button-chart-cloumn2-top-left" onclick="chartClass.btnLeftClick();">광역의회</button>
                         <button class="chart-column-postion2 button-chart-menu button-position-absolute button-chart-cloumn2-top-right" onclick="chartClass.btnRightClick();">시의회</button>
+                        <i onclick="chartClass.btnNext();" class="fa fa-arrow-circle-right fa-2x button-chart-default button-position-absolute right" aria-hidden="true"></i>
+                        <i onclick="chartClass.btnPrev();" class="fa fa-arrow-circle-left fa-2x button-chart-default button-position-absolute left" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>
@@ -138,7 +149,7 @@
                                 <th>Agent 버전</th>
                                 <td>1.0</td>
                                 <th>Agent업데이트 일자 </th>
-                                <td>{{item.updateDt}}</td>
+                                <td>{{item.lastCntcDt}}</td>
                             </tr>
                             <tr>
                                 <th>현재상태</th>
@@ -162,17 +173,20 @@
                     <div class="nemo02">
                         <table class="none-line-table">
                             <tr>
-                                <td><button class="default-button d-btn-sz" onclick="commonClass.fnAgentStart();">Agent 구동 </button></td>
-                                <td><button class="default-button d-btn-sz" onclick="commonClass.fnAgentEnd();">Agent 종료 </button></td>
-                                <td><button class="default-button d-btn-sz" onclick="commonClass.fnAgentUpdate();">Agent 업그레이드 </button></td>
-                                <td><button class="default-button d-btn-sz" onclick="commonClass.fnAgentRollback();">Agent 롤백 </button></td>
+                                <td><button class="default-button d-btn-sz" onclick="commonClass.fnAgentStart();"><i class="fa fa-play-circle-o" aria-hidden="true"></i>&nbsp;Agent 구동 </button></td>
+                                <td><button class="default-button d-btn-sz" onclick="commonClass.fnAgentEnd();"><i class="fa fa-stop-circle-o" aria-hidden="true"></i>&nbsp;Agent 종료 </button></td>
+                                <td><button class="default-button d-btn-sz" onclick="commonClass.fnAgentUpdate();"><i class="fa fa-level-up" aria-hidden="true"></i>&nbsp;Agent 업그레이드 </button></td>
+                                <td><button class="default-button d-btn-sz" onclick="commonClass.fnAgentRollback();"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Agent 롤백 </button></td>
                             </tr>
                         </table>
                     </div>
+                    <hr>
                     <div class="tab">
-                        <ul class="tab_menu">
-                            <li><button onclick="onCreateClass.fnAgentTab1();">이력</button></li>
+                        <ul class="tab_menu" style="position: relative;">
+                            <li><button onclick="onCreateClass.fnAgentTab1();">이력정보</button></li>
                             <li><button onclick="onCreateClass.fnAgentTab2();">전송건수</button></li>
+                            <div class="menu-tab-left" id="tab-under-left"></div>
+                            <div id="tab-under-right"></div>
                         </ul>
                         <div class="tab-box-1">
                             <div class="line"></div>
@@ -181,14 +195,14 @@
                                 <table class="table">
                                     <tr>
                                         <th>상태</th>
-                                        <th>명령어시작</th>
-                                        <th>명령어종료</th>
+                                        <%--<th>명령어시작</th>
+                                        <th>명령어종료</th>--%>
                                         <th>등록일자</th>
                                     </tr>
                                     <tr v-for="item in items">
-                                        <td>{{item.cmmndNm}}</td>
-                                        <td>{{item.cmmndTrnsmisDt}}</td>
-                                        <td>{{item.cmmndExcDt}}</td>
+                                        <td>{{fnAgentComment(item.cmmndNm)}}</td>
+                                        <%--<td>{{item.cmmndTrnsmisDt}}</td>
+                                        <td>{{item.cmmndExcDt}}</td>--%>
                                         <td>{{item.frstRegistDt}}</td>
                                     </tr>
                                 </table>
@@ -198,7 +212,7 @@
 
                                         <template v-for="item in lastPageNoOnPageList">
                                             <li v-if="lastPageNoOnPageList > 1" @click="agentClass.fnAgentSetHisList(firstPageNoOnPageList + item);" :class="{active: page == firstPageNoOnPageList + item}">
-                                                <a href="#">{{firstPageNoOnPageList + item}}</a>
+                                                <a href="#" v-if="lastPageNoOnPageList >= firstPageNoOnPageList + item">{{firstPageNoOnPageList + item}}</a>
                                             </li>
                                         </template>
 
@@ -307,7 +321,27 @@
             $(document).ready(function () {
                 var rasmblyId = "${param.rasmblyId}";
                 onCreateClass.init(rasmblyId);
+
+                var popcheck = commonClass.getCookie('popup_check');
+
+                if (popcheck == "true") {
+                    $("#tpl-log-data-list").hide();
+                    $("#idSaveChk").prop('checked', true);
+                } else {
+                    $("#tpl-log-data-list").show();
+                    $("#idSaveChk").prop('checked', false);
+                }
+
             });
+
+            $("#idSaveChk").on("click", function () {
+                if ($(this).filter(":checked").length > 0) {
+                    commonClass.setCookieExdays("popup_check", true, 365);
+                } else {
+                    commonClass.setCookieExdays("popup_check", false, 365);
+                }
+            });
+
         </script>
 
     </tiles:putAttribute>

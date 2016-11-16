@@ -7,7 +7,8 @@ var v_agent_server_state_info_list = new Vue({
         fetchData: function(url, data){
             commonClass.fnAjaxCallback(url, data, function(data){
                 Vue.set(v_agent_server_state_info_list, 'items', data.listAgentVO);
-            });
+                document.body.style.overflow = 'hidden';
+            },'post');
         },
         comma: function (numbers) {
             return commonClass.fnComma(numbers);
@@ -27,9 +28,30 @@ var v_agent_server_info_list = new Vue({
     methods: {
         fetchData: function(url, data){
             commonClass.fnAjaxCallback(url, data, function(data){
-                Vue.set(v_agent_server_info_list, 'areas', data.areas);
-                Vue.set(v_agent_server_info_list, 'areas2', data.areas2);
-            });
+                var areas1 = data.areas;
+                var areas2 = data.areas2;
+
+                var areas3 = _.union(areas1, areas2);
+
+                areas1 = [];
+                areas2 = [];
+                _.each(areas3, function(value, idx){
+                    if(idx < 17) {
+                        areas1.push(value);
+                    } else {
+                        areas2.push(value);
+                    }
+                });
+
+                Vue.set(v_agent_server_info_list, 'areas', areas1);
+                Vue.set(v_agent_server_info_list, 'areas2', areas2);
+
+                if(areas1.length == 0 && areas2.length == 0)
+                    $(".topNemo").hide();
+                else
+                    $(".topNemo").show();
+
+            }, 'post');
         },
         comma: function (numbers) {
             return commonClass.fnComma(numbers);
@@ -54,17 +76,41 @@ var v_agent_server_info_detail = new Vue({
         nextPage : 0
     },
     methods: {
+        fnAgentComment: function(str) {
+          if(str.indexOf('start') !== -1) {
+              return "Agent가 시작 되었습니다.";
+          }
+          if(str.indexOf('stop') !== -1) {
+              return "Agent가 정지 되었습니다.";
+          }
+          if(str.indexOf('update') !== -1) {
+              return "Agent가 업데이트 되었습니다.";
+          }
+        },
         fetchData1: function(url, data, page) {
             commonClass.fnAjaxCallback(url, data, function(data){
-
-                Vue.set(v_agent_server_info_detail, 'items', data.list);
+                
+                if(data.status == '404') {
+                    Vue.set(v_agent_server_info_detail, 'items', data.list);
+                    return
+                }
 
                 var firstPageNoOnPageList = data.paginationInfo.firstPageNoOnPageList;
                 var lastPageNoOnPageList = data.paginationInfo.lastPageNoOnPageList;
                 var recordCountPerPage = data.paginationInfo.recordCountPerPage;
                 var totalRecordCount = data.paginationInfo.totalRecordCount;
+                
+                var totalPageCount = data.paginationInfo.totalPageCount;
+
+                if(totalPageCount <= lastPageNoOnPageList) {
+                    lastPageNoOnPageList = totalPageCount;
+                } else {
+                    lastPageNoOnPageList = 10;
+                }
+                
                 var prev = firstPageNoOnPageList === 1 ? false : true;
                 var next = lastPageNoOnPageList * recordCountPerPage >= totalRecordCount ? false : true;
+                Vue.set(v_agent_server_info_detail, 'items', data.list);
                 Vue.set(v_agent_server_info_detail, 'firstPageNoOnPageList', firstPageNoOnPageList - 1);
                 Vue.set(v_agent_server_info_detail, 'lastPageNoOnPageList', lastPageNoOnPageList);
                 Vue.set(v_agent_server_info_detail, 'prev', prev);
@@ -87,7 +133,7 @@ var v_agent_server_info_detail = new Vue({
                 $("#log_button_flag").hide();
                 commonClass.fnAjaxCallback(url, subData, function (data) {
                     // 에러가 있으면 버튼 나오도록 수정해야 함.
-                    if(data.length === 0) {
+                    if(data.requstInsttId == undefined) {
                         $("#log_button_flag").hide();
                     } else {
                         $("#log_button_flag").show();
@@ -122,8 +168,11 @@ var onCreateClass = {
         this.fnCheckboxSelected(); // 회의록, 부록, 의안, 의원 체크박스 선택
         commonClass.fnMenuStyle("main");
 
-        if(rasmblyId != "")
+        commonClass.fnErrorListCloseFlag = true;
+
+        if(rasmblyId != ""){
             agentClass.fnAgentDetailPopup(rasmblyId);
+        }
 
         var leftMove = 650;
         setInterval(function () {
@@ -162,30 +211,34 @@ var onCreateClass = {
     },
     fnAgentTab1: function() {
         $(".tab-box-1").show();
-        $(".tab-box-1").css("background", "white");
-        $("#agent_server_info_popup .tab").css("background", "white");
+        $(".tab-box-1").css("background", "#383838");
+        $("#agent_server_info_popup .tab").css("background", "#383838");
         // 활성화
-        $(".tab ul li:nth-child(1) button").css("border", "1px solid #333");
-        $(".tab ul li:nth-child(1) button").css("border-bottom", "1px solid white");
-        $(".tab ul li:nth-child(1) button").css("color", "#383838");
-        $(".tab ul li:nth-child(1)").css("background", "white");
+        $(".tab ul li:nth-child(1) button").css("background", "#383838");
+        $(".tab ul li:nth-child(1) button").css("color", "#fff");
+        $(".tab ul li:nth-child(1) button").css("border", "none");
+        $(".tab #tab-under-left").addClass("menu-tab-left");
+
         // 비활성화
         $(".tab ul li:nth-child(2) button").css("color", "#888");
-        $(".tab ul li:nth-child(2) button").css("background", "white");
-        $(".tab ul li:nth-child(2) button").css("border-bottom", "1px solid #333");
+        $(".tab ul li:nth-child(2) button").css("background", "#383838");
+        $(".tab #tab-under-right").removeClass("menu-tab-right");
         $(".tab-box-2").hide();
     },
     fnAgentTab2: function() {
         $(".tab-box-2").show();
-        $(".tab-box-2").css("background", "black");
-        $("#agent_server_info_popup .tab").css("background", "black");
+        $(".tab-box-2").css("background", "#383838");
+        $("#agent_server_info_popup .tab").css("background", "#383838");
         // 활성화
-        $(".tab ul li:nth-child(2) button").css("background", "black");
-        $(".tab ul li:nth-child(2) button").css("color", "white");
+        $(".tab ul li:nth-child(2) button").css("background", "#383838");
+        $(".tab ul li:nth-child(2) button").css("color", "#fff");
         $(".tab ul li:nth-child(2) button").css("border", "none");
+        $(".tab #tab-under-right").addClass("menu-tab-right");
+
         // 비활성화
         $(".tab ul li:nth-child(1) button").css("border", "none");
         $(".tab ul li:nth-child(1) button").css("color", "#888");
+        $(".tab #tab-under-left").removeClass("menu-tab-left");
         $(".tab-box-1").hide();
     },
     fnCheckboxSelected: function () {
@@ -231,36 +284,22 @@ var onCreateClass = {
         $(".popup").draggable();
         $(".popup").hide();
 
-        // 레이어 팝업 가운데 정렬
-        var $layerPopupObj = $('.agentServerStateInfoPop');
-        var left = ( $(window).scrollLeft() + ($(window).width() - $layerPopupObj.width()) / 2 );
-        var top = ( $(window).scrollTop() + ($(window).height() - $layerPopupObj.height()) / 2 );
-        $layerPopupObj.css({'left':left,'top':top, 'position':'absolute'});
-        $('body').css('position','relative').append($layerPopupObj);
-
-        // 레이어 팝업 가운데 정렬
-        var $layerPopupObj = $('.agentServerInfo');
-        var left = ( $(window).scrollLeft() + ($(window).width() - $layerPopupObj.width()) / 2 );
-        var top = ( $(window).scrollTop() + ($(window).height() - $layerPopupObj.height()) / 2 );
-        $layerPopupObj.css({'left':left,'top':top, 'position':'absolute'});
-        $('body').css('position','relative').append($layerPopupObj);
+        // Agent 서버 상태 정보 팝업 가운데 정렬
+        commonClass.fnMiddleAlignSet('.agentServerStateInfoPop');
+        // Agent 서버정보 팝업 가운데 정렬
+        commonClass.fnMiddleAlignSet('.agentServerInfo');
+        // 로그 데이터 팝업 가운데 정렬
+        commonClass.fnMiddleAlignSet('.logData');
     }
 }
 
 $(window).resize(function() {
-    // 레이어 팝업 가운데 정렬
-    var $layerPopupObj = $('.agentServerStateInfoPop');
-    var left = ( $(window).scrollLeft() + ($(window).width() - $layerPopupObj.width()) / 2 );
-    var top = ( $(window).scrollTop() + ($(window).height() - $layerPopupObj.height()) / 2 );
-    $layerPopupObj.css({'left':left,'top':top, 'position':'absolute'});
-    $('body').css('position','relative').append($layerPopupObj);
-
-    // 레이어 팝업 가운데 정렬
-    var $layerPopupObj = $('.agentServerInfo');
-    var left = ( $(window).scrollLeft() + ($(window).width() - $layerPopupObj.width()) / 2 );
-    var top = ( $(window).scrollTop() + ($(window).height() - $layerPopupObj.height()) / 2 );
-    $layerPopupObj.css({'left':left,'top':top, 'position':'absolute'});
-    $('body').css('position','relative').append($layerPopupObj);
+    // Agent 서버 상태 정보 팝업 가운데 정렬
+    commonClass.fnMiddleAlignSet('.agentServerStateInfoPop');
+    // Agent 서버정보 팝업 가운데 정렬
+    commonClass.fnMiddleAlignSet('.agentServerInfo');
+    // 로그 데이터 팝업 가운데 정렬
+    commonClass.fnMiddleAlignSet('.logData');
 });
 
 /**
@@ -297,26 +336,32 @@ var jsTreeClass = {
                 }
                 jsTreeClass.arrayBasic.push(value.code);
             });
-            $.each(data.areas, function (index, value) { // 지역
-                var childrens = [];
-                $.each(value.childrens, function (index, value) {
-                    childrens[index] = {
-                        text: value.codenm,
-                        id: value.code
-                    }
-                });
-
+            $.each(data.parent_areas, function (index, value) { // 지역
                 areas[index] = {
-                    "text": value.codenm,
-                    "id": value.code,
-                    "state": {"opened": value.state},
-                    "children": childrens
+                    "text": value.rasmblynm,
+                    "id": value.code.substring(0,3),
+                    "state": {"opened": false},
+                    "children": []
                 }
-
             });
 
+            $.each(areas, function (index, value) {
 
-            // left 광역/기초 트리 메뉴
+                var childrens = [];
+
+                $.each(data.areas, function(i ,v) {
+                    if(value.id == v.code.substring(0,3)) {
+                        childrens.push({
+                            "text": v.codenm,
+                            "id": v.code,
+                            "state": {"opened": v.state},
+                        });
+                    }
+                });
+                areas[index].children = childrens;
+            });
+
+            // 광역/기초 트리 메뉴
             $('#rTreeBox').jstree({
                 "plugins": ["checkbox"],
                 'core': {
@@ -333,21 +378,21 @@ var jsTreeClass = {
                             "text": "기초의회",
                             "state": {
                                 "opened": true,
-                                "selected": false
+                                "selected": true
                             },
                             "children": basic
                         }
                     ]
                 }
             });
-            // left 지역별 트리 메뉴
+            // 지역별 트리 메뉴
             $('#aTreeBox').jstree({
                 "plugins": ["checkbox"],
                 'core': {
                     'data': [
                         {
                             "text": "전체",
-                            "state": {"opened": true, "selected": false},
+                            "state": {"opened": false, "selected": true},
                             "children": areas
                         }
                     ]
@@ -360,6 +405,9 @@ var jsTreeClass = {
             jsTreeClass.arraySelectedData = [];
             jsTreeClass.arraySelectWide = [];
             jsTreeClass.arraySelectBasic = [];
+
+            if(data == undefined)
+                return;
 
             $.each(data.selected, function (i, d) {
                 if (!isNaN(parseInt(d))) { // 전체 체크박스 제외
@@ -379,22 +427,31 @@ var jsTreeClass = {
                     });
                 }
             });
-            // chartClass.btnChartSearch();
+            // agentClass.fnAjaxMainAreaData();
         });
+        
         // 지역별 트리 메뉴 체인지 이벤트 : id 지역번호
         $('#aTreeBox').on("changed.jstree", function (e, data) {
             jsTreeClass.arraySelectedData = [];
+
+            if(data == undefined)
+                return;
+
             $.each(data.selected, function (i, d) {
                 if (!isNaN(parseInt(d))) { // 전체 체크박스 제외
-                    jsTreeClass.arraySelectedData.push(d);
+                    if(d.length != 3)
+                        jsTreeClass.arraySelectedData.push(d);
                 }
             });
-            // chartClass.btnChartSearch();
+            // agentClass.fnAjaxMainAreaData();
         });
 
         $.jstree.defaults.core.expand_selected_onload = true;
         // 최초 한번만 광역시 설정
-        jsTreeClass.arraySelectedData = ["002001", "051001", "053001", "032001", "062001", "042001", "052001", "044001", "031001", "033001", "043001", "041001", "063001", "061001", "054001", "055001", "064001"];
+        //jsTreeClass.arraySelectedData = ["002001", "051001", "053001", "032001", "062001", "042001", "052001", "044001", "031001", "033001", "043001", "041001", "063001", "061001", "054001", "055001", "064001"];
+        jsTreeClass.arraySelectedData = ['002001','051001','053001','032001','062001','042001','052001','044001','031001','033001',
+                     '043001','041001','063001','061001','054001','055001','064001','031012','031031','033002',
+                     '043012','041900','041009','063014','061012','054010','055002','055005'];
         chartClass.btnChartSearch();
     },
     arraySelectedData: [],
@@ -559,7 +616,6 @@ var animationClass = {
 var agentClass = {
     init: function () {
         // 지방의회, 기초의회 상태 아이콘 출력 ajax
-        this.fnAjaxMainAreaData();
         // Agent 서버 상태정보 ajax
         // this.fnAjaxAgentServerStateInfoList();
     },
@@ -580,6 +636,7 @@ var agentClass = {
         $(".agentServerStateInfoPop").addClass("openPop");
         commonClass.screenPop();
         this.fnAjaxAgentServerStateInfoList();
+
     }
     /**
      * Agent 서버 상태정보 테이블 목록
@@ -587,13 +644,10 @@ var agentClass = {
     , fnAjaxAgentServerStateInfoList: function () {
 
         var url = "getAreaStateInfoList.do";
-        var data = {};
+        var data = {
+            ramblyList: jsTreeClass.arraySelectedData
+        };
         v_agent_server_state_info_list.fetchData(url, data);
-        // commonClass.fnAjaxCallback(url, data, function (data) {
-        //     var htmlText = commonClass.getHtmlText("agent_server_state_info_popup-template");
-        //     $("#agent_server_state_info_popup").html(htmlText(data));
-        //     document.body.style.overflow = 'hidden';
-        // });
     },
     fnLogData: function(rasmblyId) {
         $(".agentServerInfo").removeClass("openPop");
@@ -614,36 +668,6 @@ var agentClass = {
             rasmblyId: rasmblyId
         };
         v_agent_server_info_detail.fetchData(url, data);
-        // commonClass.fnAjaxCallback(url, data, function (data) {
-        //     var htmlText = commonClass.getHtmlText("agent_server_info_popup-template");
-        //     $("#agent_server_info_popup").html(htmlText(data));
-        //
-        //     // 로그 버튼 숨김 / 보이기 
-        //     var url = "getLogDataButtonShowHideCheck.do";
-        //     var subData = {
-        //         requstInsttId: data.rasmblyId
-        //     }
-        //     commonClass.fnAjaxCallback(url, subData, function (data) {
-        //         // $("#agent_server_info_popup_logdata_click").hide();
-        //         // 에러가 있으면 버튼 나오도록 수정해야 함.
-        //         if(data.length === 0) {
-        //             $("#agent_server_info_popup_logdata_click").hide();
-        //         } else {
-        //             $("#agent_server_info_popup_logdata_click").show();
-        //             var htmlText = commonClass.getHtmlText("agent_server_info_popup-logdata_click-template");
-        //             $("#agent_server_info_popup_logdata_click").html(htmlText(data));
-        //         }
-        //         // if (data.status === 404) {
-        //         //     $("#agent_server_info_popup_logdata_click").hide();
-        //         // } else {
-        //         //     var htmlText = commonClass.getHtmlText("agent_server_info_popup-logdata_click-template");
-        //         //     $("#agent_server_info_popup_logdata_click").html(htmlText(data));
-        //         // }
-        //     });
-        //
-        //     // Agent 상태 설정 정보 목록
-        //     agentClass.fnAgentSetHisList(1);
-        // });
     },
     fnAgentSetHisList : function(page) {
 
@@ -654,50 +678,37 @@ var agentClass = {
             "pageIndex": page
         };
         v_agent_server_info_detail.fetchData1(url, data, page);
-        // commonClass.fnAjaxCallback(url, data, function (data) {
-        //
-        //     var htmlText = commonClass.getHtmlText("agent_server_state_set_popup-template");
-        //     $("#agent_state_set_table_list").html(htmlText(data));
-        //
-        //     // 페이지 시작
-        //     var firstPageNoOnPageList = data.paginationInfo.firstPageNoOnPageList;
-        //     var lastPageNoOnPageList = data.paginationInfo.lastPageNoOnPageList;
-        //     var recordCountPerPage = data.paginationInfo.recordCountPerPage;
-        //     var totalRecordCount = data.paginationInfo.totalRecordCount;
-        //     var prev = firstPageNoOnPageList === 1 ? false : true;
-        //     var next = lastPageNoOnPageList * recordCountPerPage >= totalRecordCount ? false : true;
-        //     var pageHtml = "";
-        //     if (prev) {
-        //         var currentPage = firstPageNoOnPageList - 1;
-        //         pageHtml += "<li><a href='#' onclick='agentClass.fnAgentSetHisList(" + currentPage + ")'>&laquo;</a><li>";
-        //     }
-        //     for (var i = firstPageNoOnPageList; i < lastPageNoOnPageList; i++) {
-        //         var currentPage = i;
-        //         if (page === i) {
-        //             pageHtml += "<li class='active'><a href='#' onclick='agentClass.fnAgentSetHisList(" + currentPage + ")'>" + i + "</a><li>";
-        //         } else {
-        //             pageHtml += "<li><a href='#' onclick='agentClass.fnAgentSetHisList(" + currentPage + ")'>" + i + "</a><li>";
-        //         }
-        //
-        //     }
-        //     if (next) {
-        //         var currentPage = lastPageNoOnPageList + 1;
-        //         pageHtml += "<li><a href='#' onclick='agentClass.fnAgentSetHisList(" + currentPage + ")'>&raquo;</a><li>";
-        //     }
-        //     $(".agent_server_state_set_page_ul").empty();
-        //     $(".agent_server_state_set_page_ul").html(pageHtml);
-        //     // 페이지 종료
-        //
-        //     document.body.style.overflow = 'hidden';
-        //
-        // });
     }
     /**
      * Agent 서버 상태 정보 목록(광역,기초) : 메인화면 Ajax
      */
     , fnAjaxMainAreaData: function () {
         var url = "getAreas.do";
-        var data = {};
+
+        if(jsTreeClass.arraySelectedData.length == 0){
+            $("#rasmblyId_empty").show();
+            $("#rasmblyId_empty").addClass('blink_me');
+            Vue.set(v_agent_server_info_list, 'areas', {});
+            Vue.set(v_agent_server_info_list, 'areas2', {});
+            $(".topNemo").hide();
+            $("#btnExpend").hide();
+            return;
+        } else {
+            $("#rasmblyId_empty").hide();
+            if(jsTreeClass.arraySelectedData.length > 17) {
+                $("#btnExpend").show();
+                $("#agent-open-close").attr("src", "/img/agent_open.png");
+            } else {
+                $("#btnExpend").hide();
+                $("div.topBox").animate({"height": "115px", opacity: 1});
+                $("#content").height("1545px");
+            }
+            $(".topNemo").show();
+        }
+
+        var data = {
+            ramblyList: jsTreeClass.arraySelectedData, // 의회(기초,광역,지역)
+        };
         v_agent_server_info_list.fetchData(url, data);
     },
     fnAgentClose: function () {

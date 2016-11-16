@@ -27,26 +27,6 @@
                         <th scope="row">지방의회</th>
                         <td>
                             <%@ include file="/WEB-INF/jsp/hbs/combo_list_script.jsp" %>
-                            <div class="selectBox">
-                                <div class="select01" id="brtc_code_div">
-                                    <select class="select01">
-                                        <option value="">기관유형 선택</option>
-                                        <option value=""></option>
-                                    </select>
-                                </div>
-                                <div class="select02" id="instt_cl_code_div">
-                                    <select class="select02">
-                                        <option value="">지역선택</option>
-                                        <option value=""></option>
-                                    </select>
-                                </div>
-                                <div class="select03" id="loasm_code_div">
-                                    <select class="select03">
-                                        <option value="">지방의회선택</option>
-                                        <option value=""></option>
-                                    </select>
-                                </div>
-                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -90,6 +70,8 @@
         </div>
     </div>
 
+    <script type="text/javascript" src="<c:url value="/assets/js/vue.min.js"/>"></script> <!-- vuejs -->
+    <script type="text/javascript" src="<c:url value="/assets/js/biz/common.js"/>"></script> <!-- 내가 만든 공통함수 -->
     <script type="text/javascript" src="<c:url value="/assets/js/biz/range_setting_reg.js"/>"></script>
 
 </tiles:putAttribute>

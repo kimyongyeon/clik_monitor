@@ -43,31 +43,58 @@
         ORDER BY ORDR ASC
     </select>
 
+    <select id="selectParentAreaList" parameterType="commonVO" resultType="commonVO">
+        SELECT
+        DECODE (REPLACE(REPLACE(REPLACE(LOASM_NM,'의회',''),'특별',''),'시','')
+        , '서울'    ,'서울'
+        , '부산광역' ,'부산'
+        , '대구광역' ,'대구'
+        , '인천광역' ,'인천'
+        , '광주광역' ,'광주'
+        , '대전광역' ,'대전'
+        , '울산광역' ,'울산'
+        , '세종자치' ,'세종'
+        , '경기도'  ,'경기'
+        , '강원도'  ,'강원'
+        , '충청북도' ,'충북'
+        , '충청남도' ,'충남'
+        , '전라북도' ,'전북'
+        , '전라남도' ,'전남'
+        , '경상북도' ,'경북'
+        , '경상남도' ,'경남'
+        , '제주자치도' ,'제주'
+        , '경기도 부천' ,'부천'
+        , '경기도 하남' ,'하남'
+        , '강원도 강릉' ,'강릉'
+        , '충청북도 청주' ,'청주'
+        , '충청남도 서산' ,'서산'
+        , '전라북도 정읍' ,'정읍'
+        , '전라남도 순천' ,'순천'
+        , '경상북도 상주' ,'상주'
+        , '경상남도 거제' ,'거제'
+        , '경상남도 김해' ,'김해'
+        ) RASMBLYNM,
+        LOASM_CODE AS CODE ,
+        LOASM_NM AS CODENM , ORDR
+
+        FROM ORGAN, COLGOVER
+        WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+        AND ISVIEW = 'Y'
+        AND <![CDATA[ ORDR <= 17 ]]>
+        ORDER BY ORDR asc
+    </select>
+
 	<!-- 지역별 의회 목록 조회 -->
 	<select id="selectAreaList" parameterType="commonVO" resultType="commonVO">
--- 		SELECT /* getAreaList : 지역별 의회 목록 조회 */
---            LOASM_CODE AS code,
---            LOASM_NM AS codenm,
--- 		  (SELECT CODE_ID_NM
--- 		   FROM COMMON_CODE
--- 		   WHERE CL_CODE='LMC'
--- 			 AND CODE_ID = BRTC_CODE) AS COMDENM,
--- 			   CTPRVNGUGUN_CODE AS CTPRVNGUGUNCODE,
--- 			   INSTT_CL_CODE AS INSTTCLCODE
--- 		FROM ORGAN,
--- 			 COLGOVER
--- 		WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
--- 		AND ISVIEW = 'Y'
--- 		ORDER BY ORDR ASC, LOASM_CODE ASC
-        WITH ORDR_LIST AS (
+        /*WITH ORDR_LIST AS (
           SELECT RASMBLY_AREA_CODE ,ORDR FROM COLGOVER WHERE <![CDATA[ ORDR <= 17 ]]>
         )
-        SELECT * /* getAreaList : 지역별 의회 목록 조회 */ FROM (
+        SELECT * *//* getAreaList : 지역별 의회 목록 조회 *//* FROM (
             SELECT ROWNUM, AA.CODE, AA.CODENM
                 , AA.ORDR
                 ,CASE SUBSTR(AA.CODE,1,3) WHEN AA.RASMBLY_AREA_CODE THEN (SELECT ORDR FROM ORDR_LIST WHERE RASMBLY_AREA_CODE = SUBSTR(AA.CODE,1,3) ) ELSE ROWNUM END ORDR2
             FROM (
-                SELECT /* GETAREALIST : 지역별 의회 목록 조회 */
+                SELECT *//* GETAREALIST : 지역별 의회 목록 조회 *//*
                 LOASM_CODE AS CODE,
                 LOASM_NM AS CODENM,
                 (SELECT CODE_ID_NM FROM COMMON_CODE  WHERE CL_CODE='LMC'  AND CODE_ID = BRTC_CODE) AS COMDENM,
@@ -80,7 +107,46 @@
             AND ISVIEW = 'Y'
             ORDER BY LOASM_CODE ASC, ORDR ASC
             ) AA
-        ) ORDER BY ORDR2, ORDR
+        ) ORDER BY ORDR2, ORDR*/
+
+        WITH AREA_LIST AS
+          ( SELECT RASMBLY_AREA_CODE ,
+                   ORDR ,
+                   CASE
+                       WHEN RASMBLY_ID LIKE '002%' THEN '서울'
+                       WHEN RASMBLY_ID LIKE '051%' THEN '부산'
+                       WHEN RASMBLY_ID LIKE '053%' THEN '대구'
+                       WHEN RASMBLY_ID LIKE '032%' THEN '인천'
+                       WHEN RASMBLY_ID LIKE '062%' THEN '광주'
+                       WHEN RASMBLY_ID LIKE '042%' THEN '대전'
+                       WHEN RASMBLY_ID LIKE '052%' THEN '울산'
+                       WHEN RASMBLY_ID LIKE '044%' THEN '세종'
+                       WHEN RASMBLY_ID LIKE '031%' THEN '경기'
+                       WHEN RASMBLY_ID LIKE '033%' THEN '강원'
+                       WHEN RASMBLY_ID LIKE '043%' THEN '충북'
+                       WHEN RASMBLY_ID LIKE '041%' THEN '충남'
+                       WHEN RASMBLY_ID LIKE '063%' THEN '전북'
+                       WHEN RASMBLY_ID LIKE '061%' THEN '전남'
+                       WHEN RASMBLY_ID LIKE '054%' THEN '경북'
+                       WHEN RASMBLY_ID LIKE '055%' THEN '경남'
+                       WHEN RASMBLY_ID LIKE '064%' THEN '제주'
+                   END AREA_NAME
+           FROM COLGOVER
+           WHERE NVL(ISVIEW,'N') = 'Y'
+             AND RASMBLY_ID LIKE '%001'
+           ORDER BY ORDR ASC )
+        SELECT ROWNUM ,
+               AREA_LIST.AREA_NAME AS LOASM_NM ,
+               COLGOVER.RASMBLY_ID AS CODE ,
+               COLGOVER.RASMBLY_NM AS CODENM
+        FROM COLGOVER ,
+             AREA_LIST
+        WHERE COLGOVER.ISVIEW = 'Y'
+          AND AREA_LIST.RASMBLY_AREA_CODE = COLGOVER.RASMBLY_AREA_CODE
+        ORDER BY AREA_LIST.ORDR ASC,
+                 RASMBLY_ID ASC
+
+
 	</select>
 
 	<!-- 기초별 의회 목록 조회 -->

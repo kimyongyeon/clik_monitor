@@ -6,6 +6,9 @@
         <%@ include file="/WEB-INF/jsp/common/error_info_list_popup.jsp" %>
 
         <div id="container">
+            <div class="full_screen_loding" >
+                <img src="/img/loading.gif" alt="">
+            </div>
             <div id="subRightBox">
                 <!-- 메뉴 로케이션 -->
                 <div class="titleArea">
@@ -26,12 +29,35 @@
                     </ul>
                 </div>
                 <!-- 검색조건 -->
-                <table class="common-search-table">
+                <table class="common-search-table" style="position: relative;">
                     <tr>
                         <th scope="row">지방의회</th>
-                        <td>
+                        <td class="tab-search-common">
                             <div class="lw-100 fl-mr-5">
                                 <%@ include file="/WEB-INF/jsp/hbs/combo_list_script.jsp" %>
+                            </div>
+                        </td>
+                        <td class="tab-search-2">
+                            <div class="lw-100 fl-mr-5">
+                                <div class="fr-mr-5">
+                                    <button class="search-button" onclick="onCreateClass.btnSearch()"><i class="fa fa-search" aria-hidden="true"></i> 검색</button>
+                                    <button class="excel-button" onclick="onCreateClass.btnExcelSave();">엑셀저장</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="tab-search-1">
+                        <th scope="row">기간</th>
+                        <td>
+                            <div class="lw-100 fl-mr-5">
+                                <span class="calendar01"><input type="text" id="datepicker1" /></span>
+                                <span class="pado">~</span>
+                                <span class="calendar01"><input type="text" id="datepicker2" /></span>
+                                <span class="calendarBtn">
+                                    <button class="edit-button" type="button" value="당일" name="dateToday" id="dateToday" onclick="onCreateClass.fnDateToday()">당일</button>
+                                    <button class="edit-button" type="button" value="1주일" name="dateWeek" id="dateWeek" onclick="onCreateClass.fnDateWeek()">1주일</button>
+                                    <button class="edit-button" type="button" value="1개월" name="dateMonth" id="dateMonth" onclick="onCreateClass.fnDateMonth()">1개월</button>
+                                </span>
                                 <div class="fr-mr-5">
                                     <button class="search-button" onclick="onCreateClass.btnSearch()"><i class="fa fa-search" aria-hidden="true"></i> 검색</button>
                                     <button class="excel-button" onclick="onCreateClass.btnExcelSave();">엑셀저장</button>
@@ -43,8 +69,27 @@
                 <!-- 결과 페이지  -->
                 <div class="BottomTable">
                     <div class="tab01Box">
-                        <div id="myTable" class="chart_loding overflow-auto">
-                            <table class="table w-1700" id="tpl-table-list-1">
+                        <div id="myTable" class="overflow-auto">
+                            <table class="table" id="tpl-table-list-1">
+                                <colgroup>
+                                    <col width="120px">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                    <col width="">
+                                </colgroup>
                                 <tr>
                                     <th>지방의회</th>
                                     <th>대수</th>
@@ -77,19 +122,18 @@
                                     <td>{{comma(item.mtrCount)}}</td>
                                     <td>{{comma(item.spkngCount)}}</td>
                                     <td>{{comma(item.numprCount)}}</td>
-                                    <td>{{comma(item.apndxCount)}}</td>
+                                    <td>{{comma(item.biCountmintsCount)}}</td>
                                     <td>{{comma(item.asembyCount)}}</td>
-                                    <td>{{comma(item.itncasembyCount)}}</td>
+                                    <td>{{comma(item.itncasembyCountasembyCount)}}</td>
                                     <td>{{comma(item.bifileCount)}}</td>
                                     <td>{{comma(item.bimintsCount)}}</td>
                                 </tr>
                             </table>
-                            <img src="/img/loading.gif" alt="">
                         </div>
                     </div>
                     <div class="tab0Box">
-                        <div id="myTable2" class="chart_loding overflow-auto">
-                            <table class="table w-1700" id="tpl-table-list-2">
+                        <div id="myTable2" class="overflow-auto">
+                            <table class="table" id="tpl-table-list-2">
                                 <tr>
                                     <th>지방의회</th>
                                     <th>회의록최종일자</th>
@@ -101,15 +145,14 @@
                                 </tr>
                                 <tr v-for="item in items">
                                     <td>{{item.rasmblyNm}}</td>
-                                    <td>{{item.billMinutesFrstRegistDt}}</td>
-                                    <td>{{item.itemFrstRegistDt}}</td>
-                                    <td>{{item.minutesStatementFrstRegistDt}}</td>
-                                    <td>{{item.minutesAnswerFrstRegistDt}}</td>
-                                    <td>{{item.minutesAppendixFrstRegistDt}}</td>
-                                    <td>{{item.billFrstRegistDt}}</td>
+                                    <td>{{isNullCheck(item.billMinutesFrstRegistDt)}}</td>
+                                    <td>{{isNullCheck(item.itemFrstRegistDt)}}</td>
+                                    <td>{{isNullCheck(item.minutesStatementFrstRegistDt)}}</td>
+                                    <td>{{isNullCheck(item.minutesAnswerFrstRegistDt)}}</td>
+                                    <td>{{isNullCheck(item.minutesAppendixFrstRegistDt)}}</td>
+                                    <td>{{isNullCheck(item.billFrstRegistDt)}}</td>
                                 </tr>
                             </table>
-                            <img src="/img/loading.gif" alt="">
                         </div>
                     </div>
                 </div>

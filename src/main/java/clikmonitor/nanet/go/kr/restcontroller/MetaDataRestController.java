@@ -1,5 +1,7 @@
 package clikmonitor.nanet.go.kr.restcontroller;
 
+import clikmonitor.nanet.go.kr.vo.CommonSearchVO;
+import clikmonitor.nanet.go.kr.vo.CommonVO;
 import clikmonitor.nanet.go.kr.vo.MetaDataSearchVO;
 import clikmonitor.nanet.go.kr.vo.MetaDataVO;
 import clikmonitor.nanet.go.kr.service.MetaService;
@@ -44,9 +46,22 @@ public class MetaDataRestController {
 
         Map returnMap = new HashMap();
         metaDataSearchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+        metaDataSearchVO.setRecordCountPerPage(metaDataSearchVO.getPageUnit());
         returnMap.put("list", metaService.selectMetaDataPagingList(metaDataSearchVO));
         returnMap.put("paginationInfo", paginationInfo);
 
         return returnMap;
+    }
+
+    /**
+     * 지역선택 콤보 목록
+     * @param metaDataSearchVO
+     * @return
+     */
+    @RequestMapping(value = "/getSiteList.do"
+            , headers = HttpHeaders.ACCEPT + "=" + MediaType.APPLICATION_JSON_UTF8_VALUE
+            , method = RequestMethod.GET)
+    public List<MetaDataVO> getSiteList(@ModelAttribute(value = "metaDataSearchVO") MetaDataSearchVO metaDataSearchVO) {
+        return metaService.selectSiteList(metaDataSearchVO);
     }
 }

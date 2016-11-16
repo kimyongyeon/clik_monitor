@@ -24,24 +24,39 @@
 	    ]]>
     </sql>
 
+    <sql id = "mail_set_date_where">
+        AND INSERT_DATE BETWEEN #{startDate} || '00:00:00' AND #{endDate} || '99:99:99' -- 기간
+    </sql>
+    <sql id = "mail_date_where">
+        AND SEND_DATE BETWEEN #{startDate} || '00:00:00' AND #{endDate} || '99:99:99' -- 기간
+    </sql>
+
     <sql id="email_where">
-        WHERE SEND_DATE BETWEEN #{startDate} AND #{endDate}
+        <include refid="mail_date_where" />
         <if test="keyWordType == 1">
             AND TITLE LIKE '%' || #{keyWordText} || '%'
         </if>
         <if test="keyWordType == 2">
             AND RECEIVER LIKE '%' || #{keyWordText} || '%'
         </if>
+        <if test="keyWordType == ''">
+            AND (RECEIVER LIKE '%' ||  #{keyWordText} || '%' OR TITLE LIKE '%' ||  #{keyWordText} || '%')
+        </if>
+        ORDER BY SEND_DATE DESC
     </sql>
 
     <sql id="email_set_where">
-        WHERE INSERT_DATE BETWEEN #{startDate} AND TO_CHAR(SYSDATE,'YYYY-MM-DD HH:MI')
+        <include refid="mail_set_date_where" />
         <if test="keyWordType == 1">
             AND TITLE LIKE '%' || #{keyWordText} || '%'
         </if>
         <if test="keyWordType == 2">
             AND RECEIVER LIKE '%' || #{keyWordText} || '%'
         </if>
+        <if test="keyWordType == ''">
+            AND (RECEIVER LIKE '%' ||  #{keyWordText} || '%' OR TITLE LIKE '%' ||  #{keyWordText} || '%')
+        </if>
+        ORDER BY INSERT_DATE DESC
     </sql>
 
     <select id="selectMailingExcelExportList" parameterType="mailSearchVO" resultMap="mailMap">
@@ -59,7 +74,7 @@
         SELECT /*selectMailingSendPagingList*/ROWNUM no
           , TITLE title
           , SEND_DATE sendDate
-        FROM EMAIL_MNG
+        FROM EMAIL_MNG WHERE 1 = 1
 
         <include refid="email_where" />
         <include refid="h_bottom" />
@@ -84,7 +99,7 @@
             AND LOASM_CODE = EMAIL_SET.RASMLY_IDS
             AND ROWNUM = 1) AS RASMLY_NM
           , INSERT_DATE
-        FROM EMAIL_SET
+        FROM EMAIL_SET WHERE 1 = 1
 
         <include refid="email_set_where" />
         <include refid="h_bottom" />
@@ -95,7 +110,7 @@
     <select id="selectMailingSendPagingTotalCount" parameterType="mailSearchVO" resultType="int" >
 
         SELECT 	/*selectMailingSendPagingTotalCount*/COUNT(1)
-        FROM	EMAIL_MNG
+        FROM	EMAIL_MNG WHERE 1 = 1
         <include refid="email_where" />
 
     </select>
@@ -112,7 +127,7 @@
         )
         VALUES
         (
-           (SELECT COUNT(EMAIL_ID) + 1 FROM EMAIL_SET)
+           (SELECT MAX(EMAIL_ID) + 1 FROM EMAIL_SET)
          , #{receiver}
          , #{title}
          , #{rasmlyIds}

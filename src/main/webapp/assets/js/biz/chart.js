@@ -16,8 +16,115 @@ var chartClass = {
         chart_spline(); // cpu, 메모리 점유율 call
         // 하드웨어 정보 jsonp cross domain
         fnAjaxJsonpHardWareDataCall();
+
+        // 1개월, 3개월, 6개월
+        $(".btn-month-1").css("background", "#38383a");
+        $(".btn-month-1").css("color","#fff");
+        $(".btn-month-1").css("border","1px solid #fff");
+
+        $(".btn-month").on("click", function() {
+            $(".btn-month").css("background", "#38383a");
+            $(".btn-month").css("color", "#999");
+            $(".btn-month").css("border", "none");
+
+            $(this).css("background", "#38383a");
+            $(this).css("color","#fff");
+            $(this).css("border","1px solid #fff");
+        });
+
+        // 비활성
+        $(".button-chart-cloumn-top-right").css("background", "#38383a");
+        $(".button-chart-cloumn-top-right").css("color", "#999");
+        $(".button-chart-cloumn-top-right").css("border", "none");
+        $(".button-chart-cloumn2-top-right").css("background", "#38383a");
+        $(".button-chart-cloumn2-top-right").css("color", "#999");
+        $(".button-chart-cloumn2-top-right").css("border", "none");
+
+        // 활성
+        $(".button-chart-cloumn-top-left").css("background", "#38383a");
+        $(".button-chart-cloumn-top-left").css("color","#fff");
+        $(".button-chart-cloumn-top-left").css("border","1px solid #fff");
+        $(".button-chart-cloumn2-top-left").css("background", "#38383a");
+        $(".button-chart-cloumn2-top-left").css("color","#fff");
+        $(".button-chart-cloumn2-top-left").css("border","1px solid #fff");
+
+        $("#chart_cloumn_1").css("visibility", "hidden");
+    },
+    monthText: '1',
+    btnMonthClick: function(mm) {
+        this.monthText = mm;
+        $("#chart_cloumn_1").css("visibility", "visible");
+        $("#chart_column_title h1").text("(" + mm +"개월)");
+        var arrayDataType = [];
+        var data = {};
+        $.each($("input[name=radioBox01]:checked"), function (idx, value) {
+            arrayDataType.push($(this).val());
+        });
+        data = {
+            ramblyList: jsTreeClass.arraySelectedData, // 의회(기초,광역,지역)
+            dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
+            month: mm || 1
+        }
+        commonClass.fnAjaxCallback("/getTotalAvgReqCntList.do", data, function (data) {
+            $("#chart_cloumn_1").css("visibility", "hidden");
+            chart_cloumn(data)
+        },'post'); // 지방 의회별 데이터 전송건수
+    },
+    dataCollectionPaginationInfo: {},
+    btnNext: function() {
+        var arrayDataType = [];
+        var sendData = {};
+        var data = {};
+        $.each($("input[name=radioBox01]:checked"), function (idx, value) {
+            arrayDataType.push($(this).val());
+        });
+        data.paginationInfo = chartClass.dataCollectionPaginationInfo;
+        if(data.paginationInfo.lastPageNo > data.paginationInfo.currentPageNo) {
+            chartClass.dataCollectionCurrentPage = data.paginationInfo.currentPageNo+1;
+        } else {
+            chartClass.dataCollectionCurrentPage = data.paginationInfo.currentPageNo;
+        }
+        sendData = {
+            ramblyList: jsTreeClass.arraySelectedData, // 의회(기초,광역,지역)
+            dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
+            pageIndex: chartClass.dataCollectionCurrentPage,
+            pageUnit: 17
+        }
+        $(".chart_column2_screen").show();
+        commonClass.fnAjaxCallback("/getDataCollectionList.do", sendData, function (data) {
+            $(".chart_column2_screen").hide();
+            chartClass.dataCollectionPaginationInfo = data.paginationInfo;
+            chart_cloumn2(data)
+        },'post'); // 데이터 수집 현황
+    },
+    btnPrev: function() {
+        var arrayDataType = [];
+        var sendData = {};
+        var data = {};
+        $.each($("input[name=radioBox01]:checked"), function (idx, value) {
+            arrayDataType.push($(this).val());
+        });
+        data.paginationInfo = chartClass.dataCollectionPaginationInfo;
+        if(2 <= data.paginationInfo.currentPageNo) {
+            chartClass.dataCollectionCurrentPage = data.paginationInfo.currentPageNo-1;
+        } else {
+            chartClass.dataCollectionCurrentPage = data.paginationInfo.currentPageNo;
+        }
+        sendData = {
+            ramblyList: jsTreeClass.arraySelectedData, // 의회(기초,광역,지역)
+            dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
+            pageIndex: chartClass.dataCollectionCurrentPage,
+            pageUnit: 17
+        }
+        $(".chart_column2_screen").show();
+        commonClass.fnAjaxCallback("/getDataCollectionList.do", sendData, function (data) {
+            $(".chart_column2_screen").hide();
+            chartClass.dataCollectionPaginationInfo = data.paginationInfo;
+            chart_cloumn2(data)
+        },'post'); // 데이터 수집 현황
     },
     btnLeftClick: function() { // 광역
+
         var arrayDataType = [];
         var data = {};
         $.each($("input[name=radioBox01]:checked"), function (idx, value) {
@@ -29,7 +136,8 @@ var chartClass = {
 
         data = {
             ramblyList: jsTreeClass.arraySelectWide, // 의회(기초,광역,지역)
-            dataTypeList: arrayDataType // 회의록, 부록, 의안, 의원
+            dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
+            month: 1
         }
         this.fnAllChartCallback(data); // 차트 데이터 호출
 
@@ -62,7 +170,8 @@ var chartClass = {
         this.fnAgentServerInfoListShowHide();
         data = {
             ramblyList: jsTreeClass.arraySelectBasic, // 의회(기초,광역,지역)
-            dataTypeList: arrayDataType // 회의록, 부록, 의안, 의원
+            dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
+            month: 1
         }
         this.fnAllChartCallback(data); // 차트 데이터 호출
 
@@ -118,38 +227,26 @@ var chartClass = {
         data = {
             ramblyList: jsTreeClass.arraySelectedData, // 의회(기초,광역,지역)
             dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
-            cntcIdList: arrayDataType // 회의록, 부록, 의안, 의원
+            cntcIdList: arrayDataType, // 회의록, 부록, 의안, 의원
+            month: 1 // 1개월
         }
-        // 기초의회만 선택시
-        $(".topNemo").show();
-        _.each(jsTreeClass.arraySelectedData, function(d){
-            _.each(jsTreeClass.arrayBasic, function(dd){
-               if(d == dd) {
-                   $(".topNemo").hide();
-                   return;
-               }
-            });
-        });
-        // 광역의회가 하나라도 선택시
-        _.each(jsTreeClass.arraySelectedData, function(d){
-            _.each(jsTreeClass.arrayWide, function(dd){
-               if(d == dd) {
-                   $(".topNemo").show();
-                   return;
-               }
-            });
-        });
+        agentClass.fnAjaxMainAreaData();
         this.fnAllChartCallback(data); // 차트 데이터 호출
-        this.fnAgentServerInfoListShowHide();
+        // this.fnAgentServerInfoListShowHide();
     },
     fnAllChartCallback: function (sendData) {
+        $(".chart_column2_screen").show();
         commonClass.fnAjaxCallback("/getTransactionList.do", sendData, function (data) {
             chart_scatter(data)
         },'post'); // 트랜잭션 뷰
         commonClass.fnAjaxCallback("/getTotalAvgReqCntList.do", sendData, function (data) {
             chart_cloumn(data)
         },'post'); // 지방 의회별 데이터 전송건수
+        sendData.pageIndex = 1;
+        sendData.pageUnit = 17;
         commonClass.fnAjaxCallback("/getDataCollectionList.do", sendData, function (data) {
+            $(".chart_column2_screen").hide();
+            chartClass.dataCollectionPaginationInfo = data.paginationInfo;
             chart_cloumn2(data)
         },'post'); // 데이터 수집 현황
     }
@@ -166,7 +263,7 @@ function fnAjaxJsonpHardWareDataCall() {
     });// 연계파일 저장용량 모니터링
 }
 
-// 실시간 1초 주기 시스템정보 호출
+// 실시간 5초 주기 시스템정보 호출
 function fnAjaxJsonpSystemInfoDataCall() {
     var url = "http://10.201.27.151:19081/rest/api/system_info.do?fnSystemInfoCallback=?";
     $.ajax({
@@ -191,8 +288,6 @@ function fnAjaxJsonSystemInfoDataCall() {
     });
 
     promise.done(function(data){
-
-
         var chart = $('#chart_spline').highcharts();
         var series = chart.series[0];
         var series1 = chart.series[1];
@@ -201,13 +296,13 @@ function fnAjaxJsonSystemInfoDataCall() {
         var shift1 = series1.data.length > 5;
 
         var x = (new Date()).getTime(), // current time
-            y = parseInt(data.memList || 0);
-        series.addPoint([x, y], true, shift);
+            y = parseFloat(data.memList).toFixed(2);
+        series.addPoint([x, parseFloat(y)], true, shift);
 
-        var y2 = parseInt(data.cpuList || 0);
-        series1.addPoint([x, y2], true, shift);
+        var y2 = parseFloat(data.cpuList).toFixed(2);
+        series1.addPoint([x, parseFloat(y2)], true, shift);
         //chart_spline();
-        setTimeout(fnAjaxJsonSystemInfoDataCall, 1000); // 사용자 요구사항으로 1초에서 5초로 조정함.
+        setTimeout(fnAjaxJsonSystemInfoDataCall, 5000);
     });
 }
 
@@ -223,12 +318,15 @@ function fnSystemInfoCallback(data) {
     var series = chart.series[0];
     var series1 = chart.series[1];
 
-    var x = (new Date()).getTime(), // current time
-        y = parseInt(data.memList || 0);
-    series.addPoint([x, y], true, true);
+    var shift = series.data.length > 5;
+    var shift1 = series1.data.length > 5;
 
-    var y2 = parseInt(data.cpuList || 0);
-    series1.addPoint([x, y2], false, true);
+    var x = (new Date()).getTime(), // current time
+        y = parseFloat(data.memList).toFixed(4);
+    series.addPoint([x, parseFloat(y)], true, shift);
+
+    var y2 = parseFloat(data.cpuList).toFixed(4);
+    series1.addPoint([x, parseFloat(y2)], true, shift);
     //chart_spline();
     setTimeout(fnAjaxJsonpSystemInfoDataCall, 1000);
 }
@@ -242,7 +340,7 @@ function chart_spline() {
                 type: 'spline',
                 defaultSeriesType: 'spline',
                 events: {
-                    load: fnAjaxJsonSystemInfoDataCall
+                    load: fnAjaxJsonpSystemInfoDataCall
                 }
             },
             credits: {
@@ -283,9 +381,9 @@ function chart_spline() {
                     var template = "";
                     if(points != '') {
                         if(points.length > 1) {
-                            var y = points[0].series.name + ":" + commonClass.fnComma(points[0].y) + "%<br />";
-                            y += points[1].series.name + ":" + commonClass.fnComma(points[1].y) + "%<br />";
-                            template += '<table><tr>' +
+                            var y = points[0].series.name + " : <span style='float:right;'>" + points[0].y + " %</span><br />";
+                            y += points[1].series.name + " : <span style='float:right;'>"  + points[1].y + " %</span><br />";
+                            template += '<table style="width:130px;"><tr>' +
                                 '<td style="padding:0;font-size:16px;"><b>'+y+'</b></td></tr>';
                             var footer = '</table>';
                             template += footer;
@@ -364,7 +462,7 @@ function chart_cloumn(ajaxData) {
                 enabled: false
             },
             title: {
-                text: '지방 의회별 데이터 전송건수 (최근1개월)'
+                text: '지방 의회별 데이터 전송건수 '
             },
             xAxis: {
                 categories: categories,
@@ -386,7 +484,7 @@ function chart_cloumn(ajaxData) {
             yAxis: {
                 min: 0,
                 max: max,
-                tickInterval: 30000,
+                tickInterval: 100,
                 title: {
                     text: '',
                     rotation: 360,
@@ -400,12 +498,12 @@ function chart_cloumn(ajaxData) {
                 formatter: function() {
                     var y = commonClass.fnComma(this.y);
                     var x = this.x;
-                    var series_name = '최근1개월';
-                    var header = '<span style="font-size:16px">'+x+'</span><table>';
+                    var series_name = '최근 ' + chartClass.monthText +'개월';
+                    var header = '<span style="font-size:16px">'+x+'</span><table style="width: 130px;">';
                     var template = "";
                     template += header;
-                    template += '<tr><td style="color:{series.color};padding:0;font-size:16px;">'+series_name+': </td>' +
-                        '<td style="padding:0;font-size:16px;"><b>'+y+'건</b></td></tr>';
+                    template += '<tr><td style="color:{series.color};padding:0;font-size:16px;">'+series_name+' : </td>' +
+                        '<td style="padding:0;font-size:16px;float:right;"><b>'+y+' 건</b></td></tr>';
                     var footer = '</table>';
                     template += footer;
                     return template;
@@ -497,18 +595,18 @@ function chart_cloumn2(ajaxData) {
                     var points = this.points;
                     var y = "";
                     if(points.length === 1) {
-                        y += points[0].series.name + ":" + commonClass.fnComma(points[0].y) + "건 (" + points[0].key + ")<br />";
+                        y += points[0].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[0].y) + " 건 (" + points[0].key + ")</span><br />";
                     } else if (points.length === 2) {
-                        y += points[0].series.name + ":" + commonClass.fnComma(points[0].y) + "건 (" + points[0].key + ")<br />";
-                        y += points[1].series.name + ":" + commonClass.fnComma(points[1].y) + "건 (" + points[1].key + ")<br />";
+                        y += points[0].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[0].y) + " 건 (" + points[0].key + ")</span><br />";
+                        y += points[1].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[1].y) + " 건 (" + points[1].key + ")</span><br />";
                     } else {
-                        y += points[0].series.name + ":" + commonClass.fnComma(points[0].y) + "건 (" + points[0].key + ")<br />";
-                        y += points[1].series.name + ":" + commonClass.fnComma(points[1].y) + "건 (" + points[1].key + ")<br />";
-                        y += points[2].series.name + ":" + commonClass.fnComma(points[2].y) + "건 (" + points[2].key + ")<br />";
+                        y += points[0].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[0].y) + " 건 (" + points[0].key + ")</span><br />";
+                        y += points[1].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[1].y) + " 건 (" + points[1].key + ")</span><br />";
+                        y += points[2].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[2].y) + " 건 (" + points[2].key + ")</span><br />";
                     }
                     var x = this.x;
                     //var series_name =  points[0].key;
-                    var header = '<span style="font-size:16px">'+x+'</span><table>';
+                    var header = '<span style="font-size:16px">'+x+'</span><table style="width:260px;">';
                     var template = "";
                     template += header;
                     template += '<tr>' +
@@ -665,18 +763,18 @@ function chart_scatter(ajaxData) {
                     var points = this.points;
                     var y = "";
                     if(points.length === 1) {
-                        y += points[0].series.name + ":" + commonClass.fnComma(points[0].y) + "건 <br />";
+                        y += points[0].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[0].y) + " 건</span><br />";
                     } else if (points.length === 2) {
-                        y += points[0].series.name + ":" + commonClass.fnComma(points[0].y) + "건 <br />";
-                        y += points[1].series.name + ":" + commonClass.fnComma(points[1].y) + "건 <br />";
+                        y += points[0].series.name + " :<span style='float:right;'>" + commonClass.fnComma(points[0].y) + " 건</span><br />";
+                        y += points[1].series.name + " : <span style='float:right;'>" + commonClass.fnComma(points[1].y) + " 건</span><br />";
                     } else {
-                        y += points[0].series.name + ":" + commonClass.fnComma(points[0].y) + "건 <br />";
-                        y += points[1].series.name + ":" + commonClass.fnComma(points[1].y) + "건 <br />";
-                        y += points[2].series.name + ":" + commonClass.fnComma(points[2].y) + "건 <br />";
+                        y += points[0].series.name + " : <span style='float:right;'>" + commonClass.fnComma(points[0].y) + " 건</span><br />";
+                        y += points[1].series.name + " : <span style='float:right;'>" + commonClass.fnComma(points[1].y) + " 건</span><br />";
+                        y += points[2].series.name + " : <span style='float:right;'>" + commonClass.fnComma(points[2].y) + " 건</span><br />";
                     }
                     var x = this.x;
                     //var series_name =  points[0].key;
-                    var header = '<span style="font-size:16px; z-index:9999;">'+x+'</span><table>';
+                    var header = '<span style="font-size:16px; z-index:9999;">'+x+'</span><table style="width: 130px;">';
                     var template = "";
                     template += header;
                     template += '<tr>' +
@@ -704,7 +802,7 @@ function chart_scatter(ajaxData) {
             yAxis: {
                 min: 0,
                 // max: 50000,
-                tickInterval: 50000,
+                tickInterval: 5000,
                 title: {
                     text: '',
                     rotation: 360
@@ -745,7 +843,8 @@ function chart_scatter(ajaxData) {
                 },
                 {
                     name: '의원',
-                    data: arrayList1
+                    data: arrayList1,
+                    color: '#2772C3'
                 }
             ]
         });
@@ -777,11 +876,11 @@ function chart_bar(ajaxData) {
             tooltip: {
                 formatter: function() {
                     var points = this.points;
-                    var y = points[0].series.name + ":" + commonClass.fnComma(points[0].y) + "GB<br />";
-                    y += points[1].series.name + ":" + commonClass.fnComma(points[1].y) + "GB<br />";
+                    var y = points[0].series.name + " :<span style='float:right;'> " + commonClass.fnComma(points[0].y) + " GB</span><br />";
+                    y += points[1].series.name + " :<span style='float:right;'> " + commonClass.fnComma(points[1].y) + " GB</span><br />";
                     var x = this.x;
                     //var series_name =  points[0].key;
-                    var header = '<span style="font-size:16px">'+x+'</span><table>';
+                    var header = '<span style="font-size:16px">'+x+'</span><table style="width:150px;">';
                     var template = "";
                     template += header;
                     template += '<tr>' +
@@ -829,7 +928,7 @@ function chart_bar(ajaxData) {
                     data: [parseInt(ajaxData.clikColsDiskFreeSizeGB), parseInt(ajaxData.clikDataDiskFreeSizeGB), parseInt(ajaxData.clikapiFileDiskFreeSizeGB)]
                 },
                 {
-                    name: '사용용량',
+                    name: '사용 용량',
                     data: [parseInt(ajaxData.clikColsDiskUsableSizeGB), parseInt(ajaxData.clikDataDiskUsableSizeGB), parseInt(ajaxData.clikapiFileDiskUsableSizeGB)]
                 }
                 ]
@@ -872,16 +971,16 @@ function chart_bar2(rasmblyId) {
 
                         var y = "";
                         if(points.length === 1) {
-                            y += points[0].series.name + ":" + commonClass.fnComma(points[0].y) + "건 <br />";
+                            y += points[0].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[0].y) + " 건 </span><br />";
                         } else if (points.length === 2) {
-                            y += points[0].series.name + ":" + commonClass.fnComma(points[0].y) + "건 <br />";
-                            y += points[1].series.name + ":" + commonClass.fnComma(points[1].y) + "건 <br />";
+                            y += points[0].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[0].y) + " 건 </span><br />";
+                            y += points[1].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[1].y) + " 건 </span><br />";
                         } else {
-                            y += points[0].series.name + ":" + commonClass.fnComma(points[0].y) + "건 <br />";
-                            y += points[1].series.name + ":" + commonClass.fnComma(points[1].y) + "건 <br />";
-                            y += points[2].series.name + ":" + commonClass.fnComma(points[2].y) + "건 <br />";
+                            y += points[0].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[0].y) + " 건 </span><br />";
+                            y += points[1].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[1].y) + " 건 </span><br />";
+                            y += points[2].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[2].y) + " 건 </span><br />";
                         }
-                        var header = '<span style="font-size:16px">데이터 건수</span><table>';
+                        var header = '<span style="font-size:16px">데이터 건수</span><table style="width:150px;">';
                         var template = "";
                         template += header;
                         template += '<tr>' +
@@ -910,10 +1009,10 @@ function chart_bar2(rasmblyId) {
                         text: '',
                         align: 'high'
                     },
-                    // labels: {
-                    //     overflow: 'justify'
-                    //
-                    // }
+                    labels: {
+                        overflow: 'justify'
+
+                    }
                 },
                 credits: {
                     enabled: false

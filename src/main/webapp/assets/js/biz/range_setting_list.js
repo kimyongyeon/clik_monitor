@@ -14,11 +14,20 @@ var v_table_list = new Vue({
     }
 });
 
+$(window).resize(function() {
+    // 로그 데이터 팝업 가운데 정렬
+    commonClass.fnMiddleAlignSet('.logData');
+});
+
+
 var onCreateClass = {
     init: function() {
         
-        commonClass.init(); // 공통함수 초기화 
-        
+        commonClass.init(); // 공통함수 초기화
+        commonClass.fnLogDataList(1);
+
+        commonClass.fnErrorListCloseFlag = false;
+
         this.btnSearch();
         //  상세화면
         $('#myTable3').delegate('.toggle', 'click' ,function(){
@@ -30,6 +39,12 @@ var onCreateClass = {
         this.fnDateToday();
         
         commonClass.fnMenuStyle("range");
+
+        // 로그 데이터 팝업 가운데 정렬
+        commonClass.fnMiddleAlignSet('.logData');
+    },
+    fnDetail: function(rasmblyId) {
+        location.href = "/range_setting_edit.do?rasmblyId=" + rasmblyId;
     },
     btnExcelSave: function() {
         location.href = "/excelDownload.do?keyWordType=2";

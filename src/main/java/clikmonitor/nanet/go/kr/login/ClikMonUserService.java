@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 import javax.annotation.Resource;
 
+import static org.hsqldb.HsqlDateTime.e;
+
 /**
  * Created by kimyongyeon on 2016-08-29.
  */
@@ -27,6 +29,11 @@ public class ClikMonUserService implements UserDetailsService {
 
         try{
             LoginVO resultVO = loginMapper.selectLoginOne(loginVO);
+            System.out.println(resultVO);
+            if(resultVO == null) {
+                clikMonUser.setPassword(standardPasswordEncoder.encode(""));
+                return clikMonUser;
+            }
             clikMonUser.setUsername(userName);
             String pw = resultVO.getPw();
             clikMonUser.setPassword(standardPasswordEncoder.encode(pw));

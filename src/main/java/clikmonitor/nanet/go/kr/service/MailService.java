@@ -92,19 +92,20 @@ public interface MailService {
             // 의회별 관리에 대한 받을사람 이메일 주소를 콤바로 저장
 //            mailVO.setReceiver(recvs.stream().collect(Collectors.joining(",")));
             // select로 바뀌면서 아래 로직을 바꿈. VO checkbox vo도 변경함.
-            if(mailVO.getAreas1().length != 0) {
-                mailVO.setRasmlyIds(mailVO.getAreas1()[0]);
+            if(!"".equals(mailVO.getAreas1()[0])) {
+                if(mailVO.getAreas1().length != 0) {
+                    mailVO.setRasmlyIds(mailVO.getAreas1()[0]);
+                }
             }
-            if(mailVO.getAreas2().length != 0) {
-                mailVO.setRasmlyIds(mailVO.getAreas2()[0]);
+            if(!"".equals(mailVO.getAreas2()[0])) {
+                if(mailVO.getAreas2().length != 0) {
+                    mailVO.setRasmlyIds(mailVO.getAreas2()[0]);
+                }
             }
+
             mailVO.setReceiver(mailVO.getReceiver());
             try {
-                if("".equals(mailVO.getEmailId())) { // 등록
-                    mailMapper.insertMailingSetProc(mailVO);
-                } else { // 수정
-                    mailMapper.updateMailingSetProc(mailVO);
-                }
+                mailMapper.insertMailingSetProc(mailVO);
             } catch (Exception e) {
                 mailMapper.updateMailingSetProc(mailVO);
             }

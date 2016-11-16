@@ -26,52 +26,60 @@
     </sql>
 
     <sql id = "meta_where">
-        AND REGDATE BETWEEN #{startDate} AND #{endDate} -- 최종등록일
-        AND REGION like '%' || #{region} || '%' -- 지역
-        AND SITENM like '%' || #{siteNm} || '%' -- 사이트명
+        <if test="startDate == endDate">
+            AND WEBROBOT_CONTENTS.REGDATE LIKE #{startDate} || '%' -- 최종등록일
+        </if>
+        <if test="startDate != endDate">
+            AND WEBROBOT_CONTENTS.REGDATE BETWEEN #{startDate} || '000000' AND #{endDate} || '999999' -- 최종등록일
+        </if>
+        AND WEBROBOT_CONTENTS.REGION LIKE '%' || #{region} || '%' -- 지역
+        AND WEBROBOT_CONTENTS.SITEID LIKE '%' || #{siteId} || '%' -- 사이트명
+        GROUP BY WEBROBOT_SITE.SITENM,
+          WEBROBOT_SEED.SEEDNM,
+          WEBROBOT_CONTENTS.DOCTYPE,
+          WEBROBOT_CONTENTS.SEEDID,
+          WEBROBOT_CONTENTS.SEEDURL
+        ORDER BY MAX(WEBROBOT_CONTENTS.REGDATE) DESC
     </sql>
 
 
     <select id="selectMetaExcelExportList" parameterType="metaDataSearchVO" resultMap="metaDataMap">
-        SELECT
-            ROWNUM NUM-- 번호
-            , WEBROBOT_CONTENTS.CATEGORYID
-            , (SELECT (SELECT CODE_ID_NM FROM COMMON_CODE WHERE CL_CODE='LMC' AND CODE_ID = BRTC_CODE) AS COMDENM FROM ORGAN, COLGOVER WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID AND ISVIEW = 'Y' AND LOASM_CODE LIKE WEBROBOT_CONTENTS.REGION || '%' AND ROWNUM = 1) AREA  -- 지역
-            , WEBROBOT_CONTENTS.SEEDNM -- 사이트명
-            , WEBROBOT_CONTENTS.SEEDID -- 사이트ID
-            , WEBROBOT_CONTENTS.SEEDURL -- 사이트URL
-            , (SELECT DOCTYPE_NAME	FROM OUTDOCTYPE WHERE DOCTYPE = WEBROBOT_CONTENTS.DOCTYPE) DOCTYPE_NAME -- 자료유형
-            , WEBROBOT_CONTENTS.SITENM -- 게시판명
-            , WEBROBOT_CONTENTS.URL -- 게시판 URL
-            , WEBROBOT_CONTENTS.REGDATE -- 최종등록
-        FROM WEBROBOT_CONTENTS
-        WHERE WEBROBOT_CONTENTS.CUD_CODE != 'D'	AND WEBROBOT_CONTENTS.DOCTYPE != '140'
-
+        <include refid="h_top" />
+        SELECT /* selectMetaExcelExportList */
+            WEBROBOT_SITE.SITENM,
+            WEBROBOT_SEED.SEEDNM,
+            MAX(WEBROBOT_CONTENTS.REGDATE) REGDATE_ORG,
+            SUBSTR(MAX(WEBROBOT_CONTENTS.REGDATE),1,4)||'-'||SUBSTR(MAX(WEBROBOT_CONTENTS.REGDATE),5,2)||'-'||SUBSTR(MAX(WEBROBOT_CONTENTS.REGDATE),7,2) REGDATE,
+            ( SELECT DOCTYPE_NAME FROM OUTDOCTYPE WHERE DOCTYPE = WEBROBOT_CONTENTS.DOCTYPE) DOCTYPE_NAME, -- 자료유형,
+            WEBROBOT_CONTENTS.SEEDID, -- 사이트ID,
+            WEBROBOT_CONTENTS.SEEDURL -- 사이트URL
+        FROM WEBROBOT_CONTENTS, WEBROBOT_SITE,  WEBROBOT_SEED
+        WHERE WEBROBOT_CONTENTS.SITEID = WEBROBOT_SITE.SITEID
+        AND WEBROBOT_CONTENTS.SEEDID = WEBROBOT_SEED.SEEDID
+        AND WEBROBOT_SITE.SITEID = WEBROBOT_SEED.SITEID
+        AND WEBROBOT_CONTENTS.CUD_CODE != 'D'   AND WEBROBOT_CONTENTS.DOCTYPE != '140'
         <include refid="meta_where" />
+        <include refid="h_bottom" />
     </select>
 
     <!--메타데이터 목록  -->
     <select id="selectMetaDataPagingList" parameterType="metaDataSearchVO" resultMap="metaDataMap">
 
         <include refid="h_top" />
-
-        SELECT
-            ROWNUM NUM-- 번호
-            , WEBROBOT_CONTENTS.CATEGORYID
-            , (SELECT (SELECT CODE_ID_NM FROM COMMON_CODE WHERE CL_CODE='LMC' AND CODE_ID = BRTC_CODE) AS COMDENM FROM ORGAN, COLGOVER WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID AND ISVIEW = 'Y' AND LOASM_CODE LIKE WEBROBOT_CONTENTS.REGION || '%' AND ROWNUM = 1) AREA  -- 지역
-            , WEBROBOT_CONTENTS.SEEDNM -- 사이트명
-            , WEBROBOT_CONTENTS.SEEDID -- 사이트ID
-            , WEBROBOT_CONTENTS.SEEDURL -- 사이트URL
-            , (SELECT DOCTYPE_NAME	FROM OUTDOCTYPE WHERE DOCTYPE = WEBROBOT_CONTENTS.DOCTYPE) DOCTYPE_NAME -- 자료유형
-            , WEBROBOT_CONTENTS.SITENM -- 게시판명
-            , WEBROBOT_CONTENTS.URL -- 게시판 URL
-            /*, WEBROBOT_CONTENTS.REGDATE -- 최종등록*/
-            , SUBSTR(WEBROBOT_CONTENTS.REGDATE,1,4)||'-'||SUBSTR(WEBROBOT_CONTENTS.REGDATE,5,2)||'-'||SUBSTR(WEBROBOT_CONTENTS.REGDATE,7,2) REGDATE
-        FROM WEBROBOT_CONTENTS
-        WHERE WEBROBOT_CONTENTS.CUD_CODE != 'D'	AND WEBROBOT_CONTENTS.DOCTYPE != '140'
-
+        SELECT /* selectMetaDataPagingList */
+            WEBROBOT_SITE.SITENM,
+            WEBROBOT_SEED.SEEDNM,
+            MAX(WEBROBOT_CONTENTS.REGDATE) REGDATE_ORG,
+            SUBSTR(MAX(WEBROBOT_CONTENTS.REGDATE),1,4)||'-'||SUBSTR(MAX(WEBROBOT_CONTENTS.REGDATE),5,2)||'-'||SUBSTR(MAX(WEBROBOT_CONTENTS.REGDATE),7,2) REGDATE,
+            ( SELECT DOCTYPE_NAME FROM OUTDOCTYPE WHERE DOCTYPE = WEBROBOT_CONTENTS.DOCTYPE) DOCTYPE_NAME, -- 자료유형,
+            WEBROBOT_CONTENTS.SEEDID, -- 사이트ID,
+            WEBROBOT_CONTENTS.SEEDURL -- 사이트URL
+        FROM WEBROBOT_CONTENTS, WEBROBOT_SITE,  WEBROBOT_SEED
+        WHERE WEBROBOT_CONTENTS.SITEID = WEBROBOT_SITE.SITEID
+        AND WEBROBOT_CONTENTS.SEEDID = WEBROBOT_SEED.SEEDID
+        AND WEBROBOT_SITE.SITEID = WEBROBOT_SEED.SITEID
+        AND WEBROBOT_CONTENTS.CUD_CODE != 'D'   AND WEBROBOT_CONTENTS.DOCTYPE != '140'
         <include refid="meta_where" />
-
         <include refid="h_bottom" />
 
 
@@ -81,17 +89,29 @@
     <select id="selectMetaDataRecordTotalCount" parameterType="metaDataSearchVO" resultType="int" >
 
         <![CDATA[
-			SELECT
-				COUNT(*) AS CNT
-			FROM
-				WEBROBOT_CONTENTS
-			WHERE
-				CUD_CODE != 'D'
-				AND DOCTYPE != '140'
-	        	]]>
-
+			SELECT  COUNT(*) AS CNT FROM (
+                SELECT /* selectMetaDataPagingList */
+                    WEBROBOT_SITE.SITENM,
+                    WEBROBOT_SEED.SEEDNM,
+                    MAX(WEBROBOT_CONTENTS.REGDATE) REGDATE_ORG,
+                    SUBSTR(MAX(WEBROBOT_CONTENTS.REGDATE),1,4)||'-'||SUBSTR(MAX(WEBROBOT_CONTENTS.REGDATE),5,2)||'-'||SUBSTR(MAX(WEBROBOT_CONTENTS.REGDATE),7,2) REGDATE,
+                    ( SELECT DOCTYPE_NAME FROM OUTDOCTYPE WHERE DOCTYPE = WEBROBOT_CONTENTS.DOCTYPE) DOCTYPE_NAME, -- 자료유형,
+                    WEBROBOT_CONTENTS.SEEDID, -- 사이트ID,
+                    WEBROBOT_CONTENTS.SEEDURL -- 사이트URL
+                FROM WEBROBOT_CONTENTS, WEBROBOT_SITE,  WEBROBOT_SEED
+                WHERE WEBROBOT_CONTENTS.SITEID = WEBROBOT_SITE.SITEID
+                AND WEBROBOT_CONTENTS.SEEDID = WEBROBOT_SEED.SEEDID
+                AND WEBROBOT_SITE.SITEID = WEBROBOT_SEED.SITEID
+                AND WEBROBOT_CONTENTS.CUD_CODE != 'D'   AND WEBROBOT_CONTENTS.DOCTYPE != '140'
+        ]]>
         <include refid="meta_where" />
+			)
+    </select>
 
+    <select id="selectSiteList" parameterType="metaDataSearchVO" resultMap="metaDataMap">
+        SELECT SITEID, SITENM
+        FROM WEBROBOT_SITE
+        WHERE REGION = #{region}
     </select>
 
 </mapper>

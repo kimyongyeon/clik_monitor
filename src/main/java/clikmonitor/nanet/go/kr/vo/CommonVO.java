@@ -18,6 +18,7 @@ public class CommonVO {
     // -- 지역
     private String loasmCode; // 지역코드
     private String loasmNm; // 지역명
+    private String rasmblynm;
 
     private String code;
     private String codenm;
@@ -26,6 +27,9 @@ public class CommonVO {
     private boolean state;
     private List<Children> childrens;
     private static List<CommonVO> trees;
+
+    private String ordr;
+    private String ordr2;
 
     @Data
     @AllArgsConstructor

@@ -27,11 +27,12 @@ public class StatisticsVO {
     private String biCount = ""; // IS '의안_개수';
     private String bifileCount = ""; // IS '의안파일_개수';
     private String bimintsCount = ""; // IS '의안회의록_개수';
-    private String itncasembyCount = ""; // IS '발의의원_개수';
+    private String itncasembyCountasembyCount = ""; // IS '발의의원_개수';
     private String mintsCount = ""; // IS '회의록_개수';
     private String apndxCount = ""; // IS '부록_개수';
     private String mtrCount = ""; // IS '안건_개수';
     private String spkngCount = ""; // IS '발언_개수';
+    private String biCountmintsCount = "";
     // 항목별최종전송데이터
     private String billMinutesFrstRegistDt; // 회의록최종일자
     private String itemFrstRegistDt; // 안건최종일자

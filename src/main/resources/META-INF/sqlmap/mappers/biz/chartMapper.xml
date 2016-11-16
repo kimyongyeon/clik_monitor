@@ -6,9 +6,8 @@
 
     <resultMap id="chartMap" type="chartVO"></resultMap>
 
-	<!-- 전체평균요청건수 목록 조회 : 금주,  REQUST_RECPTN_TM : X축, CNT: Y축-->
+	<!-- 전체평균요청건수 목록 조회 : 최근1개월,  REQUST_RECPTN_TM : X축, CNT: Y축-->
     <select id="selectTotalAvgRequestCountList1" parameterType="chartSearchVO" resultMap="chartMap">
-	<!--<select id="selectTotalAvgRequestCountList1" parameterType="chartSearchVO" resultType="chartVO">-->
         WITH /*selectTotalAvgRequestCountList1*/ TEMP AS (
             SELECT LOASM_CODE AS REQUST_INSTT_ID, LOASM_NM AS RASMBLYNM
             FROM ORGAN, COLGOVER
@@ -32,7 +31,6 @@
             WHERE 1 = 1
             </if>
             AND RESULT_CODE = '000'
---             AND OCCRRNC_DE BETWEEN TO_CHAR(TRUNC(SYSDATE,'YYYY'),'YYYYMMDD') AND TO_CHAR(LAST_DAY(ADD_MONTHS(TO_CHAR(TRUNC(SYSDATE,'YYYY'),'YYYYMMDD'),+11)),'YYYYMMDD')
             AND OCCRRNC_DE BETWEEN TO_CHAR(TRUNC(SYSDATE+1)-TO_CHAR(SYSDATE,'D'),'YYYYMMDD') AND TO_CHAR(TRUNC(SYSDATE+1)-TO_CHAR(SYSDATE,'D'),'YYYYMMDD')
             GROUP BY REQUST_INSTT_ID ) D
         WHERE C.REQUST_INSTT_ID = D.REQUST_INSTT_ID(+)
@@ -67,8 +65,6 @@
                 WHERE 1 = 1
             </if>
           AND RESULT_CODE = '000'
---            AND OCCRRNC_DE BETWEEN TO_CHAR(TRUNC(SYSDATE,'YYYY'),'YYYYMMDD') AND TO_CHAR(LAST_DAY(ADD_MONTHS(TO_CHAR(TRUNC(SYSDATE,'YYYY'),'YYYYMMDD'),+11)),'YYYYMMDD')
---            AND OCCRRNC_DE BETWEEN TRUNC(SYSDATE-6)-TO_CHAR(SYSDATE, 'D') AND TRUNC(TRUNC(SYSDATE)+2)-TO_CHAR(SYSDATE, 'D')
            AND OCCRRNC_DE BETWEEN  TO_CHAR(TRUNC(SYSDATE-6)-TO_CHAR(SYSDATE, 'D'),'YYYYMMDD') AND TO_CHAR(TRUNC(TRUNC(SYSDATE)+2)-TO_CHAR(SYSDATE, 'D'),'YYYYMMDD')
            GROUP BY REQUST_INSTT_ID )D
         WHERE C.REQUST_INSTT_ID = D.REQUST_INSTT_ID(+)
@@ -138,10 +134,21 @@
             <if test="ramblyList == null">
                 WHERE 1 = 1
             </if>
-          AND RESULT_CODE = '000'
-           --AND OCCRRNC_DE BETWEEN TO_CHAR(TRUNC(SYSDATE,'YYYY'),'YYYYMMDD') AND TO_CHAR(LAST_DAY(ADD_MONTHS(TO_CHAR(TRUNC(SYSDATE,'YYYY'),'YYYYMMDD'),+11)),'YYYYMMDD')
-           --AND OCCRRNC_DE BETWEEN TRUNC(ADD_MONTHS(SYSDATE,-1)+1)-TO_CHAR (SYSDATE,'DD') AND TRUNC(LAST_DAY(ADD_MONTHS(SYSDATE, -1)))
-           AND OCCRRNC_DE like  REPLACE(SUBSTR(TRUNC(ADD_MONTHS(SYSDATE,-1)+1)-TO_CHAR (SYSDATE,'DD'),0,7),'/','') || '%'
+           AND RESULT_CODE = '000'
+           /*AND CNTC_ID IN ('REQ401','REQ203','REQ301')*/
+           AND CNTC_ID IN
+           <foreach item="item" index="index" collection="cntcIdList" open="(" close=")" separator=",">
+               #{item}
+           </foreach>
+           <if test="month == 1">
+            AND OCCRRNC_DE like  REPLACE(SUBSTR(TRUNC(ADD_MONTHS(SYSDATE,-1)+1)-TO_CHAR (SYSDATE,'DD'),0,7),'/','') || '%'
+           </if>
+           <if test="month == 3">
+            AND OCCRRNC_DE BETWEEN  REPLACE(SUBSTR(TRUNC(ADD_MONTHS(SYSDATE,-3)+1)-TO_CHAR (SYSDATE,'DD'),0,7),'/','') AND REPLACE(SUBSTR(TRUNC(ADD_MONTHS(SYSDATE,0)+1)-TO_CHAR (SYSDATE,'DD'),0,7),'/','')
+           </if>
+           <if test="month == 6">
+            AND OCCRRNC_DE BETWEEN  REPLACE(SUBSTR(TRUNC(ADD_MONTHS(SYSDATE,-6)+1)-TO_CHAR (SYSDATE,'DD'),0,7),'/','') AND REPLACE(SUBSTR(TRUNC(ADD_MONTHS(SYSDATE,0)+1)-TO_CHAR (SYSDATE,'DD'),0,7),'/','')
+           </if>
            GROUP BY REQUST_INSTT_ID )D
         WHERE C.REQUST_INSTT_ID = D.REQUST_INSTT_ID(+)
           AND C.RASMBLYNM IS NOT NULL
@@ -149,7 +156,7 @@
 	<!-- 트랜잭션 목록 조회 -->
     <select id="selectTransactionList" parameterType="chartSearchVO" resultMap="chartMap">
         <![CDATA[
-            WITH AA AS (
+            WITH /*selectTransactionList*/ AA AS (
                 SELECT  BB.MAKE_DATES+LEVEL-1 || '월' XDATA, 0 YDATA, ROWNUM ORDR
                 FROM (SELECT TO_CHAR(TRUNC(SYSDATE,'YYYY'),'MM') MAKE_DATES  FROM DUAL) BB CONNECT BY LEVEL <= 12
                 ORDER BY ORDR ASC
@@ -158,12 +165,16 @@
                 SELECT CNTC_ID, EXTRACT(MONTH FROM FRST_REGIST_PNTTM) || '월' AS XDATA , COUNT(*) YDATA
                 FROM (SELECT CNTC_ID, FRST_REGIST_PNTTM FROM TAR_LOG
         ]]>
-            WHERE CNTC_ID =  #{cntcId}
+            WHERE 1 =1
             AND RESULT_CODE = '000'
-                <!--WHERE CNTC_ID IN
-                <foreach item="item" index="index" collection="cntcIdList" open="(" close=")" separator=",">
-                    #{item}
-                </foreach>-->
+            AND CNTC_ID IN
+            <foreach item="item" index="index" collection="cntcIdList" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            AND REQUST_INSTT_ID IN
+            <foreach item="item" index="index" collection="ramblyList" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         <![CDATA[
                 ORDER BY FRST_REGIST_PNTTM  )
             WHERE FRST_REGIST_PNTTM > TO_CHAR(TRUNC(SYSDATE,'YYYY'),'YYYYMMDD')
@@ -171,9 +182,331 @@
             ) BB, AA WHERE AA.XDATA = BB.XDATA(+) ORDER BY CNTC_ID, ORDR ASC
          ]]>
     </select>
+    <sql id = "h_top">
+        <![CDATA[
+			SELECT  *
+            FROM	(
+            		SELECT 	ROWNUM RNUM, ALL_LIST.*
+            		FROM  	(
+        ]]>
+    </sql>
+
+    <sql id = "h_bottom">
+        <![CDATA[
+							) ALL_LIST
+					)
+			WHERE  	RNUM  > #{firstIndex}
+	        AND  	RNUM <= #{firstIndex} + #{recordCountPerPage}
+	    ]]>
+    </sql>
+
+    <sql id="h_with">
+        WITH /*selectDataCollectionList*/ TEMP AS (
+            SELECT LOASM_CODE AS CODE, LOASM_NM AS CODENM
+            FROM ORGAN, COLGOVER
+            WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+            AND ORGAN.LOASM_CODE IN
+            <foreach item="item" index="index" collection="ramblyList" open="(" close=")" separator=",">#{item}
+            </foreach>
+            AND ISVIEW =
+            'Y'
+            ORDER BY ORDR ASC
+        )
+    </sql>
+
+    <select id="selectDataCollectionListCount" parameterType="chartSearchVO" resultType="int">
+        SELECT COUNT(*) FROM (
+            <include refid="h_with" />
+            <!--WITH /*selectDataCollectionList*/ TEMP AS (
+                SELECT LOASM_CODE AS CODE, LOASM_NM AS CODENM
+                FROM ORGAN, COLGOVER
+                WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+                AND ORGAN.LOASM_CODE IN
+                <foreach item="item" index="index" collection="ramblyList" open="(" close=")" separator=",">#{item}
+                </foreach>
+                AND ISVIEW =
+                'Y'
+                ORDER BY ORDR ASC
+            )-->
+            SELECT CODE,
+                DECODE (REPLACE(REPLACE(REPLACE(CODENM,'의회',''),'특별',''),'시','')
+                , '서울' , '서울'
+                , '부산광역' ,'부산'
+                , '대구광역' ,'대구'
+                , '인천광역' ,'인천'
+                , '광주광역' ,'광주'
+                , '대전광역' ,'대전'
+                , '울산광역' ,'울산'
+                , '세종자치' ,'세종'
+                , '경기도' ,'경기'
+                , '강원도' ,'강원'
+                , '충청북도' ,'충북'
+                , '충청남도' ,'충남'
+                , '전라북도' ,'전북'
+                , '전라남도' ,'전남'
+                , '경상북도' ,'경북'
+                , '경상남도' ,'경남'
+                , '제주자치도' ,'제주'
+                , '경기도 부천' ,'부천'
+                , '경기도 하남' ,'하남'
+                , '강원도 강릉' ,'강릉'
+                , '충청북도 청주' ,'청주'
+                , '충청남도 서산' ,'서산'
+                , '전라북도 정읍' ,'정읍'
+                , '전라남도 순천' ,'순천'
+                , '경상북도 상주' ,'상주'
+                , '경상남도 거제' ,'거제'
+                , '경상남도 김해' ,'김해'
+                ) RASMBLYNM,
+                CODENM xData,
+                CASE LENGTH(BB.TITLE) WHEN NULL THEN '회의록' ELSE BB.TITLE END title,
+                DT,
+                ORDR,
+                CNT yData
+            FROM TEMP AA, (SELECT '회의록' AS TITLE , A.RASMBLY_ID ,
+            (SELECT RASMBLY_NM FROM COLGOVER WHERE RASMBLY_ID = A.RASMBLY_ID) AS RASMBLY_NM , MAX(A.MTG_DE) AS DT ,
+            (SELECT ORDR FROM COLGOVER WHERE RASMBLY_ID = A.RASMBLY_ID) AS ORDR,
+            (SELECT COUNT(*) FROM MINUTES WHERE RASMBLY_ID = A. RASMBLY_ID AND CNTC_INPUT_SE_CODE = 'API') AS CNT
+            FROM MINUTES A
+            WHERE A.CNTC_INPUT_SE_CODE = 'API'
+            AND RASMBLY_ID NOT LIKE 'TEST%'
+            AND RASMBLY_ID IN
+            <foreach item="item" index="index" collection="ramblyList" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            GROUP BY A.RASMBLY_ID) BB
+            WHERE AA.CODE = BB.RASMBLY_ID(+)
+        )
+    </select>
 	<!-- 데이터 수집현황 목록 조회  -->
+    <select id="selectDataCollectionList1" parameterType="chartSearchVO" resultMap="chartMap">
+        <include refid="h_top" />
+        <include refid="h_with" />
+        <!--WITH /*selectDataCollectionList*/ TEMP AS (
+        SELECT LOASM_CODE AS CODE, LOASM_NM AS CODENM
+        FROM ORGAN, COLGOVER
+        WHERE ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+        AND ORGAN.LOASM_CODE IN
+        <foreach item="item" index="index" collection="ramblyList" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        AND ISVIEW = 'Y'
+        ORDER BY ORDR ASC
+        )-->
+        SELECT CODE,
+        DECODE (REPLACE(REPLACE(REPLACE(CODENM,'의회',''),'특별',''),'시','')
+        , '서울'    ,'서울'
+        , '부산광역' ,'부산'
+        , '대구광역' ,'대구'
+        , '인천광역' ,'인천'
+        , '광주광역' ,'광주'
+        , '대전광역' ,'대전'
+        , '울산광역' ,'울산'
+        , '세종자치' ,'세종'
+        , '경기도'  ,'경기'
+        , '강원도'  ,'강원'
+        , '충청북도' ,'충북'
+        , '충청남도' ,'충남'
+        , '전라북도' ,'전북'
+        , '전라남도' ,'전남'
+        , '경상북도' ,'경북'
+        , '경상남도' ,'경남'
+        , '제주자치도' ,'제주'
+        , '경기도 부천' ,'부천'
+        , '경기도 하남' ,'하남'
+        , '강원도 강릉' ,'강릉'
+        , '충청북도 청주' ,'청주'
+        , '충청남도 서산' ,'서산'
+        , '전라북도 정읍' ,'정읍'
+        , '전라남도 순천' ,'순천'
+        , '경상북도 상주' ,'상주'
+        , '경상남도 거제' ,'거제'
+        , '경상남도 김해' ,'김해'
+        ) RASMBLYNM,
+        CODENM xData,
+        CASE LENGTH(BB.TITLE) WHEN NULL THEN '회의록' ELSE BB.TITLE END title,
+        DT,
+        ORDR,
+        CNT yData
+        FROM TEMP AA, (SELECT '회의록' AS TITLE ,  A.RASMBLY_ID ,
+        (SELECT RASMBLY_NM  FROM COLGOVER  WHERE RASMBLY_ID = A.RASMBLY_ID) AS RASMBLY_NM ,  MAX(A.MTG_DE) AS DT ,
+        (SELECT ORDR FROM COLGOVER WHERE RASMBLY_ID = A.RASMBLY_ID) AS ORDR,
+        (SELECT COUNT(*) FROM MINUTES  WHERE RASMBLY_ID = A.RASMBLY_ID  AND CNTC_INPUT_SE_CODE = 'API') AS CNT
+        FROM MINUTES A
+        WHERE A.CNTC_INPUT_SE_CODE = 'API'
+        AND RASMBLY_ID NOT LIKE 'TEST%'
+        AND RASMBLY_ID IN
+        <foreach item="item" index="index" collection="ramblyList" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        GROUP BY A.RASMBLY_ID) BB
+        WHERE AA.CODE = BB.RASMBLY_ID(+)
+        <include refid="h_bottom" />
+    </select>
+    <select id="selectDataCollectionList2" parameterType="chartSearchVO" resultMap="chartMap">
+        <include refid="h_top" />
+        <include refid="h_with" />
+        SELECT CODE,
+        DECODE (REPLACE(REPLACE(REPLACE(CODENM,'의회',''),'특별',''),'시','')
+        , '서울'    ,'서울'
+        , '부산광역' ,'부산'
+        , '대구광역' ,'대구'
+        , '인천광역' ,'인천'
+        , '광주광역' ,'광주'
+        , '대전광역' ,'대전'
+        , '울산광역' ,'울산'
+        , '세종자치' ,'세종'
+        , '경기도'  ,'경기'
+        , '강원도'  ,'강원'
+        , '충청북도' ,'충북'
+        , '충청남도' ,'충남'
+        , '전라북도' ,'전북'
+        , '전라남도' ,'전남'
+        , '경상북도' ,'경북'
+        , '경상남도' ,'경남'
+        , '제주자치도' ,'제주'
+        , '경기도 부천' ,'부천'
+        , '경기도 하남' ,'하남'
+        , '강원도 강릉' ,'강릉'
+        , '충청북도 청주' ,'청주'
+        , '충청남도 서산' ,'서산'
+        , '전라북도 정읍' ,'정읍'
+        , '전라남도 순천' ,'순천'
+        , '경상북도 상주' ,'상주'
+        , '경상남도 거제' ,'거제'
+        , '경상남도 김해' ,'김해'
+        ) RASMBLYNM,
+        CODENM xData,
+        CASE LENGTH(BB.TITLE) WHEN NULL THEN '의안' ELSE BB.TITLE END title,
+        DT,
+        ORDR,
+        CNT yData
+        FROM TEMP AA, (SELECT '의안' AS TITLE ,  A.RASMBLY_ID ,
+        (SELECT RASMBLY_NM FROM COLGOVER  WHERE RASMBLY_ID = A.RASMBLY_ID) AS RASMBLY_NM ,  MAX(A.ITNC_DE) AS DT ,
+        (SELECT ORDR  FROM COLGOVER   WHERE RASMBLY_ID = A.RASMBLY_ID) AS ORDR,
+        (SELECT COUNT(*)  FROM BILL   WHERE RASMBLY_ID = A.RASMBLY_ID  AND CNTC_INPUT_SE_CODE = 'API') AS CNT
+        FROM BILL A
+        WHERE LENGTH(TRIM(A.ITNC_DE)) = 8
+        AND RASMBLY_ID NOT LIKE 'TEST%'
+        AND RASMBLY_ID IN
+        <foreach item="item" index="index" collection="ramblyList" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        AND A.CNTC_INPUT_SE_CODE = 'API'
+        GROUP BY A.RASMBLY_ID) BB
+        WHERE AA.CODE = BB.RASMBLY_ID(+)
+        <include refid="h_bottom" />
+    </select>
+    <select id="selectDataCollectionList3" parameterType="chartSearchVO" resultMap="chartMap">
+        <include refid="h_top" />
+        <include refid="h_with" />
+        SELECT CODE,
+        DECODE (REPLACE(REPLACE(REPLACE(CODENM,'의회',''),'특별',''),'시','')
+        , '서울'    ,'서울'
+        , '부산광역' ,'부산'
+        , '대구광역' ,'대구'
+        , '인천광역' ,'인천'
+        , '광주광역' ,'광주'
+        , '대전광역' ,'대전'
+        , '울산광역' ,'울산'
+        , '세종자치' ,'세종'
+        , '경기도'  ,'경기'
+        , '강원도'  ,'강원'
+        , '충청북도' ,'충북'
+        , '충청남도' ,'충남'
+        , '전라북도' ,'전북'
+        , '전라남도' ,'전남'
+        , '경상북도' ,'경북'
+        , '경상남도' ,'경남'
+        , '제주자치도' ,'제주'
+        , '경기도 부천' ,'부천'
+        , '경기도 하남' ,'하남'
+        , '강원도 강릉' ,'강릉'
+        , '충청북도 청주' ,'청주'
+        , '충청남도 서산' ,'서산'
+        , '전라북도 정읍' ,'정읍'
+        , '전라남도 순천' ,'순천'
+        , '경상북도 상주' ,'상주'
+        , '경상남도 거제' ,'거제'
+        , '경상남도 김해' ,'김해'
+        ) RASMBLYNM,
+        CODENM xData,
+        CASE LENGTH(BB.TITLE) WHEN NULL THEN '의원' ELSE BB.TITLE END title,
+        DT,
+        ORDR,
+        CNT yData
+        FROM TEMP AA, (SELECT '의원' AS TITLE , A.RASMBLY_ID ,
+        (SELECT RASMBLY_NM  FROM COLGOVER  WHERE RASMBLY_ID = A.RASMBLY_ID) AS RASMBLY_NM ,  MAX(A.LAST_UPDT_DT) AS DT ,
+        (SELECT ORDR  FROM COLGOVER  WHERE RASMBLY_ID = A.RASMBLY_ID) AS ORDR,
+        (SELECT COUNT(*)  FROM LAMAN WHERE RASMBLY_ID = A.RASMBLY_ID  AND CNTC_INPUT_SE_CODE = 'API') AS CNT
+        FROM LAMAN A
+        WHERE A.CNTC_INPUT_SE_CODE = 'API'
+        AND RASMBLY_ID NOT LIKE 'TEST%'
+        AND RASMBLY_ID IN
+        <foreach item="item" index="index" collection="ramblyList" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        GROUP BY A.RASMBLY_ID) BB
+        WHERE AA.CODE = BB.RASMBLY_ID(+)
+        <include refid="h_bottom" />
+    </select>
+    <select id="selectDataCollectionList4" parameterType="chartSearchVO" resultMap="chartMap">
+        <include refid="h_top" />
+        <include refid="h_with" />
+        SELECT CODE,
+        DECODE (REPLACE(REPLACE(REPLACE(CODENM,'의회',''),'특별',''),'시','')
+        , '서울'    ,'서울'
+        , '부산광역' ,'부산'
+        , '대구광역' ,'대구'
+        , '인천광역' ,'인천'
+        , '광주광역' ,'광주'
+        , '대전광역' ,'대전'
+        , '울산광역' ,'울산'
+        , '세종자치' ,'세종'
+        , '경기도'  ,'경기'
+        , '강원도'  ,'강원'
+        , '충청북도' ,'충북'
+        , '충청남도' ,'충남'
+        , '전라북도' ,'전북'
+        , '전라남도' ,'전남'
+        , '경상북도' ,'경북'
+        , '경상남도' ,'경남'
+        , '제주자치도' ,'제주'
+        , '경기도 부천' ,'부천'
+        , '경기도 하남' ,'하남'
+        , '강원도 강릉' ,'강릉'
+        , '충청북도 청주' ,'청주'
+        , '충청남도 서산' ,'서산'
+        , '전라북도 정읍' ,'정읍'
+        , '전라남도 순천' ,'순천'
+        , '경상북도 상주' ,'상주'
+        , '경상남도 거제' ,'거제'
+        , '경상남도 김해' ,'김해'
+        ) RASMBLYNM,
+        CODENM xData,
+        CASE LENGTH(BB.TITLE) WHEN NULL THEN '부록' ELSE BB.TITLE END title,
+        DT,
+        ORDR,
+        CNT yData
+        FROM TEMP AA, (SELECT '부록' AS TITLE ,  A.RASMBLY_ID ,
+        (SELECT RASMBLY_NM  FROM COLGOVER  WHERE RASMBLY_ID = A.RASMBLY_ID) AS RASMBLY_NM ,  MAX(A.LAST_UPDT_DT) AS DT ,
+        (SELECT ORDR  FROM COLGOVER  WHERE RASMBLY_ID = A.RASMBLY_ID) AS ORDR,
+        (SELECT COUNT(*) FROM MINUTES_APPENDIX WHERE RASMBLY_ID = A.RASMBLY_ID AND CNTC_INPUT_SE_CODE = 'API') AS CNT
+        FROM MINUTES_APPENDIX A
+        WHERE A.CNTC_INPUT_SE_CODE = 'API'
+        AND RASMBLY_ID NOT LIKE 'TEST%'
+        AND RASMBLY_ID IN
+        <foreach item="item" index="index" collection="ramblyList" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        GROUP BY A.RASMBLY_ID) BB
+        WHERE AA.CODE = BB.RASMBLY_ID(+)
+        <include refid="h_bottom" />
+    </select>
+
     <select id="selectDataCollectionList" parameterType="chartSearchVO" resultMap="chartMap">
 
+            <include refid="h_top" />
             WITH /*selectDataCollectionList*/ TEMP AS (
                 SELECT LOASM_CODE AS CODE, LOASM_NM AS CODENM
                 FROM ORGAN, COLGOVER
@@ -381,6 +714,7 @@
                 </foreach>
                GROUP BY A.RASMBLY_ID) BB
             WHERE AA.CODE = BB.RASMBLY_ID(+)
+            <include refid="h_bottom" />
 
 	</select>
 

@@ -106,7 +106,7 @@
                             <td>
                                 <span class="select01">
                                     <select name="keyWordType" id="keyWordType" class="select01">
-                                        <option value="">선택</option>
+                                        <option value="">전체</option>
                                         <option value="1">제목</option>
                                         <option value="2">받는사람</option>
                                     </select>

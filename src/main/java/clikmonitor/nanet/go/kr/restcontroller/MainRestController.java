@@ -24,9 +24,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.swing.*;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -201,12 +207,12 @@ public class MainRestController  {
      */
     @RequestMapping(value = "/getAreas.do"
             , headers = HttpHeaders.ACCEPT + "=" + MediaType.APPLICATION_JSON_UTF8_VALUE
-            , method = RequestMethod.GET)
-    public Map getAreas() {
+            , method = RequestMethod.POST)
+    public Map getAreas(@RequestBody  AgentSearchVO agentSearchVO) {
         final List<CommonVO.MainArea> areas = new ArrayList<>();
         final List<CommonVO.MainArea> areas2 = new ArrayList<>();
         Map map = new HashMap();
-        agentService.getAgentStateInfoList(new AgentSearchVO()).forEach(a ->
+        agentService.getAgentStateInfoList(agentSearchVO).forEach(a ->
         {
             String status = "";
             String ext = ""; // 확장자
@@ -232,8 +238,6 @@ public class MainRestController  {
             }
 
         });
-
-
         return map;
     }
 
@@ -333,8 +337,8 @@ public class MainRestController  {
      */
     @RequestMapping(value = "/getAreaStateInfoList.do"
             , headers = HttpHeaders.ACCEPT + "=" + MediaType.APPLICATION_JSON_UTF8_VALUE
-            , method = RequestMethod.GET)
-    public Map getAreaStateInfoList(AgentSearchVO agentVO) {
+            , method = RequestMethod.POST)
+    public Map getAreaStateInfoList(@RequestBody  AgentSearchVO agentVO) {
         Map map = new HashMap();
         map.put("listAgentVO", agentService.getAgentServerTableList(agentVO));
         return map;
@@ -422,6 +426,10 @@ public class MainRestController  {
 
         Map map = new HashMap();
         if(chartSearchVO.getRamblyList().length == 0) {
+            map.put("list1", "");
+            map.put("list2", "");
+            map.put("list3", "");
+            map.put("list4", "");
             return map;
         }
         List<String> arrayList = new ArrayList<String>();
@@ -459,16 +467,6 @@ public class MainRestController  {
                 map.put("list1", chartService.selectTransactionList(chartSearchVO));
             }
         }
-//        chartSearchVO.setCntcIdList(arrayList.toArray(new String[arrayList.size()]));
-//        try {
-//            List<ChartVO> list = chartService.selectTransactionList(chartSearchVO);
-//            map.put("list2", list.stream().filter(i->"REQ301".equals(i.getCntcId())).collect(Collectors.toList()));
-//            map.put("list3", list.stream().filter(i->"REQ305".equals(i.getCntcId())).collect(Collectors.toList()));
-//            map.put("list4", list.stream().filter(i->"REQ401".equals(i.getCntcId())).collect(Collectors.toList()));
-//            map.put("list1", list.stream().filter(i->"REQ203".equals(i.getCntcId())).collect(Collectors.toList()));
-//        } catch (Exception e) {
-//            System.out.println(e.getStackTrace());
-//        }
         return map;
     }
 
@@ -488,25 +486,36 @@ public class MainRestController  {
             return map;
         }
 
+        PaginationInfo paginationInfo = new PaginationInfo();
+        paginationInfo.setCurrentPageNo(chartSearchVO.getPageIndex()); // 현재 페이지
+        paginationInfo.setRecordCountPerPage(chartSearchVO.getPageUnit()); // 페이지 갯수
+        paginationInfo.setPageSize(chartSearchVO.getPageSize()); // 페이지 사이즈
+        paginationInfo.setTotalRecordCount(chartService.selectDataCollectionListCount(chartSearchVO));  // 전체카운트
+        chartSearchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+        chartSearchVO.setRecordCountPerPage(chartSearchVO.getPageUnit());
         List<ChartVO> list = chartService.selectDataCollectionList(chartSearchVO);
-
-        map.put("list5",commonService.selectChartXdataList(chartSearchVO));
-
-        for (String str : chartSearchVO.getDataTypeList()) {
-            if("1".equals(str)) { // 회의록
-                map.put("list1",list.stream().filter(a->a.getTitle().equals("회의록")).collect(Collectors.toList()));
-            }
-            if("2".equals(str)) { // 부록
-                map.put("list2",list.stream().filter(a->a.getTitle().equals("부록")).collect(Collectors.toList()));
-            }
-            if("3".equals(str)) { // 의안
-                map.put("list3",list.stream().filter(a->a.getTitle().equals("의안")).collect(Collectors.toList()));
-            }
-            if("4".equals(str)) { // 의원
-                map.put("list4",list.stream().filter(a->a.getTitle().equals("의원")).collect(Collectors.toList()));
-            }
-        }
+//        map.put("list5",commonService.selectChartXdataList(chartSearchVO));
+        map.put("list1", chartService.selectDataCollectionList1(chartSearchVO)); // 회의록
+        map.put("list3", chartService.selectDataCollectionList2(chartSearchVO)); // 의안
+        map.put("list4", chartService.selectDataCollectionList3(chartSearchVO)); // 의원
+        map.put("list2", chartService.selectDataCollectionList4(chartSearchVO)); // 부록
         map.put("list",list);
+        map.put("paginationInfo",paginationInfo);
+
+//        for (String str : chartSearchVO.getDataTypeList()) {
+//            if("1".equals(str)) { // 회의록
+//                map.put("list1",list.stream().filter(a->a.getTitle().equals("회의록")).collect(Collectors.toList()));
+//            }
+//            if("2".equals(str)) { // 부록
+//                map.put("list2",list.stream().filter(a->a.getTitle().equals("부록")).collect(Collectors.toList()));
+//            }
+//            if("3".equals(str)) { // 의안
+//                map.put("list3",list.stream().filter(a->a.getTitle().equals("의안")).collect(Collectors.toList()));
+//            }
+//            if("4".equals(str)) { // 의원
+//                map.put("list4",list.stream().filter(a->a.getTitle().equals("의원")).collect(Collectors.toList()));
+//            }
+//        }
 
         return map;
     }
@@ -525,6 +534,7 @@ public class MainRestController  {
         map.put("cpuList", showCpu());
         map.put("memList", showMemory());
         System.out.println(showCpu());
+        System.out.println(showMemory());
         return map;
     }
 
@@ -583,38 +593,81 @@ public class MainRestController  {
         return map;
     }
 
+    public static String onlyNum(String str) {
+        if ( str == null ) return "";
+
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < str.length(); i++){
+            if( Character.isDigit( str.charAt(i) ) ) {
+                sb.append( str.charAt(i) );
+            }
+        }
+        return sb.toString();
+    }
+
     public String showMemory() {
 
-        Runtime r = Runtime.getRuntime();
-
-        //JVM이 현재 시스템에 요구 가능한 최대 메모리량, 이 값을 넘으면 OutOfMemory 오류가 발생 합니다.
-        double max = r.maxMemory();
-
-        //JVM이 현재 시스템에 얻어 쓴 메모리의 총량
-        double total = r.totalMemory();
-
-        //JVM이 현재 시스템에 청구하여 사용중인 최대 메모리(total)중에서 사용 가능한 메모리
-        double free = r.freeMemory();
-
-        Double mem = 100.0 * (total - free);
-
-        return mem.toString();
+        Double used = 0.0;
+        try{
+            Process p = Runtime.getRuntime().exec("top -b -n 1");
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line = null;
+            String[] str;
+            int i=0;
+            while((line = br.readLine()) != null){
+                switch(i) {
+                    case 3: // mem
+                        line = line.replace("  ", " ");
+                        line = line.replace(" ", ",");
+                        str = line.split(",");
+                        String total = onlyNum(str[1]); // total
+                        String use = onlyNum(str[4]); // use
+                        used = (Double.parseDouble(use) / Double.parseDouble(total)) * 100;
+                        System.out.println(used);
+                        break;
+                }
+                i++;
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return used.toString();
     }
 
     public String showCpu()  {
-        OperatingSystemMXBean osbean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        double load = osbean.getSystemCpuLoad();
-        if(load < 0.0) {
-            return "";
-        }
-        load = load*100.0;
+        Double used = 0.0;
         try{
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            Process p = Runtime.getRuntime().exec("top -b -n 1");
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line = null;
+            String[] str;
+            int i=0;
+            while((line = br.readLine()) != null){
+                switch(i) {
+                    case 2: // cpu
+                        line = line.replace("  ", " ");
+                        line = line.replace(" ", ",");
+
+                        str = line.split(",");
+                        String[] per = str[1].split("%");
+                        str = per[0].split("\\.");
+                        String uses = str[0] + "." + str[1];
+
+                        str = line.split(",");
+                        per = str[3].split("%");
+                        str = per[0].split("\\.");
+                        String sys = str[0] + "." + str[1];
+
+                        used = Double.parseDouble(uses) + Double.parseDouble(sys);
+                        System.out.println(used);
+                        break;
+                }
+                i++;
+            }
+        }catch(Exception e){
+            System.out.println(e);
         }
-        System.out.println("CPU Usage: " + load);
-        return load + "";
+        return used.toString();
     }
 
 
@@ -642,127 +695,12 @@ public class MainRestController  {
             agentVO.setFrstRegisterId(getUser().getUsername());
             //startup
             if ("REQ001".equals(cmmndCode)) {
-                if ("002001".equals(rasmblyId)) {            //서울특별시의회
-                    agentVO.setExeCmmnd(start002001);
-                } else if ("051001".equals(rasmblyId)) {    //부산광역시의회
-                    agentVO.setExeCmmnd(start051001);
-                } else if ("053001".equals(rasmblyId)) {    //대구광역시의회
-                    agentVO.setExeCmmnd(start053001);
-                } else if ("032001".equals(rasmblyId)) {    //인천광역시의회
-                    agentVO.setExeCmmnd(start032001);
-                } else if ("062001".equals(rasmblyId)) {    //광주광역시의회
-                    agentVO.setExeCmmnd(start062001);
-                } else if ("042001".equals(rasmblyId)) {    //대전광역시의회
-                    agentVO.setExeCmmnd(start042001);
-                } else if ("052001".equals(rasmblyId)) {    //울산광역시의회
-                    agentVO.setExeCmmnd(start052001);
-                } else if ("044001".equals(rasmblyId)) {    //세종특별자치시의회
-                    agentVO.setExeCmmnd(start044001);
-                } else if ("031001".equals(rasmblyId)) {    //경기도의회
-                    agentVO.setExeCmmnd(start031001);
-                } else if ("033001".equals(rasmblyId)) {    //강원도의회
-                    agentVO.setExeCmmnd(start033001);
-                } else if ("043001".equals(rasmblyId)) {    //충청북도의회
-                    agentVO.setExeCmmnd(start043001);
-                } else if ("041001".equals(rasmblyId)) {    //충청남도의회
-                    agentVO.setExeCmmnd(start041001);
-                } else if ("063001".equals(rasmblyId)) {    //전라북도의회
-                    agentVO.setExeCmmnd(start063001);
-                } else if ("061001".equals(rasmblyId)) {    //전라남도의회
-                    agentVO.setExeCmmnd(start061001);
-                } else if ("054001".equals(rasmblyId)) {    //경상북도의회
-                    agentVO.setExeCmmnd(start054001);
-                } else if ("055001".equals(rasmblyId)) {    //경상남도의회
-                    agentVO.setExeCmmnd(start055001);
-                } else if ("064001".equals(rasmblyId)) {    //제주특별자치도의회
-                    agentVO.setExeCmmnd(start064001);
-                } else if ("031012".equals(rasmblyId)) {    //경기도 부천시의회
-                    agentVO.setExeCmmnd(start031012);
-                } else if ("031031".equals(rasmblyId)) {    //경기도 하남시의회
-                    agentVO.setExeCmmnd(start031031);
-                } else if ("033002".equals(rasmblyId)) {    //강원도 강릉시의회
-                    agentVO.setExeCmmnd(start033002);
-                } else if ("041009".equals(rasmblyId)) {    //충청남도 서산시의회
-                    agentVO.setExeCmmnd(start041009);
-                } else if ("041900".equals(rasmblyId)) {    //충청남도 서산군의회
-                    agentVO.setExeCmmnd(start041900);
-                } else if ("043012".equals(rasmblyId)) {    //충청북도 청주시의회
-                    agentVO.setExeCmmnd(start043012);
-                } else if ("054010".equals(rasmblyId)) {    //경상북도 상주시의회
-                    agentVO.setExeCmmnd(start054010);
-                } else if ("055002".equals(rasmblyId)) {    //경상남도 거제시의회
-                    agentVO.setExeCmmnd(start055002);
-                } else if ("055005".equals(rasmblyId)) {    //경상남도 김해시의회
-                    agentVO.setExeCmmnd(start055005);
-                } else if ("061012".equals(rasmblyId)) {    //전라남도 순천시의회
-                    agentVO.setExeCmmnd(start061012);
-                } else if ("063014".equals(rasmblyId)) {    //전라북도 정읍시의회
-                    agentVO.setExeCmmnd(start063014);
-                }
+                agentVoSetExeCommnd(agentVO, rasmblyId, cmmndCode);
             }
-
             //shutdown
-            if ("REQ002".equals(cmmndCode)) {
-
-                if ("002001".equals(rasmblyId)) {            //서울특별시의회
-                    agentVO.setExeCmmnd(stop002001);
-                } else if ("051001".equals(rasmblyId)) {    //부산광역시의회
-                    agentVO.setExeCmmnd(stop051001);
-                } else if ("053001".equals(rasmblyId)) {    //대구광역시의회
-                    agentVO.setExeCmmnd(stop053001);
-                } else if ("032001".equals(rasmblyId)) {    //인천광역시의회
-                    agentVO.setExeCmmnd(stop032001);
-                } else if ("062001".equals(rasmblyId)) {    //광주광역시의회
-                    agentVO.setExeCmmnd(stop062001);
-                } else if ("042001".equals(rasmblyId)) {    //대전광역시의회
-                    agentVO.setExeCmmnd(stop042001);
-                } else if ("052001".equals(rasmblyId)) {    //울산광역시의회
-                    agentVO.setExeCmmnd(stop052001);
-                } else if ("044001".equals(rasmblyId)) {    //세종특별자치시의회
-                    agentVO.setExeCmmnd(stop044001);
-                } else if ("031001".equals(rasmblyId)) {    //경기도의회
-                    agentVO.setExeCmmnd(stop031001);
-                } else if ("033001".equals(rasmblyId)) {    //강원도의회
-                    agentVO.setExeCmmnd(stop033001);
-                } else if ("043001".equals(rasmblyId)) {    //충청북도의회
-                    agentVO.setExeCmmnd(stop043001);
-                } else if ("041001".equals(rasmblyId)) {    //충청남도의회
-                    agentVO.setExeCmmnd(stop041001);
-                } else if ("063001".equals(rasmblyId)) {    //전라북도의회
-                    agentVO.setExeCmmnd(stop063001);
-                } else if ("061001".equals(rasmblyId)) {    //전라남도의회
-                    agentVO.setExeCmmnd(stop061001);
-                } else if ("054001".equals(rasmblyId)) {    //경상북도의회
-                    agentVO.setExeCmmnd(stop054001);
-                } else if ("055001".equals(rasmblyId)) {    //경상남도의회
-                    agentVO.setExeCmmnd(stop055001);
-                } else if ("064001".equals(rasmblyId)) {    //제주특별자치도의회
-                    agentVO.setExeCmmnd(stop064001);
-                } else if ("031012".equals(rasmblyId)) {    //경기도 부천시의회
-                    agentVO.setExeCmmnd(stop031012);
-                } else if ("031031".equals(rasmblyId)) {    //경기도 하남시의회
-                    agentVO.setExeCmmnd(stop031031);
-                } else if ("033002".equals(rasmblyId)) {    //강원도 강릉시의회
-                    agentVO.setExeCmmnd(stop033002);
-                } else if ("041009".equals(rasmblyId)) {    //충청남도 서산시의회
-                    agentVO.setExeCmmnd(stop041009);
-                } else if ("041900".equals(rasmblyId)) {    //충청남도 서산군의회
-                    agentVO.setExeCmmnd(stop041900);
-                } else if ("043012".equals(rasmblyId)) {    //충청북도 청주시의회
-                    agentVO.setExeCmmnd(stop043012);
-                } else if ("054010".equals(rasmblyId)) {    //경상북도 상주시의회
-                    agentVO.setExeCmmnd(stop054010);
-                } else if ("055002".equals(rasmblyId)) {    //경상남도 거제시의회
-                    agentVO.setExeCmmnd(stop055002);
-                } else if ("055005".equals(rasmblyId)) {    //경상남도 김해시의회
-                    agentVO.setExeCmmnd(stop055005);
-                } else if ("061012".equals(rasmblyId)) {    //전라남도 순천시의회
-                    agentVO.setExeCmmnd(stop061012);
-                } else if ("063014".equals(rasmblyId)) {    //전라북도 정읍시의회
-                    agentVO.setExeCmmnd(stop063014);
-                }
+            else if ("REQ002".equals(cmmndCode)) {
+                agentVoSetExeCommnd(agentVO, rasmblyId, cmmndCode);
             }
-
             //update
             else if ("REQ003".equals(cmmndCode)) {
 
@@ -808,5 +746,127 @@ public class MainRestController  {
         }catch(Exception e) {
         }finally {}
         return new ModelAndView("redirect:/main.do?rasmblyId="+agentVO.getRasmblyId());
+    }
+
+    private void agentVoSetExeCommnd(@ModelAttribute("agentVO") AgentVO agentVO, String rasmblyId, String cmmndCode) {
+        //startup
+        if ("REQ001".equals(cmmndCode)) {
+            if ("002001".equals(rasmblyId)) {            //서울특별시의회
+                agentVO.setExeCmmnd(start002001);
+            } else if ("051001".equals(rasmblyId)) {    //부산광역시의회
+                agentVO.setExeCmmnd(start051001);
+            } else if ("053001".equals(rasmblyId)) {    //대구광역시의회
+                agentVO.setExeCmmnd(start053001);
+            } else if ("032001".equals(rasmblyId)) {    //인천광역시의회
+                agentVO.setExeCmmnd(start032001);
+            } else if ("062001".equals(rasmblyId)) {    //광주광역시의회
+                agentVO.setExeCmmnd(start062001);
+            } else if ("042001".equals(rasmblyId)) {    //대전광역시의회
+                agentVO.setExeCmmnd(start042001);
+            } else if ("052001".equals(rasmblyId)) {    //울산광역시의회
+                agentVO.setExeCmmnd(start052001);
+            } else if ("044001".equals(rasmblyId)) {    //세종특별자치시의회
+                agentVO.setExeCmmnd(start044001);
+            } else if ("031001".equals(rasmblyId)) {    //경기도의회
+                agentVO.setExeCmmnd(start031001);
+            } else if ("033001".equals(rasmblyId)) {    //강원도의회
+                agentVO.setExeCmmnd(start033001);
+            } else if ("043001".equals(rasmblyId)) {    //충청북도의회
+                agentVO.setExeCmmnd(start043001);
+            } else if ("041001".equals(rasmblyId)) {    //충청남도의회
+                agentVO.setExeCmmnd(start041001);
+            } else if ("063001".equals(rasmblyId)) {    //전라북도의회
+                agentVO.setExeCmmnd(start063001);
+            } else if ("061001".equals(rasmblyId)) {    //전라남도의회
+                agentVO.setExeCmmnd(start061001);
+            } else if ("054001".equals(rasmblyId)) {    //경상북도의회
+                agentVO.setExeCmmnd(start054001);
+            } else if ("055001".equals(rasmblyId)) {    //경상남도의회
+                agentVO.setExeCmmnd(start055001);
+            } else if ("064001".equals(rasmblyId)) {    //제주특별자치도의회
+                agentVO.setExeCmmnd(start064001);
+            } else if ("031012".equals(rasmblyId)) {    //경기도 부천시의회
+                agentVO.setExeCmmnd(start031012);
+            } else if ("031031".equals(rasmblyId)) {    //경기도 하남시의회
+                agentVO.setExeCmmnd(start031031);
+            } else if ("033002".equals(rasmblyId)) {    //강원도 강릉시의회
+                agentVO.setExeCmmnd(start033002);
+            } else if ("041009".equals(rasmblyId)) {    //충청남도 서산시의회
+                agentVO.setExeCmmnd(start041009);
+            } else if ("041900".equals(rasmblyId)) {    //충청남도 서산군의회
+                agentVO.setExeCmmnd(start041900);
+            } else if ("043012".equals(rasmblyId)) {    //충청북도 청주시의회
+                agentVO.setExeCmmnd(start043012);
+            } else if ("054010".equals(rasmblyId)) {    //경상북도 상주시의회
+                agentVO.setExeCmmnd(start054010);
+            } else if ("055002".equals(rasmblyId)) {    //경상남도 거제시의회
+                agentVO.setExeCmmnd(start055002);
+            } else if ("055005".equals(rasmblyId)) {    //경상남도 김해시의회
+                agentVO.setExeCmmnd(start055005);
+            } else if ("061012".equals(rasmblyId)) {    //전라남도 순천시의회
+                agentVO.setExeCmmnd(start061012);
+            } else if ("063014".equals(rasmblyId)) {    //전라북도 정읍시의회
+                agentVO.setExeCmmnd(start063014);
+            }
+        }
+        if ("REQ002".equals(cmmndCode)) {
+            if ("002001".equals(rasmblyId)) {            //서울특별시의회
+                agentVO.setExeCmmnd(stop002001);
+            } else if ("051001".equals(rasmblyId)) {    //부산광역시의회
+                agentVO.setExeCmmnd(stop051001);
+            } else if ("053001".equals(rasmblyId)) {    //대구광역시의회
+                agentVO.setExeCmmnd(stop053001);
+            } else if ("032001".equals(rasmblyId)) {    //인천광역시의회
+                agentVO.setExeCmmnd(stop032001);
+            } else if ("062001".equals(rasmblyId)) {    //광주광역시의회
+                agentVO.setExeCmmnd(stop062001);
+            } else if ("042001".equals(rasmblyId)) {    //대전광역시의회
+                agentVO.setExeCmmnd(stop042001);
+            } else if ("052001".equals(rasmblyId)) {    //울산광역시의회
+                agentVO.setExeCmmnd(stop052001);
+            } else if ("044001".equals(rasmblyId)) {    //세종특별자치시의회
+                agentVO.setExeCmmnd(stop044001);
+            } else if ("031001".equals(rasmblyId)) {    //경기도의회
+                agentVO.setExeCmmnd(stop031001);
+            } else if ("033001".equals(rasmblyId)) {    //강원도의회
+                agentVO.setExeCmmnd(stop033001);
+            } else if ("043001".equals(rasmblyId)) {    //충청북도의회
+                agentVO.setExeCmmnd(stop043001);
+            } else if ("041001".equals(rasmblyId)) {    //충청남도의회
+                agentVO.setExeCmmnd(stop041001);
+            } else if ("063001".equals(rasmblyId)) {    //전라북도의회
+                agentVO.setExeCmmnd(stop063001);
+            } else if ("061001".equals(rasmblyId)) {    //전라남도의회
+                agentVO.setExeCmmnd(stop061001);
+            } else if ("054001".equals(rasmblyId)) {    //경상북도의회
+                agentVO.setExeCmmnd(stop054001);
+            } else if ("055001".equals(rasmblyId)) {    //경상남도의회
+                agentVO.setExeCmmnd(stop055001);
+            } else if ("064001".equals(rasmblyId)) {    //제주특별자치도의회
+                agentVO.setExeCmmnd(stop064001);
+            } else if ("031012".equals(rasmblyId)) {    //경기도 부천시의회
+                agentVO.setExeCmmnd(stop031012);
+            } else if ("031031".equals(rasmblyId)) {    //경기도 하남시의회
+                agentVO.setExeCmmnd(stop031031);
+            } else if ("033002".equals(rasmblyId)) {    //강원도 강릉시의회
+                agentVO.setExeCmmnd(stop033002);
+            } else if ("041009".equals(rasmblyId)) {    //충청남도 서산시의회
+                agentVO.setExeCmmnd(stop041009);
+            } else if ("041900".equals(rasmblyId)) {    //충청남도 서산군의회
+                agentVO.setExeCmmnd(stop041900);
+            } else if ("043012".equals(rasmblyId)) {    //충청북도 청주시의회
+                agentVO.setExeCmmnd(stop043012);
+            } else if ("054010".equals(rasmblyId)) {    //경상북도 상주시의회
+                agentVO.setExeCmmnd(stop054010);
+            } else if ("055002".equals(rasmblyId)) {    //경상남도 거제시의회
+                agentVO.setExeCmmnd(stop055002);
+            } else if ("055005".equals(rasmblyId)) {    //경상남도 김해시의회
+                agentVO.setExeCmmnd(stop055005);
+            } else if ("061012".equals(rasmblyId)) {    //전라남도 순천시의회
+                agentVO.setExeCmmnd(stop061012);
+            } else if ("063014".equals(rasmblyId)) {    //전라북도 정읍시의회
+                agentVO.setExeCmmnd(stop063014);
+            }
+        }
     }
 }

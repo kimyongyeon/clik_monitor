@@ -14,11 +14,25 @@ var v_table_list = new Vue({
     methods: {
         fetchData: function(url, data, page){
             commonClass.fnAjaxCallback(url, data, function(data){
-                
+
+                if(data.status == '404') {
+                    Vue.set(v_table_list, 'items', data.list);
+                    $("#myTable4 img").hide();
+                    return
+                }
+
                 var firstPageNoOnPageList = data.paginationInfo.firstPageNoOnPageList;
                 var lastPageNoOnPageList = data.paginationInfo.lastPageNoOnPageList;
                 var recordCountPerPage = data.paginationInfo.recordCountPerPage;
                 var totalRecordCount = data.paginationInfo.totalRecordCount;
+
+                var totalPageCount = data.paginationInfo.totalPageCount;
+                if(totalPageCount <= lastPageNoOnPageList) {
+                    lastPageNoOnPageList = totalPageCount;
+                } else {
+                    lastPageNoOnPageList = 10;
+                }
+
                 var prev = firstPageNoOnPageList === 1 ? false : true;
                 var next = lastPageNoOnPageList * recordCountPerPage >= totalRecordCount ? false : true;
                 Vue.set(v_table_list, 'items', data.list);
@@ -40,12 +54,6 @@ var onCreateClass = {
 
         commonClass.init();
 
-        //달력 소스(jQuery UI)
-        $("#datepicker1, #datepicker2").datepicker(commonClass.fnDatePickerUiInit());
-
-        this.fnDateMonth();
-        this.fnSearch(1);
-
         commonClass.fnMenuStyle("meta");
 
         // 검색어 입력후 엔터
@@ -55,20 +63,49 @@ var onCreateClass = {
                 onCreateClass.fnSearch();
             }
         });
-        
-        $("#loasm_code_div").hide();
+        commonClass.fnAjaxInsttClCodeList();
+        commonClass.fnAjaxSiteCodeList();
 
+        //달력 소스(jQuery UI)
+        $("#datepicker1, #datepicker2").datepicker(commonClass.fnDatePickerUiInit());
+
+        this.fnDateMonth();
+        this.fnSearch(1);
+    },
+    fnOnchage : function() {
+        commonClass.fnAjaxSiteCodeList();
     },
     fnExcel: function() {
         var startDate = $("#datepicker1").val();
         var endDate = $("#datepicker2").val();
-        var region = $("#instt_cl_code_div option:selected").val(); // 지역명
-        var siteNm = $("#site-title").val(); // 사이트명
+        var region = v_combo_data_list.insttClCode || ''; // 지역선택
+        var siteId = $("#siteId option:selected").val(); // 사이트명
+        if(startDate != '') {
+            startDate = startDate.replace(/-/gi,'');
+        }
+        if(endDate != '') {
+            endDate = endDate.replace(/-/gi,'');
+        }
+
+        if(region == '') {
+            alert("지역명을 선택하세요.");
+            $("#insttClCode").focus();
+            return;
+        }
+        // if(siteId == '') {
+        //     alert("사이트명을 선택하세요.");
+        //     $("#siteId").focus();
+        //     return;
+        // }
+
+        console.log(this.currentPage);
 
         var params = "?startDate=" + startDate;
         params += "&endDate=" + endDate;
-        params += "&region=" + region;
-        params += "&siteNm=" + siteNm;
+        params += "&region=" + region || "002";
+        params += "&siteId=" + siteId;
+        params += "&pageIndex=" + this.currentPage;
+        params += "&pageUnit=" + 20;
         params += "&keyWordType=4";
         
         location.href = "/excelDownload.do" + params;
@@ -76,24 +113,47 @@ var onCreateClass = {
     fnSearch: function(page) {
         this.fnAjaxTableList(page);
     },
+    currentPage: 0,
     fnAjaxTableList: function(page) {
 
         page = page || 1;
-
+        this.currentPage = page;
+        
         var url = "getMetaDataList.do";
         var startDate = $("#datepicker1").val();
         var endDate = $("#datepicker2").val();
-        var region = $("#instt_cl_code_div option:selected").val(); // 지역명
-        var siteNm = $("#site-title").val(); // 사이트명
-        startDate = startDate.replace('-','');
-        endDate = endDate.replace('-','');
+        var region = v_combo_data_list.insttClCode || ''; // 지역선택
+        var siteId = $("#siteId option:selected").val(); // 사이트명
+
+        if(startDate != '') {
+            startDate = startDate.replace(/-/gi,'');
+        }
+        if(endDate != '') {
+            endDate = endDate.replace(/-/gi,'');
+        }
+
+        if(startDate == endDate) {
+            endDate = parseInt(endDate) + 1;
+        }
+
+        if(region == '') {
+            alert("지역명을 선택하세요.");
+            $("#insttClCode").focus();
+            return;
+        }
+        // if(siteId == '') {
+        //     alert("사이트명을 선택하세요.");
+        //     $("#siteId").focus();
+        //     return;
+        // }
+
         var data = {
             startDate: startDate,
             endDate: endDate,
-            region: region,
-            siteNm: siteNm,
+            region: region || "002",
+            siteId: siteId,
             "pageIndex": page,
-            "firstIndex":page
+            "pageUnit":20
         };
         v_table_list.fetchData(url, data, page);
     },

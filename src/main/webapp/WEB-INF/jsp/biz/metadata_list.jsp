@@ -22,17 +22,24 @@
             <table class="common-search-table">
                 <tr>
                     <th scope="row">지역명</th>
-                    <td>
-                        <div class="selectBox">
-                            <%@ include file="/WEB-INF/jsp/hbs/combo_list_script.jsp" %>
+                    <td colspan="3">
+                        <div class="selectBox" id="tpl_commbo_list">
+                            <select name="insttClCode" id="insttClCode" class="select02" onchange="onCreateClass.fnOnchage();" v-model="insttClCode">
+                                <option value="">지역선택</option>
+                                <option v-for="item in commonList_2" v-bind:value="item.code">{{item.codenm}}</option>
+                            </select>
+                            <select name="siteId" id="siteId" class="select02" onchange="" v-model="siteId">
+                                <option value="">사이트선택</option>
+                                <option v-for="item in commonList_4" v-bind:value="item.siteid">{{item.sitenm}}</option>
+                            </select>
                         </div>
                     </td>
-                    <th scope="row">사이트명</th>
+                    <%--<th scope="row">사이트명</th>
                     <td>
                         <div>
                             <input type="text" id="site-title" name="site-title" />
                         </div>
-                    </td>
+                    </td>--%>
                 </tr>
                 <tr>
                     <th scope="row">최종 등록일</th>
@@ -60,39 +67,36 @@
             <div class="BottomTable" id="tpl-table-list">
                 <div class="tab01Box">
                     <div id="myTable4" class="chart_loding" >
-                        <table class="table w-1700" >
+                        <table class="table" >
                             <colgroup>
                                 <col width="50px">
-                                <col width="100px">
-                                <col width="150px">
                                 <col width="80px">
-                                <col width="500px">
+                                <col width="150px">
+                                <col width="150px">
                                 <col width="100px">
-                                <col width="200px">
-                                <col width="1000px">
                                 <col width="100px">
+                                <col width="100px">
+                                <col width="350px">
                             </colgroup>
                             <tr>
                                 <th>번호</th>
                                 <th>지역</th>
+                                <th>사이트명</th>
                                 <th>게시판명</th>
+                                <th>최종등록일</th>
+                                <th>자료유형</th>
                                 <th>사이트ID</th>
                                 <th>사이트 URL</th>
-                                <th>자료유형</th>
-                                <th>사이트명</th>
-                                <th>게시판 URL</th>
-                                <th>최종등록일</th>
                             </tr>
                             <tr v-for="item in items">
-                                <td>{{item.num}}</td>
+                                <td>{{item.rnum}}</td>
                                 <td>{{item.area}}</td>
-                                <td>{{item.seednm}}</td>
-                                <td>{{item.seedid}}</td>
-                                <td>{{item.seedurl}}</td>
-                                <td>{{item.doctypeName}}</td>
                                 <td>{{item.sitenm}}</td>
-                                <td>{{item.url}}</td>
+                                <td>{{item.seednm}}</td>
                                 <td>{{item.regdate}}</td>
+                                <td>{{item.doctypeName}}</td>
+                                <td>{{item.seedid}}</td>
+                                <td class="ellipsis">{{item.seedurl}}</td>
                             </tr>
                         </table>
                         <img src="/img/loading.gif" alt="">
@@ -104,7 +108,7 @@
 
                         <template v-for="item in lastPageNoOnPageList">
                             <li v-if="lastPageNoOnPageList > 1" @click="onCreateClass.fnAjaxTableList(firstPageNoOnPageList + item);" :class="{active: page == firstPageNoOnPageList + item}">
-                                <a href="#">{{firstPageNoOnPageList + item}}</a>
+                                <a href="#" v-if="lastPageNoOnPageList >= firstPageNoOnPageList + item">{{firstPageNoOnPageList + item}}</a>
                             </li>
                         </template>
 

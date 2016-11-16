@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MetaDataVO {
+    private String rnum; // 번호
     private String num; // 번호
     private String area; // 지역
     private String seednm;
@@ -18,6 +19,7 @@ public class MetaDataVO {
     private String seedurl;
     private String doctypeName;
     private String sitenm;
+    private String siteid;
     private String url;
     private String regdate;
 }

@@ -26,6 +26,10 @@
 			, SUBSTR(COLGOVER.RASMBLY_ID, 4,3) gubun
 		FROM COLGOVER, COLGOVER_SET
 		WHERE COLGOVER_SET.RASMBLY_ID(+) = COLGOVER.RASMBLY_ID
+		AND COLGOVER.RASMBLY_ID IN
+        <foreach item="item" index="index" collection="ramblyList" open="(" close=")" separator=",">
+           #{item}
+        </foreach>
 		AND COLGOVER.ISVIEW = 'Y'
 		ORDER BY ORDR ASC
 	</select>
@@ -45,18 +49,22 @@
   		   , COLGOVER_SET.RAM
   		   , COLGOVER_SET.MODULE_INSTALL_PATH
   		   , DECODE (COLGOVER.SYSTEM_STTUS_CODE,'000','정상',null,'설치안됨','비정상') AS SYSTEM_STTUS_CODE
-           , COLGOVER.LAST_UPDT_DT
+           , COLGOVER.LAST_CNTC_DT LAST_UPDT_DT
            , COLGOVER_SET.NOTE
         FROM COLGOVER,
              COLGOVER_SET
         WHERE COLGOVER_SET.RASMBLY_ID(+) = COLGOVER.RASMBLY_ID
           AND COLGOVER.ISVIEW = 'Y'
+          AND COLGOVER.RASMBLY_ID IN
+        <foreach item="item" index="index" collection="ramblyList" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
         ORDER BY ORDR ASC
 
 	</select>
 
     <select id="selectAgentUpdateOne" parameterType="agentSearchVO" resultMap="agentMap">
-        SELECT
+        SELECT /* selectAgentUpdateOne */
           RASMBLY_ID
         , CMMND_EXC_DT as updateDate
         FROM COUNCIL_SYSTEM_CONTROL
@@ -70,7 +78,8 @@
 		SELECT /*selectAgentInfoOne*/
      		 CST.RASMBLY_ID rasmblyId
 		   , CST.RASMBLY_NM rasmblyNm -- 의회명
-		   , CST.SYSTEM_STTUS_CODE systemSttusCode -- 상태코드
+		   /*, CST.SYSTEM_STTUS_CODE systemSttusCode -- 상태코드*/
+		   , DECODE (CR.SYSTEM_STTUS_CODE,'000','정상',null,'설치안됨','비정상') AS SYSTEM_STTUS_CODE
 		   , CST.NOTE note
            , CR.LAST_CNTC_DT lastCntcDt
 		FROM COLGOVER_SET CST, COLGOVER CR
@@ -103,20 +112,21 @@
     <!-- Agent 상태정보 히스토리 -->
     <select id="selectAgentSetStateList" parameterType="agentSearchVO" resultType="agentVO">
       <include refid="h_top" />
-      SELECT
+      SELECT /* selectAgentSetStateList */
             CMMND_NM
           , CMMND_TRNSMIS_DT
           , CMMND_EXC_DT
           , FRST_REGIST_DT
           , RASMBLY_ID
       FROM COUNCIL_SYSTEM_CONTROL WHERE RASMBLY_ID = #{rasmblyId}
-      <include refid="h_bottom" />
       ORDER BY FRST_REGIST_DT DESC
+      <include refid="h_bottom" />
+
     </select>
 
     <!-- Agent 상태정보 히스토리 -->
     <select id="selectAgentSetStateListCount" parameterType="agentSearchVO" resultType="int">
-        SELECT
+        SELECT /* selectAgentSetStateListCount */
           COUNT(*)
         FROM COUNCIL_SYSTEM_CONTROL
         WHERE RASMBLY_ID = #{rasmblyId}
@@ -160,7 +170,7 @@
 
     <!-- Agent 정보 수정 -->
     <update id="updateAgentNoteOne" parameterType="agentVO">
-      UPDATE COLGOVER_SET
+      UPDATE /* updateAgentNoteOne */ COLGOVER_SET
       SET note = #{note}
       WHERE RASMBLY_ID=#{rasmblyId};
     </update>
@@ -172,7 +182,7 @@
 
     <!-- 지방의회 연계API 관리 - AGENT 설정 정보를 등록한다. -->
     <insert id="insertCouncilSystemControl" parameterType="agentVO">
-        INSERT INTO COUNCIL_SYSTEM_CONTROL
+        INSERT /* insertCouncilSystemControl */ INTO COUNCIL_SYSTEM_CONTROL
         (
             REQST_NO
             ,RASMBLY_ID

@@ -3,9 +3,11 @@ package clikmonitor.nanet.go.kr.service;
 import clikmonitor.nanet.go.kr.vo.ChartSearchVO;
 import clikmonitor.nanet.go.kr.vo.ChartVO;
 import clikmonitor.nanet.go.kr.mapper.ChartMapper;
+import clikmonitor.nanet.go.kr.vo.CommonSearchVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +40,12 @@ public interface ChartService {
      * @return : 의회별 데이터건수
      */
     List<ChartVO> selectDataCollectionList(ChartSearchVO chartSearchVO);
+    List<ChartVO> selectDataCollectionList1(ChartSearchVO chartSearchVO);
+    List<ChartVO> selectDataCollectionList2(ChartSearchVO chartSearchVO);
+    List<ChartVO> selectDataCollectionList3(ChartSearchVO chartSearchVO);
+    List<ChartVO> selectDataCollectionList4(ChartSearchVO chartSearchVO);
+
+    int selectDataCollectionListCount(CommonSearchVO chartSearchVO);
 
     /**
      * Agent 서버 정보 바 차트 조회
@@ -54,6 +62,31 @@ public interface ChartService {
         ChartMapper chartMapper;
 
         @Override
+        public List<ChartVO> selectDataCollectionList1(ChartSearchVO chartSearchVO) {
+            return chartMapper.selectDataCollectionList1(chartSearchVO);
+        }
+
+        @Override
+        public List<ChartVO> selectDataCollectionList2(ChartSearchVO chartSearchVO) {
+            return chartMapper.selectDataCollectionList2(chartSearchVO);
+        }
+
+        @Override
+        public List<ChartVO> selectDataCollectionList3(ChartSearchVO chartSearchVO) {
+            return chartMapper.selectDataCollectionList3(chartSearchVO);
+        }
+
+        @Override
+        public List<ChartVO> selectDataCollectionList4(ChartSearchVO chartSearchVO) {
+            return chartMapper.selectDataCollectionList4(chartSearchVO);
+        }
+
+        @Override
+        public int selectDataCollectionListCount(CommonSearchVO chartSearchVO) {
+            return chartMapper.selectDataCollectionListCount(chartSearchVO);
+        }
+
+        @Override
         public List<ChartVO> selectTotalAvgRequestCountList1(ChartSearchVO chartSearchVO) {
             return chartMapper.selectTotalAvgRequestCountList1(chartSearchVO);
         }
@@ -65,6 +98,33 @@ public interface ChartService {
 
         @Override
         public List<ChartVO> selectTotalAvgRequestCountList3(ChartSearchVO chartSearchVO) {
+            List<String> arrayList = new ArrayList<String>();
+            for (String str : chartSearchVO.getDataTypeList()) {
+                if("1".equals(str)) { // 회의록
+                    chartSearchVO.setCntcId("REQ301"); // 회의록
+                    arrayList = new ArrayList<String>();
+                    arrayList.add("REQ301");
+                    chartSearchVO.setCntcIdList(arrayList.toArray(new String[arrayList.size()]));
+                }
+                if("2".equals(str)) { // 부록
+                    chartSearchVO.setCntcId("REQ305"); //  부록
+                    arrayList = new ArrayList<String>();
+                    arrayList.add("REQ305");
+                    chartSearchVO.setCntcIdList(arrayList.toArray(new String[arrayList.size()]));
+                }
+                if("3".equals(str)) { // 의안
+                    chartSearchVO.setCntcId("REQ401"); // 의안
+                    arrayList = new ArrayList<String>();
+                    arrayList.add("REQ401");
+                    chartSearchVO.setCntcIdList(arrayList.toArray(new String[arrayList.size()]));
+                }
+                if("4".equals(str)) { // 의원
+                    chartSearchVO.setCntcId("REQ203"); // 의원
+                    arrayList = new ArrayList<String>();
+                    arrayList.add("REQ203");
+                    chartSearchVO.setCntcIdList(arrayList.toArray(new String[arrayList.size()]));
+                }
+            }
             return chartMapper.selectTotalAvgRequestCountList3(chartSearchVO);
         }
 

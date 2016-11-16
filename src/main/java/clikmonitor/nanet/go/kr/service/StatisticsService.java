@@ -27,7 +27,7 @@ public interface StatisticsService {
      *
      * @return the rasmbly data send excel export
      */
-    List<StatisticsVO> getRasmblyDataSendExcelExport(); // 의회별 전송 데이터 목록 엑셀저장
+    List<StatisticsVO> getRasmblyDataSendExcelExport(StatisticsSearchVO statisticsSearchVO); // 의회별 전송 데이터 목록 엑셀저장
 
     /**
      * Gets rasmbly last send data.
@@ -42,7 +42,7 @@ public interface StatisticsService {
      *
      * @return the rasmbly last send data excel export
      */
-    List<StatisticsVO> getRasmblyLastSendDataExcelExport(); // 항목별 최종전송 데이터 목록 엑셀저장
+    List<StatisticsVO> getRasmblyLastSendDataExcelExport(StatisticsSearchVO statisticsSearchVO); // 항목별 최종전송 데이터 목록 엑셀저장
     /*
         StatisticsService 끝
     */
@@ -65,8 +65,8 @@ public interface StatisticsService {
         }
 
         @Override
-        public List<StatisticsVO> getRasmblyDataSendExcelExport() {
-            return statisticsMapper.selectRasmblyDataSendExcelExportList();
+        public List<StatisticsVO> getRasmblyDataSendExcelExport(StatisticsSearchVO statisticsSearchVO) {
+            return statisticsMapper.selectRasmblyDataSendExcelExportList(statisticsSearchVO);
         }
 
         @Override
@@ -75,8 +75,8 @@ public interface StatisticsService {
         }
 
         @Override
-        public List<StatisticsVO> getRasmblyLastSendDataExcelExport() {
-            return statisticsMapper.selectRasmblyLastSendDataExcelExportList();
+        public List<StatisticsVO> getRasmblyLastSendDataExcelExport(StatisticsSearchVO statisticsSearchVO) {
+            return statisticsMapper.selectRasmblyLastSendDataExcelExportList(statisticsSearchVO);
         }
     }
 

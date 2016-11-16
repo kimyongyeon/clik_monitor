@@ -8,6 +8,7 @@
     <title>지방의회 모니터링 시스템</title>
 
     <script type="text/javascript" src="<c:url value="/assets/js/jquery-1.11.1.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/assets/js/vue.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/assets/js/common.js"/>"></script>
     <%--<!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -147,7 +148,7 @@
 <script>
     $(document).ready(function () {
 
-        $("#j_username").val(getCookie('userid'));
+        $("#j_username").val(commonClass.getCookie('userid'));
 
         if ($("#j_username").val()) {
             $("#idSaveChk").prop('checked', true);
@@ -176,38 +177,12 @@
         $("#idSaveChk").on("click", function () {
             var id = $("#j_username").val() || "";
             if ($(this).filter(":checked").length > 0) {
-                setCookieExdays("userid", id, 365);
+                commonClass.setCookieExdays("userid", id, 365);
             } else {
-                setCookieExdays("userid", '', 365);
+                commonClass.setCookieExdays("userid", '', 365);
             }
         });
     });
-
-    function getCookie(cname) {
-        var name = cname + "=";
-        var ca = document.cookie.split(';');
-        for(var i = 0; i <ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0)==' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length,c.length);
-            }
-        }
-        return "";
-    }
-
-    function setCookieExdays(cname, cvalue, exdays) {
-        var d = new Date();
-        d.setTime(d.getTime() + (exdays*24*60*60*1000));
-        var expires = "expires="+ d.toUTCString();
-        document.cookie = cname + "=" + cvalue + ";path=/; " + expires;
-    }
-
-    function setCookie(cname, cvalue) {
-        document.cookie = cname + "=" + cvalue+ ";path=/; ";
-    }
 
     function foc(obj){
         $(obj).css("border","2px solid #e13614");

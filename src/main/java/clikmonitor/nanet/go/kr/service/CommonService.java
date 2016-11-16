@@ -58,6 +58,7 @@ public interface CommonService {
         @Override
         public Map<String, List<CommonVO>> getTreeList() {
             Map<String, List<CommonVO>> outMap = new HashMap();
+            outMap.put("parent_areas", commonMapper.selectParentAreaList()); // 부모 지역
             outMap.put("areas", commonMapper.selectAreaList()); // 지역
             outMap.put("wide", commonMapper.selectBroadList()); // 광역
             outMap.put("basic", commonMapper.selectBasicList()); // 기초

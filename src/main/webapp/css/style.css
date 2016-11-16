@@ -56,9 +56,13 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .block { display: block !important;}
 .none { display: none !important;}
 .screen {background: #444;opacity: 0.8;position: fixed;width: 100%;height: auto;z-index: 2;display: none;}
-.openPop {display: block !important;}
+.openPop {display: block !important; z-index: 1;}
 .ellipsis { width: 250px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; margin-left:5px;}
 
+#rasmblyId_empty {float: left; position: relative; width: 300px; display: none;}
+#rasmblyId_empty h1 {color: red !important; font-weight: bold;}
+
+#chart_column_title {display: inline; width: 106px; color: white; position: absolute; right: 148px; top: 4%; z-index: 2}
 .default-button {background: #3d3d3d; border:1px solid #fff; border-radius: 2px; color: #fff; }
 .edit-button { background: #3d3d3d; border:1px solid #fff; border-radius: 2px; width: 100px; height: 26px; color: white;}
 .insert-button { background: #3d3d3d; border:1px solid #fff; border-radius: 2px; width: 100px; height: 26px; color: white;}
@@ -66,8 +70,9 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .search-button { background: #3d3d3d; border:1px solid #fff; border-radius: 2px;width: 100px; height: 26px; color: white;}
 /* 테이블 */
 .table { width: 100%; border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; table-layout: fixed; word-break: break-all; background: white;}
-.table tr th { width: 100%; height: 38px; text-align: center; background: #3d3d3d; border-top: solid 1px #898989; border-bottom: solid 1px #898989; font-size: 12pt; line-height: 38px; padding-left: 10px;    border-left: none; color: #fff;}
-.table tr td { border-right: none; border-bottom: solid 1px #898989; border-top: solid 1px #898989; padding-left: 10px; line-height: 20px; font-size: 10pt; text-align: center;}
+.table tr th { width: 100%; height: 38px; text-align: center; background: #3d3d3d; border-top: solid 1px #898989; border-bottom: solid 1px #898989; font-size: 10pt; line-height: 38px; padding-left: 10px;    border-left: none; color: #fff;}
+.table tr td { border-right: none; border-bottom: solid 1px #898989; border-top: solid 1px #898989; padding-left: 10px; line-height: 20px; font-size: 9pt; text-align: center; }
+.table tr:hover {background: yellow;}
 .none-line-table { border: 0 none; width: 100%; border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; table-layout: fixed;}
 .none-line-table tr td { padding: 5px; border: 0px;}
 
@@ -155,23 +160,22 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 #chart_scatter { width: 100%; height: 300px; border: solid 1px #898989 !important; margin-right: 10px !important; background: #39393b;}
 #chart_cloumn { width: 100%; height: 300px; margin-right: 10px !important; border: solid 1px #898989 !important; background: #39393b;}
 #chart_bar { width: 100%; height: 300px; margin-right: 10px !important; border: solid 1px #898989 !important;}
-#chart_bar2{width:1000px; height: 250px;}
+#chart_bar2{width:1261px; height: 295px;}
 #chart_cloumn2 { width: 99%; !important; border: solid 1px #898989; margin-right: 10px !important; height: 400px;}
 #chart_spline { width: 100%; height: 300px; border: solid 1px #898989 !important; margin-right: 10px !important;}
 
-.chart_loding {
-    display: table;
-    width: 100%;
-}
-.chart_loding i {
-    color: white; display: table-cell; text-align: center; vertical-align: middle;
-}
-.chart_loding img {
-    position: absolute; top: 40%; left: 50%;;
-}
-.BottomTable img {
-    position: absolute; top: 40%; left: 50%; margin-left: -300px;
-}
+.chart_loding { display: table; width: 100%; z-index: 4;}
+.chart_loding i { color: white; display: table-cell; text-align: center; vertical-align: middle;}
+.chart_loding img { position: absolute; top: 40%; left: 50%;}
+
+.chart_cloumn2_loding { display: table; width: 100%; z-index: 3}
+.chart_cloumn2_loding i { color: white; display: table-cell; text-align: center; vertical-align: middle;}
+.chart_cloumn2_loding img { position: absolute; top: 40%; left: 50%;}
+
+.full_screen_loding {width: 100%; height: 100%; position: absolute; top: 232px; background: black; opacity: 0.9; z-index: 1; display:none;}
+.full_screen_loding img { position: absolute; top: 40%; left: 50%;}
+
+.BottomTable img { position: absolute; top: 40%; left: 50%; margin-left: -300px;}
 
 /* 월별 데이터 항목 차트에 레젠드 */
 .tran-legend { position: absolute; border: 1px solid gray; width: 185px; top:85%; height: 38px; left:40%; background: black;}
@@ -179,41 +183,51 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .tran-legend ul li:nth-child(1) { margin-left: 9px;}
 .tran-legend ul li:nth-child(1) i { color: #2b908f; background-color: #2b908f;}
 .tran-legend ul li:nth-child(2) i { color: #90ee7e; background-color: #90ee7e;}
-.tran-legend ul li:nth-child(3) i { color: #f45b5b; background-color: #f45b5b;}
+.tran-legend ul li:nth-child(3) i { color: #2772C3; background-color: #2772C3;}
 
 /* 차트 버튼 위치 */
 .button-chart-menu { -webkit-border-radius:2px; -moz-border-radius:2px; border-radius:2px; font-size: 12px; background-color: #38383a; color: white; border: none; text-align: center; text-decoration: none; display: inline-block; width: 125px !important; height: 38px;}
+.button-chart-default { color: white; border: none; text-align: center; }
+.btn-month-6 {top:2%; width:50px !important; height:30px; left:118px; border: none; background: #38383a; color: #999}
+.btn-month-3 {top:2%; width:50px !important; height:30px; left:64px; border: none; background: #38383a; color: #999}
+.btn-month-1 {top:2%; width:50px !important; height:30px; left:9px; border: 1px solid white;}
+#chart_cloumn_1 { width: 100%; position: absolute; height: 300px; z-index: 2; top: 0; opacity: 0.8; background: black;}
 .button-position-absolute { position: absolute; z-index:1;}
+.right {top: 89%; right: 25px;cursor: pointer;}
+.left {top: 89%; left: 20px;cursor: pointer;}
 .button-chart-cloumn2-top-left {top: 89%;left: calc(100% - 937px);}
 .button-chart-cloumn2-top-right {top: 89%;right: calc(100% - 934px);}
 .button-chart-cloumn-top-left {top: 85%;left: calc(100% - 524px);}
 .button-chart-cloumn-top-right {top: 85%;right: calc(100% - 522px);}
+.blink_me { animation: blinker 1s linear infinite;}
+@keyframes blinker { 50% { opacity: 0; }}
 
 /* 로그데이터 팝업 */
-.logData { width: 1063px; height: 755px; border: solid 1px #666; margin: 0 auto;  padding: 0 20px;  position: fixed; z-index: 9999; top: 30px; left: 10%; background: #fff9ec; display: none;}
+.logData { width: 1063px; height: 755px; border: solid 1px #fff; margin: 0 auto;  padding: 0 20px;  z-index: 9999; top: 30px; left: 10%; background: #383838; display: none; color:#fff;}
 .logData .top { height: 50px; position: relative; padding-top: 20px; padding-left: 20px; padding-bottom: 10px;}
+.logData .top h1 { color: #fff;}
 .logData .top .closeBtn { position: absolute; top: 20px; right: 20px;}
-.logData .top .closeBtn a { font-size: 20px; line-height: 20px; font-weight: bold;}
+.logData .top .closeBtn a { font-size: 20px; line-height: 20px; font-weight: bold; color: #fff;}
 .logData .middle { height: 585px;}
 .logData .middle .nemo01 { overflow: hidden;}
 .logData .middle .nemo01 .box01 { border-right: dotted 1px #333; width: 350px;float: left;}
 .logData .middle .nemo01 .box02 { padding-left: 10px;border-right: dotted 1px #333;float: left;width: 340px;}
 .logData .middle .nemo01 .box03 { padding-left: 10px;float: left;width: 350px;}
 .logData .middle .listBox01 { padding-bottom: 20px; overflow: hidden;}
-.logData .middle h2 {background: #a4a4a4; color: #fff; font-size: 20px;line-height: 50px;float: left;width: 150px; height: 50px; text-align: center;}
-.logData .middle p { padding-left: 10px; font-size: 20px; line-height: 50px; float: left; width: 150px; height: 50px; text-align: left;}
+.logData .middle h2 {background: #414141; color: #fff; font-size: 20px;line-height: 40px;float: left;width: 150px; height: 40px; text-align: center;}
+.logData .middle p { padding-left: 10px; font-size: 12pt; line-height: 50px; float: left; width: 150px; height: 50px; text-align: left;}
 .logData .middle .nemo02 { overflow: hidden;}
 .logData .middle .nemo02 ul { margin-left: 60px;}
 .logData .middle .nemo02 ul li { width: 300px; height: 200px; float: left; margin-right: 20px; border: solid 1px #000; line-height: 20px; text-align: center;}
-.logData .middle .resultMessege p { padding-left: 0; font-size: 20px; line-height: 20px; float: none; width: 100%; height: 374px; text-align: left; overflow-y: scroll; overflow-x: visible;}
-.resultMessege { margin-top: 54px; border: solid 1px #000; min-height: 350px; padding: 10px; line-height: 25px; font-size: 18px;}
+.logData .middle .resultMessege p { padding-left: 0; font-size: 20px; line-height: 20px; float: none; width: 100%; height: 374px; text-align: left; overflow-y: hidden; overflow-x: visible;}
+.resultMessege { margin-top: 54px; border: solid 1px #fff; min-height: 350px; padding: 10px; line-height: 25px; font-size: 18px;}
 .logData .bottom { border-top: solid 1px #333;}
 .logData .bottom span.btnSet { padding-top: 20px; width: 104px; height: 60px; display: block; margin: 0 auto;}
 .logData .bottom span.btnSet span.leftBtn { display: block; margin-right: 10px; width: 100px; height: 50px; float: left;}
-.logData .bottom span.btnSet a { display: block; float: left; width: 100px; height: 50px; line-height: 50px; font-size: 18px; text-align: center; border: solid 1px #666;}
-
+.logData .bottom span.btnSet a { display: block; float: left; width: 100px; height: 50px; line-height: 50px; font-size: 18px; text-align: center; border: solid 1px #fff; color:#fff;}
+.logData_popup {z-index: 3;}
 /* 서브 화면 */
-#container #subRightBox { width: calc(100% - 30%); padding-top: 15px; padding-left: 15px; padding-bottom: 4.9em;}
+#container #subRightBox { width: 98%; padding-top: 15px; padding-left: 15px; padding-right:15px; padding-bottom: 4.9em;}
 #container #subRightBox .titleArea { position: relative; color:white;}
 #container #subRightBox h2 { border-bottom: solid 1px #fff; padding-bottom: 10px; font-size: 30px; line-height: 30px; margin-bottom: 30px;}
 #container #subRightBox .location { position: absolute; right: 0; top: 10px;}
@@ -233,13 +247,13 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 
 /* 페이징 처리 */
 .pagination {display: inline-block;padding-left: 0;margin: 20px 0;border-radius: 4px;}
-.pagination > li {display: inline;}
-.pagination > li > a, .pagination > li > span {position: relative;float: left;padding: 6px 12px;margin-left: -1px;line-height: 1.42857143;color: #337ab7;text-decoration: none;background-color: #fff;border: 1px solid #ddd;font-size: 9px;}
+.pagination > li {display: inline; margin-right: 2px;}
+.pagination > li > a, .pagination > li > span {position: relative;float: left;padding: 6px 12px;margin-left: -1px;line-height: 1.42857143;color: #888;text-decoration: none;background-color: #383838;border: 1px solid #888;font-size: 9px; margin-right:4px;}
 .pagination > li:first-child > a, .pagination > li:first-child > span {margin-left: 0;border-top-left-radius: 4px;border-bottom-left-radius: 4px;}
 .pagination > li:last-child > a, .pagination > li:last-child > span {border-top-right-radius: 4px;border-bottom-right-radius: 4px;}
-.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {z-index: 2;color: #23527c;background-color: #eee;border-color: #ddd;}
-.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {z-index: 3;color: #fff;    cursor: default;background-color: #337ab7;border-color: #337ab7;}
-.pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus, .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {    color: #777;cursor: not-allowed;background-color: #fff;border-color: #ddd;}
+.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {z-index: 2;color: #fff;background-color: #eee;border-color: #ddd;}
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {z-index: 3;color: #fff;    cursor: default;background-color: #383838;border-color: #fff;}
+.pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus, .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {    color: #fff;cursor: not-allowed;background-color: #fff;border-color: #ddd;}
 .pagination-lg > li > a, .pagination-lg > li > span { padding: 10px 16px; font-size: 18px; line-height: 1.3333333;}
 .pagination-lg > li:first-child > a, .pagination-lg > li:first-child > span { border-top-left-radius: 6px; border-bottom-left-radius: 6px;}
 .pagination-lg > li:last-child > a, .pagination-lg > li:last-child > span { border-top-right-radius: 6px; border-bottom-right-radius: 6px;}
@@ -249,33 +263,41 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .pagination .active {border: none !important;}
 
 /* 1280 X 760 팝업 */
-.layer-pop-1280-760 {width: 1280px;height: 760px;padding:10px;border: solid 1px #666;z-index: 3;background: #fff;display: none;}
+.layer-pop-1280-760 {width: 1280px;height: 760px;padding:10px;border: solid 1px #fff;z-index: 3;background: #383838;display: none; opacity: 0.98; color: white;}
 .layer-pop-1280-760 .top {height: 50px;position: relative;padding-top: 20px;padding-left: 20px;padding-bottom: 10px;}
 .layer-pop-1280-760 .top h1 {float: left;padding-top: 10px;}
 .layer-pop-1280-760 .top .closeBtn {position: absolute;top: 20px;right: 20px;}
-.layer-pop-1280-760 .top .closeBtn a {font-size: 20px;line-height: 20px;font-weight: bold;}
+.layer-pop-1280-760 .top .closeBtn a {font-size: 20px;line-height: 20px;font-weight: bold; color: #fff;}
+.layer-pop-1280-760 table { border: 1px solid #656565; color: #fff; border: none;}
+.layer-pop-1280-760 table tr th {background: #414141; color: #fff;}
+.layer-pop-1280-760 table tr td {background: #383838; color: #fff;}
 .layer-pop-1280-760 table tr th:nth-child(1){width: 100px;}
+.layer-pop-1280-760 textarea {width: 835px; border-radius: 2px; border: none; overflow: hidden;}
+.layer-pop-1280-760 hr {border-style: dashed; color:#666;margin-top: 40px;}
+.layer-pop-1280-760 .tab {background: #383838; color: #fff;}
 
 /* 800 X 289 이동 팝업 */
-.popup {position:fixed;right:0; bottom:0; z-index:99999; width:800px; height:289px;background:#fff;float:right; display: none;}
+.popup {position:fixed;right:0; bottom:0; z-index:4; width:800px; height:289px;background:#383838;float:right; display: none; color:#fff; border: 1px solid #fff;}
 .popup .top { height: 16px; position: relative; padding-top: 20px; padding-left: 20px; padding-bottom: 10px;}
+.popup nav { left: 300px; bottom: -12px; position: absolute;}
 .popup .top .closeBtn { position: absolute;top: 11px; right: 20px;}
-.popup .top .closeBtn a { font-size: 20px; line-height: 20px; font-weight: bold;}
-.popup .middle { height: 585px; overflow-y: scroll;}
+.popup .top .closeBtn a { font-size: 20px; line-height: 20px; font-weight: bold; color: #fff;}
+.popup .middle { height: 220px; overflow-y: auto;}
 .popup .middle table { border: 0 none; width: 100%; border-collapse: collapse; border-spacing: 0; padding: 0; margin: 0 auto;}
-.popup .middle table tr th { background: #fbfbfb; border-top: solid 1px #ccc; border-bottom: solid 1px #ccc; border-right: solid 1px #ccc; font-size: 14px; line-height: 24px; width: 200px; border-left: none;}
+.popup .middle table tr th { background: #414141; border-top: solid 1px #ccc; border-bottom: solid 1px #ccc; border-right: solid 1px #ccc; font-size: 14px; line-height: 24px; width: 200px; border-left: none;}
 .popup .middle table tr th.end { border-right: none;}
-.popup .middle table tr td { border-right: none; text-align: center; line-height: 24px; border-bottom: solid 1px #ccc; border-right: solid 1px #ccc;}
+.popup .middle table tr td { border-right: none; text-align: center; line-height: 24px; border-bottom: solid 1px #ccc; border-right: solid 1px #ccc; background: #383838 !important;}
 .popup .middle table tr td.end { border-right: none;}
 .popup .middle table tr td input { width: 100%; height: 36px; line-height: 36px; border: 1px solid #ccc;}
 .popup .middle tr td select { float: left; width: 150px; height: 36px; border: 1px solid #ccc; font-size: 12px; margin-right: 4px; color: #333; line-height: 18px; padding: 3px 4px;}
-.popup .bottom { border-top: solid 1px #333;}
+.popup .bottom { border-top: solid 1px #333; padding-top: 2px;}
 .popup .bottom a { display: block; margin: 15px auto 0; width: 100px; height: 50px; line-height: 50px; font-size: 18px; text-align: center; border: solid 1px #666;}
+.popup .bottom label {color: #fff;}
 
 /* 작은 팝업 */
 .q-popup-layout {border: solid 1px #eee; display: none; width: 300px; height: 100px; background: #fff; position: absolute; top: 50%; left: 50%; margin-top: -50px; margin-left: -150px;}
 .q-popup-layout p {text-align: center; color: #000; padding: 20px;}
-.q-popup-layout .btnSet {width: 220px; margin: 0 auto;}
+.q-popup-layout .btnSet {width: 100%; margin-left: 15%;}
 .q-popup-layout .btnSet a {float: left; display: block; width: 100px; height: 30px; color: #fff; background: #000; line-height: 30px; text-align: center; margin-right: 10px;
 }
 
@@ -284,32 +306,34 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 
 /* Agent 서버정보 팝업 */
 .agentServerInfo table th { background: #f9f9f9; color: black;}
-.agentServerInfo .none-line-table button { height: 50px; background: #3d3d3d; border: 1px solid white; color: white;}
+.agentServerInfo .none-line-table button { height: 50px; background: #3d3d3d; border: 1px solid white; color: white; font-size: 12pt;}
 /*.agentServerInfo .none-line-table button:hover { height: 50px; background: rgb(255, 100, 69); border: 1px solid rgb(255, 100, 69); color: white;}*/
 .agent-server-info-memo { width: 100%;  height: 100%;  padding-top: 5px;}
 .agent-server-info-memo .left { width: 80%; float: left;}
 .agent-server-info-memo .right { width: 11%; float: right; padding-bottom: 5px;}
-.agent-server-info-memo .right button { height: 77px; background: #3d3d3d; border: 1px solid white; color: white;}
+.agent-server-info-memo .right button { height: 77px; background: #3d3d3d; border: 1px solid white; color: white; font-size: 12pt;}
 /*.agent-server-info-memo .right button:hover { height: 77px; background: rgb(255, 100, 69); border: 1px solid rgb(255, 100, 69); color: white;}*/
 
 
-#agent_server_info_popup .tab {width: 99%; height: auto; overflow: hidden; background: white; margin-left: 5px;}
+#agent_server_info_popup .tab {width: 99%; height: auto; overflow: hidden; background: #383838; margin-left: 5px;}
 #agent_server_info_popup .tab ul.tab_menu {width: 100%; height: auto;}
-#agent_server_info_popup .tab ul.tab_menu li {width: 49.6%; float: left; list-style: none;}
-#agent_server_info_popup .tab ul li:nth-child(1) button {width: 100%; height: 50px; background: white; color: #383838; border:1px solid black; border-bottom: 1px solid white;}
-#agent_server_info_popup .tab ul li:nth-child(2) button {width: 102%; height: 50px; background: white; color: #888; border: none; border-bottom: 1px solid black;}
+#agent_server_info_popup .tab ul.tab_menu li {width: 49.6%; float: left; list-style: none; background: #383838 !important; margin-bottom: 18px;}
+#agent_server_info_popup .tab ul li:nth-child(1) button {width: 100%; height: 50px; background: #383838; color: #fff; border:none; font-size: 15pt;}
+#agent_server_info_popup .tab ul li:nth-child(2) button {width: 102%; height: 50px; background: #383838; color: #fff; border:none; font-size: 15pt;}
 #agent_server_info_popup nav {text-align: center;}
+#agent_server_info_popup .menu-tab-left {border-bottom:4px solid white; padding: 5px; position: absolute; left: 275px; top:35px; width: 70px;}
+#agent_server_info_popup .menu-tab-right {border-bottom:4px solid white; padding: 5px; position: absolute; right: 277px; top:35px; width: 70px;}
 
-#agent_server_info_popup .tab .tab-box-1 {background: white; height: 350px; margin-top: 49px; border: 1px solid #333; border-top: none; overflow: auto; width:100%;}
+#agent_server_info_popup .tab .tab-box-1 {background: #383838; height: 276px; margin-top: 49px; border: 1px solid #333; border-top: none; overflow: auto; width:100%;}
 #agent_server_info_popup .tab .tab-box-1 .line {margin-bottom: 5px;}
-#agent_server_info_popup .tab .tab-box-1 table { width: 1000px; height: auto; margin-left: 100px; border: 1px solid #ddd;}
-#agent_server_info_popup .tab .tab-box-1 table th { background: #f9f9f9; text-align: center; height: 39px; width:100px;}
-#agent_server_info_popup .tab .tab-box-1 table td { color: #383838; text-align: center; height: 39px;}
+#agent_server_info_popup .tab .tab-box-1 table { width: 1000px; height: auto; margin-left: 100px; border: none;}
+#agent_server_info_popup .tab .tab-box-1 table th { background: #414141; text-align: center; height: 39px; width:100px; color:#fff;}
+#agent_server_info_popup .tab .tab-box-1 table td { background: #383838; color: #fff; text-align: center; height: 39px;}
 
-#agent_server_info_popup .tab .tab-box-2 {display: none; height: 350px; margin-top: 49px; }
-#agent_server_info_popup .tab .tab-box-2 #chart_bar2 { margin-top:100px; margin-left: 127px; border: 3px solid gray;}
+#agent_server_info_popup .tab .tab-box-2 {display: none; height: 276px; margin-top: 49px; background: #383838;}
+#agent_server_info_popup .tab .tab-box-2 #chart_bar2 { border: 3px solid gray;}
 #agent_server_info_popup .tab .tab-box-2 .line {margin-bottom: 5px;}
-#agent_server_info_popup .tab .tab-box-2 {height: 300px;}
+#agent_server_info_popup .tab .tab-box-2 {height: 309px; margin-top:65px;}
 
 /* 공통 탭 */
 .common-tab { width: 100%; height: 50px; margin-bottom: 5px;}
@@ -322,75 +346,27 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .common-tab-3 li { width: 33.1%;}
 /* 검색조건 */
 .common-search-table { width: 100%; table-layout: fixed; background: white;}
-.common-search-table tr th {
-    width: 10%;
-    height: 40px;
-    font-weight: bold;
-    background: #3d3d3d;
-    border: none;
-    color: white;
-}
+.common-search-table tr th {width: 10%;height: 40px;font-weight: bold;background: #3d3d3d;border: none;color: white;}
 
-.common-search-table tr td {
-    width: 70%;
-    background: #3d3d3d;
-    border: none;
-    color: white;
-}
-
+.common-search-table tr td { width: 70%; background: #3d3d3d; border: none; color: white;}
+.common-search-table img {width: 24px; position: relative; top:5px; height: 21px;}
 /* select 박스 레이아웃 */
-.selectBox select {
-    float: left;
-    margin-right: 5px;
-}
+.selectBox select { float: left; margin-right: 5px;}
 
 /* laout 통합 */
-.lw-100 {
-    margin-right: 5px;
-    width: 100%;
-}
+.lw-100 { margin-right: 5px; width: 100%; }
 
-.fl-mr-5 {
-    float: left;
-    margin-right: 5px;
-}
-
-.fr-mr-5 {
-    float: right;
-    margin-right: 5px;
-}
+.fl-mr-5 { float: left; margin-right: 5px; }
+.fr-mr-5 { float: right; margin-right: 5px; }
 
 /* 가로테이블(상세화면 같은거 */
-.common-table-h {
-    table-layout: fixed;
-    width: 100%;
-    background: white;
-    color: black;
-    padding: 1em;
-}
-
-.common-table-h tr th {
-    background: #f9f9f9;
-    width: 10%;
-    height: 40px;
-}
-
-.common-table-h tr td {
-    background: white;
-    width: 90%;
-}
-
-.common-table-h tr td * {
-    float: left;
-    margin-right: 5px;
-    margin-left: 5px;
-}
+.common-table-h { table-layout: fixed; width: 100%; background: white; color: black; padding: 1em;}
+.common-table-h tr th { background: #f9f9f9; width: 10%; height: 40px; text-align: left;  padding-left: 20px;}
+.common-table-h tr td { background: white; width: 90%;}
+.common-table-h tr td * { float: left; margin-right: 5px; margin-left: 5px;}
 
 /* 연계API서버 업데이트 팝업 */
-.agent-update-layer-popup {
-    width: 600px;
-    height: 300px;
-    background: white;
+.agent-update-layer-popup { width: 600px; height: 300px; background: white;
     display: none;
     z-index: 4;
     position: absolute;
@@ -427,11 +403,13 @@ footer p { position: absolute; bottom: 26px; left: 45% }
     float: left;
     margin-bottom: 10px;
     text-align: left;
+    color: black;
 }
 
 .agent-update-layer-popup .content hr{
     width: 100%;
     margin-bottom: 30px;
+
 }
 
 .agent-update-layer-popup .content .inner div {
@@ -443,6 +421,7 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .agent-update-layer-popup .content .inner div span{
     margin-left: 15px;
     float: left;
+    color: black;
 }
 
 .agent-update-layer-popup .content .inner input{
@@ -485,19 +464,16 @@ footer p { position: absolute; bottom: 26px; left: 45% }
     width: 1700px;
 }
 
-.overflow-auto {
-    overflow: auto;
-}
+.overflow-auto {overflow: auto;}
 
-.log-row {
-    cursor: pointer;
-}
+.log-row {cursor: pointer;}
 
-#log_button_flag {
-    float: right;
-    margin-right: 50px;
-}
+#log_button_flag {float: left;margin-left: 10px;margin-top: -4px;}
+#log_button_flag .edit-button{height: 40px;border-color: #90ee7e;color: #90ee7e;}
 
-#log_button_flag .edit-button{
-    height: 40px;
-}
+.calendar01 input {width: 80px;}
+.calendarBtn {margin-left: 5px;}
+
+.tab01Box button {width: 104px !important;}
+
+.chart_column2_screen {position: absolute; top:0; width: 100%; height: 403px; background: black; z-index: 2; opacity: 0.9; display: none;}

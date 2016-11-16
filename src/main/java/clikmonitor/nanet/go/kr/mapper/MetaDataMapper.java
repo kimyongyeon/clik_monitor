@@ -20,6 +20,8 @@ public interface MetaDataMapper {
      */
     List<MetaDataVO> selectMetaDataPagingList(CommonSearchVO metaSearchVO);
 
+    List<MetaDataVO> selectSiteList(CommonSearchVO metaSearchVO);
+
     List<MetaDataVO> selectMetaExcelExportList(CommonSearchVO metaSearchVO);
 
     int selectMetaDataRecordTotalCount(CommonSearchVO metaSearchVO);

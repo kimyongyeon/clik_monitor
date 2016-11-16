@@ -36,6 +36,12 @@ public interface ChartMapper {
      * @return : 의회별 데이터건수
      */
     List<ChartVO> selectDataCollectionList(CommonSearchVO chartSearchVO);
+    List<ChartVO> selectDataCollectionList1(CommonSearchVO chartSearchVO);
+    List<ChartVO> selectDataCollectionList2(CommonSearchVO chartSearchVO);
+    List<ChartVO> selectDataCollectionList3(CommonSearchVO chartSearchVO);
+    List<ChartVO> selectDataCollectionList4(CommonSearchVO chartSearchVO);
+
+    int selectDataCollectionListCount(CommonSearchVO chartSearchVO);
 
     /**
      * Agent 서버 정보 바 차트 조회

@@ -16,6 +16,7 @@ public class ChartSearchVO extends CommonSearchVO {
     private String cntcId;
     private String[] ramblyList; // 의회목록 선택항목
     private String[] dataTypeList; // 희의록, 부록, 의안, 의원 선택항목
+    private String month; // 1,3,6 개월
     private String searchRamblyKeyword;
     private String searchDataTypeKeyword;
     private String[] cntcIdList;

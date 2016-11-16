@@ -30,6 +30,7 @@
                                 <button class="excel-button" onclick="onCreateClass.btnExcelSave();">엑셀저장</button>
                             </div>
                         </div>
+
                     </td>
                 </tr>
             </table>
@@ -44,7 +45,7 @@
                                 <th>요청처리율</th>
                                 <th>최종수정일</th>
                             </tr>
-                            <tr v-for="item in items">
+                            <tr v-for="item in items" @click="onCreateClass.fnDetail(item.rasmblyId)">
                                 <td>{{item.rasmblyNm}}</td>
                                 <td>{{item.setInterval}}</td>
                                 <td>{{item.reqProcessingRatio}}</td>
@@ -59,7 +60,7 @@
                         </nav>
                     </div>
                     <div style="text-align: left;">
-                        <button class="edit-button" onclick="onCreateClass.btnEvent();">이벤트보기</button>
+                        <button class="edit-button" onclick="onCreateClass.btnEvent();">에러 정보 목록 보기</button>
                     </div>
                 </div>
             </div>
@@ -79,7 +80,27 @@
         //달력 소스(jQuery UI)
         $(document).ready(function () {
             onCreateClass.init();
+
+            var popcheck = commonClass.getCookie('popup_check');
+
+            if (popcheck == "true") {
+                $("#tpl-log-data-list").hide();
+                $("#idSaveChk").prop('checked', true);
+            } else {
+                $("#tpl-log-data-list").show();
+                $("#idSaveChk").prop('checked', false);
+            }
+
         });
+
+        $("#idSaveChk").on("click", function () {
+            if ($(this).filter(":checked").length > 0) {
+                commonClass.setCookieExdays("popup_check", true, 365);
+            } else {
+                commonClass.setCookieExdays("popup_check", false, 365);
+            }
+        });
+
     </script>
 
 </tiles:putAttribute>

@@ -14,4 +14,5 @@ import lombok.NoArgsConstructor;
 public class MetaDataSearchVO extends CommonSearchVO {
     private String region; // 지역명
     private String siteNm; // 사이트명
+    private String siteId; // 사이트명
 }

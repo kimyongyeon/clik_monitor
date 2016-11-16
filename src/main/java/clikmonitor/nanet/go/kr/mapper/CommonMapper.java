@@ -18,6 +18,7 @@ public interface CommonMapper {
      * @return list list
      */
     List<CommonVO> selectAreaList(); // 지역별 의회 목록 조회
+    List<CommonVO> selectParentAreaList(); // 부모 지역별 의회 목록 조회
 
     List<CommonVO> selectChartXdataList(CommonSearchVO commonSearchVO); // 의회 차트 X축
 

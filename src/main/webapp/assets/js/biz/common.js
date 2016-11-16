@@ -3,7 +3,12 @@ var v_combo_data_list = new Vue({
     data: {
         commonList_1: [],
         commonList_2: [],
-        commonList_3: []
+        commonList_3: [],
+        commonList_4: [],
+        brtcCode: 'intsttcl_000023',
+        insttClCode: '002',
+        loasmCode: '',
+        siteId: '',
     },
     methods: {
         fetchData: function(url, data){
@@ -16,6 +21,9 @@ var v_combo_data_list = new Vue({
                 }
                 if(url == '/getLoasmInfo.do') {
                     Vue.set(v_combo_data_list, 'commonList_3', data);
+                }
+                if(url == '/getSiteList.do') {
+                    Vue.set(v_combo_data_list, 'commonList_4', data);
                 }
             });
         }
@@ -37,10 +45,24 @@ var v_log_data_list = new Vue({
     methods: {
         fetchData: function(url, data, page){
             commonClass.fnAjaxCallback(url, data, function(data){
+
+                if(data.status == '404') {
+                    Vue.set(v_log_data_list, 'items', data.list);
+                    return
+                }
+                
                 var firstPageNoOnPageList = data.paginationInfo.firstPageNoOnPageList;
                 var lastPageNoOnPageList = data.paginationInfo.lastPageNoOnPageList;
                 var recordCountPerPage = data.paginationInfo.recordCountPerPage;
                 var totalRecordCount = data.paginationInfo.totalRecordCount;
+
+                var totalPageCount = data.paginationInfo.totalPageCount;
+                if(totalPageCount <= lastPageNoOnPageList) {
+                    lastPageNoOnPageList = totalPageCount;
+                } else {
+                    lastPageNoOnPageList = 10;
+                }
+                
                 var prev = firstPageNoOnPageList === 1 ? false : true;
                 var next = lastPageNoOnPageList * recordCountPerPage >= totalRecordCount ? false : true;
                 Vue.set(v_log_data_list, 'items', data.list);
@@ -56,8 +78,14 @@ var v_log_data_list = new Vue({
         comma: function (numbers) {
             return commonClass.fnComma(numbers);
         },
-        dataFormat: function(strDate) {
-            return commonClass.fnStringToDate(strDate);
+        dateFormat: function(strDate) {
+            var year = strDate.substring(0,4);
+            var month = strDate.substring(4,6);
+            var day = strDate.substring(6,8);
+            var hh = strDate.substring(8,10);
+            var mm = strDate.substring(10,12);
+            var ss = strDate.substring(12,14);
+            return year + "-" + month + "-" + day + " " + hh + ":" + mm + ":" + ss;
         },
         activeOn: function(event) {
             var par = $(event.target).parent();
@@ -77,13 +105,25 @@ var v_log_data_detail = new Vue({
             commonClass.fnAjaxCallback(url, data, function(data){
                 Vue.set(v_log_data_detail, 'item', data);
                 $(".logData").addClass("openPop");
+                commonClass.screenPop();
             });
         },
         comma: function (numbers) {
             return commonClass.fnComma(numbers);
         },
-        dataFormat: function(strDate) {
-            return commonClass.fnStringToDate(strDate);
+        dateFormat: function(strDate) {
+            strDate = strDate || '';
+            if(strDate == '')
+                return "";
+            if(strDate.length != 14)
+                return strDate;
+            var year = strDate.substring(0,4);
+            var month = strDate.substring(4,6);
+            var day = strDate.substring(6,8);
+            var hh = strDate.substring(8,10);
+            var mm = strDate.substring(10,12);
+            var ss = strDate.substring(12,14);
+            return year + "-" + month + "-" + day + " " + hh + ":" + mm + ":" + ss;
         }
     }
 });
@@ -91,6 +131,7 @@ var v_log_data_detail = new Vue({
 var commonClass = {
     init: function() { // 초기화
         this.fnAjaxBrtcCodeList(); // 기관유형
+        this.fnAjaxInsttClCodeList(); // 지역
         this.fnErrorLogListClose(); // 에러목록페이지 닫기
 
         var option = {
@@ -103,12 +144,20 @@ var commonClass = {
         };
         $("#apiServerUpdateForm").ajaxForm(option);
 
-        $(".log-row").css("cursor", "pointer");
-        $(".log-row").on("click", function () {
-            $(".log-row").css("background", "");
-            $(this).css("background", "red");
-        });
+        // $(".log-row").css("cursor", "pointer");
+        // $(".log-row").on("click", function () {
+        //     $(".log-row").css("background", "");
+        //     $(this).css("background", "red");
+        // });
 
+    },
+    fnMiddleAlignSet: function(select) {
+        // 로그 데이터 팝업 가운데 정렬
+        var $layerPopupObj = $(select);
+        var left = ( $(window).scrollLeft() + ($(window).width() - $layerPopupObj.width()) / 2 );
+        var top = ( $(window).scrollTop() + ($(window).height() - $layerPopupObj.height()) / 2 );
+        $layerPopupObj.css({'left':left,'top':top, 'position':'absolute'});
+        $('body').css('position','relative').append($layerPopupObj);  
     },
     mainInit: function() {
         this.tabsInit(); // 통계관리 탭 초기화
@@ -171,6 +220,18 @@ var commonClass = {
             $("#aTreeBox").hide();
 
             commonClass.tabCurrentIdx = 1;
+
+            $(".button-chart-cloumn-top-left").show();
+            $(".button-chart-cloumn-top-right").show();
+            $(".button-chart-cloumn2-top-left").show();
+            $(".button-chart-cloumn2-top-right").show();
+
+            $("#rTreeBox").jstree('open_all');
+            $("#rTreeBox").jstree('check_all');
+
+            jsTreeClass.arraySelectedData = $("#rTreeBox").jstree("get_selected");
+            agentClass.fnAjaxMainAreaData();
+
         });
 
         $(tab02).on("click", function (e) {
@@ -182,6 +243,18 @@ var commonClass = {
             $("#aTreeBox").show();
 
             commonClass.tabCurrentIdx = 2;
+
+            $(".button-chart-cloumn-top-left").hide();
+            $(".button-chart-cloumn-top-right").hide();
+            $(".button-chart-cloumn2-top-left").hide();
+            $(".button-chart-cloumn2-top-right").hide();
+
+            $("#aTreeBox").jstree('open_all');
+            $("#aTreeBox").jstree('check_all');
+
+            jsTreeClass.arraySelectedData = $("#aTreeBox").jstree("get_selected");
+            agentClass.fnAjaxMainAreaData();
+
         });
     },
     screenPop: function() {
@@ -255,17 +328,7 @@ var commonClass = {
     fnAjaxBrtcCodeList: function() { // 기관유형 : 공통함수에서 초기화용으로 사용하고 화면에서 호출되는 부분이 없음.
         var url = "/getBrtcCodeList.do";
         var data = {};
-
         v_combo_data_list.fetchData(url,data);
-
-        // this.fnAjaxCallback(url, data, function(data) {
-        //     var commonList = {
-        //         commonList: data
-        //     };
-        //     var htmlText = commonClass.getHtmlText("brtc-code-template");
-        //     $("#brtc_code_div").html(htmlText(commonList)); // 기관유형 selectBox UI 만들기
-        //     commonClass.fnAjaxInsttClCodeList(); // 지역선택 selectBox UI 만들기 함수 call
-        // });
     },
     fnAjaxInsttClCodeList: function() { // 지역선택 : 기관유형 EventHandle
 
@@ -280,20 +343,7 @@ var commonClass = {
 
         var url = "/getInsttClCodeList.do";
         var data = {brtcCode: 'LMC'};
-
         v_combo_data_list.fetchData(url,data);
-
-        // this.fnAjaxCallback(url, data, function(data) {
-        //     var commonList = {
-        //         commonList: data
-        //     };
-        //     var htmlText = commonClass.getHtmlText("instt-cl-code-template");
-        //     $("#instt_cl_code_div").html(htmlText(commonList)); // 지역선택 selectBox UI 만들기
-        //     // 초기화
-        //     $('select[name=insttClCode] option:selected').val(''); // 지역선택 selectBox 초기화
-        //     $('select[name=loasmCode]').attr('disabled',true); // 지방의회선택 비활성화
-        //     $('select[name=loasmCode] option:selected').val(''); // 지방의회 초기화
-        // },"post");
     },
     fnAjaxLoasmCodeList: function() { // 지방의회선택 : 지역 EventHandle
         var url = "/getLoasmInfo.do";
@@ -306,15 +356,14 @@ var commonClass = {
         };
 
         v_combo_data_list.fetchData(url,data);
-
-        // this.fnAjaxCallback(url, data, function(data) {
-        //     var commonList = {
-        //         commonList: data
-        //     };
-        //     var htmlText = commonClass.getHtmlText("loasm_code-template");
-        //     // 초기화
-        //     $("#loasm_code_div").html(htmlText(commonList)); // 지방의회선택 selectBox UI 만들기
-        // }, 'post');
+    },
+    fnAjaxSiteCodeList: function() { 
+        var url = "/getSiteList.do";
+        var region = $('select[name=insttClCode] option:selected').val();
+        var data = {
+            region: region || '002'
+        };
+        v_combo_data_list.fetchData(url,data);
     },
     // 당일 : fnToday(0)
     // 1주일 : fnToday(-7)
@@ -428,8 +477,13 @@ var commonClass = {
     /**
      * 에러정보목록 닫기
      */
+    fnErrorListCloseFlag : false,
     fnErrorLogListClose: function () {
         $(".popup").hide();
+        // 그만보기 : 메인화면에서만 먹도록 수정.
+        if(this.fnErrorListCloseFlag) {
+            commonClass.setCookieExdays("popup_check", true, 365);    
+        }
     },
     fnMenuStyle: function(sel) {
         if(sel === "main") {
@@ -457,5 +511,28 @@ var commonClass = {
             $(".menu_1").css("color", "#d84d2c");
             $(".main-menu-left ul li:nth-child(1)").css("border-bottom", "5px solid rgb(255, 100, 69)");
         }
+    },
+    getCookie: function(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length,c.length);
+            }
+        }
+        return "";
+    },
+    setCookieExdays: function(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";path=/; " + expires;
+    },
+    setCookie: function(cname, cvalue) {
+        document.cookie = cname + "=" + cvalue+ ";path=/; ";
     }
 };

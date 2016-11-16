@@ -3,13 +3,13 @@
 
     <div class="top">
         <h2>에러 정보 목록</h2>
-        <nav aria-label="Page navigation" style="left: 300px; bottom: -12px; position: absolute;">
+        <nav aria-label="Page navigation">
             <ul class="pagination">
                 <li v-if="prev" @click="commonClass.fnLogDataList(prevPage);"><a href="#">&laquo;</a></li>
 
                 <template v-for="item in lastPageNoOnPageList">
                     <li v-if="lastPageNoOnPageList > 1" @click="commonClass.fnLogDataList(firstPageNoOnPageList + item);" :class="{active: page == firstPageNoOnPageList + item}">
-                        <a href="#">{{firstPageNoOnPageList + item}}</a>
+                        <a href="#" v-if="lastPageNoOnPageList >= firstPageNoOnPageList + item">{{firstPageNoOnPageList + item}}</a>
                     </li>
                 </template>
 
@@ -19,26 +19,30 @@
         <div class="closeBtn"><a href="#" onclick="commonClass.fnErrorLogListClose();">X</a></div>
     </div>
 
-    <div class="middle" style="height:220px;">
+    <div class="middle">
         <!-- 목록 -->
         <div class="logData_list_popup">
             <table>
                 <tr>
                     <th height="5">의회명</th>
-                    <th>요청일자</th>
+                    <th>요청일시</th>
                     <th>서버IP</th>
                     <th>결과코드</th>
                     <th>결과메세지</th>
                 </tr>
                 <tr class="log-row"  v-on:click="activeOn" @click="commonClass.fnLogDetailData(item.requstId); activeOn"  v-for="item in items">
                     <td>{{item.rasmblyNm}}</td>
-                    <td class="dateFormat">{{item.requstRecptnTm}}</td>
+                    <td class="dateFormat">{{dateFormat(item.requstRecptnTm)}}</td>
                     <td>{{item.serverIp}}</td>
                     <td>{{item.codeNm}}</td>
                     <td><p class="ellipsis">{{item.resultMssage}}</p></td>
                 </tr>
             </table>
         </div>
+    </div>
+
+    <div class="bottom">
+        <div class="closeBtn"><label for="idSaveChk"><input type="checkbox" id="idSaveChk" name="idSaveChk"> 그만보기</label></div>
     </div>
 </div>
 
@@ -69,7 +73,7 @@
                     </div>
                     <div class="listBox01">
                         <h2>요청일자</h2>
-                        <p>{{item.requstRecptnTm}}</p>
+                        <p>{{dateFormat(item.requstRecptnTm)}}</p>
                     </div>
                 </div>
                 <div class="box03">

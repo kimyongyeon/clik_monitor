@@ -312,6 +312,12 @@ var onCreateClass = {
             $(".q-popup-layout").hide();
             return;
         }
+        if(areas1 != '' && areas2 != '' ) {
+            alert("기초의회, 광역의회는 하나만 선택 가능 합니다.");
+            $("#areas").focus();
+            $(".q-popup-layout").hide();
+            return;
+        }
 
         var data = {
             emailId: emailId || '', // 이메일아이디
@@ -324,6 +330,7 @@ var onCreateClass = {
             $(".q-popup-layout").hide();
 
             onCreateClass.fnList();
+            onCreateClass.fnAjaxTableMailList();
 
         }, "post");
     },

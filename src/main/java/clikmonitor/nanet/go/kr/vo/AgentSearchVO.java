@@ -7,4 +7,5 @@ import lombok.Data;
  */
 @Data
 public class AgentSearchVO extends CommonSearchVO {
+    private String[] ramblyList; // 의회목록 선택항목
 }

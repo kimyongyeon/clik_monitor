@@ -4,11 +4,14 @@ import clikmonitor.nanet.go.kr.vo.ChartSearchVO;
 import clikmonitor.nanet.go.kr.vo.ChartVO;
 import clikmonitor.nanet.go.kr.mapper.ChartMapper;
 import clikmonitor.nanet.go.kr.vo.CommonSearchVO;
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by kimyongyeon on 2016-07-29.
@@ -23,7 +26,8 @@ public interface ChartService {
      */
     List<ChartVO> selectTotalAvgRequestCountList1(ChartSearchVO chartSearchVO);
     List<ChartVO> selectTotalAvgRequestCountList2(ChartSearchVO chartSearchVO);
-    List<ChartVO> selectTotalAvgRequestCountList3(ChartSearchVO chartSearchVO);
+    Map selectTotalAvgRequestCountList3(ChartSearchVO chartSearchVO);
+    int selectTotalAvgRequestCountList3Count(ChartSearchVO chartSearchVO);
 
     /**
      * 트랜잭션 목록 조회
@@ -62,6 +66,11 @@ public interface ChartService {
         ChartMapper chartMapper;
 
         @Override
+        public int selectTotalAvgRequestCountList3Count(ChartSearchVO chartSearchVO) {
+            return chartMapper.selectTotalAvgRequestCountList3Count(chartSearchVO);
+        }
+
+        @Override
         public List<ChartVO> selectDataCollectionList1(ChartSearchVO chartSearchVO) {
             return chartMapper.selectDataCollectionList1(chartSearchVO);
         }
@@ -97,7 +106,7 @@ public interface ChartService {
         }
 
         @Override
-        public List<ChartVO> selectTotalAvgRequestCountList3(ChartSearchVO chartSearchVO) {
+        public Map selectTotalAvgRequestCountList3(ChartSearchVO chartSearchVO) {
             List<String> arrayList = new ArrayList<String>();
             for (String str : chartSearchVO.getDataTypeList()) {
                 if("1".equals(str)) { // 회의록
@@ -125,7 +134,20 @@ public interface ChartService {
                     chartSearchVO.setCntcIdList(arrayList.toArray(new String[arrayList.size()]));
                 }
             }
-            return chartMapper.selectTotalAvgRequestCountList3(chartSearchVO);
+
+            PaginationInfo paginationInfo = new PaginationInfo();
+            paginationInfo.setCurrentPageNo(chartSearchVO.getPageIndex()); // 현재 페이지
+            paginationInfo.setRecordCountPerPage(chartSearchVO.getPageUnit()); // 페이지 갯수
+            paginationInfo.setPageSize(chartSearchVO.getPageSize()); // 페이지 사이즈
+            paginationInfo.setTotalRecordCount(chartMapper.selectTotalAvgRequestCountList3Count(chartSearchVO)); // 전체카운트
+
+            Map map = new HashMap();
+            chartSearchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+            chartSearchVO.setRecordCountPerPage(chartSearchVO.getPageUnit());
+            map.put("list3", chartMapper.selectTotalAvgRequestCountList3(chartSearchVO));
+            map.put("paginationInfo", paginationInfo);
+
+            return map;
         }
 
         @Override

@@ -33,6 +33,7 @@
     </sql>
 
     <select id="selectRangeExcelExportList" parameterType="rangeSearchVO" resultType="rangeVO">
+        <![CDATA[
          SELECT /* selectRangeExcelExportList */
              COLGOVER.RASMBLY_ID rasmblyId
 		   , COLGOVER.RASMBLY_NM rasmblyNm
@@ -41,9 +42,34 @@
            /*, COLGOVER.LAST_UPDT_DT lastCntcDt*/
            , TO_CHAR(COLGOVER.LAST_CNTC_DT, 'YYYY-MM-DD') LASTCNTCDT
         FROM COLGOVER, COLGOVER_SET
+        ]]>
         WHERE 1 = 1
         AND COLGOVER_SET.RASMBLY_ID(+) = COLGOVER.RASMBLY_ID
         AND COLGOVER.ISVIEW = 'Y'
+        <if test="keyWordSub == 1"> <!-- 기관유형 -->
+            <if test="brtcCode == 'intsttcl_000024'"> <!-- 기초 -->
+                AND SUBSTR(COLGOVER.RASMBLY_ID,1,6) IN (
+                SELECT LOASM_CODE AS LOASMCODE
+                FROM ORGAN, COLGOVER
+                WHERE INSTT_CL_CODE = 'INTSTTCL_000024'
+                AND ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+                )
+            </if>
+            <if test="brtcCode == 'intsttcl_000023'"> <!-- 광역 -->
+                AND SUBSTR(COLGOVER.RASMBLY_ID,1,6) IN (
+                SELECT LOASM_CODE AS LOASMCODE
+                FROM ORGAN, COLGOVER
+                WHERE INSTT_CL_CODE != 'INTSTTCL_000024'
+                AND ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+                )
+            </if>
+        </if>
+        <if test="keyWordSub == 2"> <!-- 지역 -->
+            AND SUBSTR(COLGOVER_SET.RASMBLY_ID,1,3) IN (#{insttClCode})
+        </if>
+        <if test="keyWordSub == 3"> <!-- 지방의회 -->
+            AND SUBSTR(COLGOVER_SET.RASMBLY_ID,1,6) IN (#{loasmCode})
+        </if>
         ORDER BY ORDR ASC
     </select>
 
@@ -62,18 +88,30 @@
         FROM COLGOVER, COLGOVER_SET
 		]]>
         WHERE 1 = 1
-        <if test="keyWordType == 1"> <!-- 기관유형 -->
-            AND SUBSTR(COLGOVER_SET.RASMBLY_ID,1,6) IN (
+        AND COLGOVER_SET.RASMBLY_ID(+) = COLGOVER.RASMBLY_ID
+        AND COLGOVER.ISVIEW = 'Y'
+        <if test="keyWordSub == 1"> <!-- 기관유형 -->
+            <if test="brtcCode == 'intsttcl_000024'"> <!-- 기초 -->
+                AND SUBSTR(COLGOVER.RASMBLY_ID,1,6) IN (
                 SELECT LOASM_CODE AS LOASMCODE
                 FROM ORGAN, COLGOVER
-                WHERE INSTT_CL_CODE != #{brtcCode}
+                WHERE INSTT_CL_CODE = 'INTSTTCL_000024'
                 AND ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
-            )
+                )
+            </if>
+            <if test="brtcCode == 'intsttcl_000023'"> <!-- 광역 -->
+                AND SUBSTR(COLGOVER.RASMBLY_ID,1,6) IN (
+                SELECT LOASM_CODE AS LOASMCODE
+                FROM ORGAN, COLGOVER
+                WHERE INSTT_CL_CODE != 'INTSTTCL_000024'
+                AND ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+                )
+            </if>
         </if>
-        <if test="keyWordType == 2"> <!-- 지역 -->
+        <if test="keyWordSub == 2"> <!-- 지역 -->
             AND SUBSTR(COLGOVER_SET.RASMBLY_ID,1,3) IN (#{insttClCode})
         </if>
-        <if test="keyWordType == 3"> <!-- 지방의회 -->
+        <if test="keyWordSub == 3"> <!-- 지방의회 -->
             AND SUBSTR(COLGOVER_SET.RASMBLY_ID,1,6) IN (#{loasmCode})
         </if>
         <!--<include refid="h_bottom" />-->

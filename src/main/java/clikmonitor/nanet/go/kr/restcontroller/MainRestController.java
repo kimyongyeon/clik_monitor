@@ -386,6 +386,7 @@ public class MainRestController  {
 
         Map map = new HashMap();
         pLogVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+        pLogVO.setRecordCountPerPage(pLogVO.getPageUnit());
         map.put("list", logService.selectErrorLogInfoList(pLogVO));
         map.put("paginationInfo", paginationInfo);
         return map;
@@ -407,9 +408,9 @@ public class MainRestController  {
         if(chartSearchVO.getRamblyList().length == 0) {
             return map;
         }
-//        map.put("list1", chartService.selectTotalAvgRequestCountList1(chartSearchVO)); // 금주
-//        map.put("list2", chartService.selectTotalAvgRequestCountList2(chartSearchVO)); // 전주
-        map.put("list3", chartService.selectTotalAvgRequestCountList3(chartSearchVO)); // 전월
+
+        map = chartService.selectTotalAvgRequestCountList3(chartSearchVO);
+
         return map;
     }
 
@@ -494,28 +495,12 @@ public class MainRestController  {
         chartSearchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
         chartSearchVO.setRecordCountPerPage(chartSearchVO.getPageUnit());
         List<ChartVO> list = chartService.selectDataCollectionList(chartSearchVO);
-//        map.put("list5",commonService.selectChartXdataList(chartSearchVO));
         map.put("list1", chartService.selectDataCollectionList1(chartSearchVO)); // 회의록
         map.put("list3", chartService.selectDataCollectionList2(chartSearchVO)); // 의안
         map.put("list4", chartService.selectDataCollectionList3(chartSearchVO)); // 의원
         map.put("list2", chartService.selectDataCollectionList4(chartSearchVO)); // 부록
         map.put("list",list);
         map.put("paginationInfo",paginationInfo);
-
-//        for (String str : chartSearchVO.getDataTypeList()) {
-//            if("1".equals(str)) { // 회의록
-//                map.put("list1",list.stream().filter(a->a.getTitle().equals("회의록")).collect(Collectors.toList()));
-//            }
-//            if("2".equals(str)) { // 부록
-//                map.put("list2",list.stream().filter(a->a.getTitle().equals("부록")).collect(Collectors.toList()));
-//            }
-//            if("3".equals(str)) { // 의안
-//                map.put("list3",list.stream().filter(a->a.getTitle().equals("의안")).collect(Collectors.toList()));
-//            }
-//            if("4".equals(str)) { // 의원
-//                map.put("list4",list.stream().filter(a->a.getTitle().equals("의원")).collect(Collectors.toList()));
-//            }
-//        }
 
         return map;
     }

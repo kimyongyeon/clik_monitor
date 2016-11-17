@@ -198,14 +198,14 @@
     <select id="selectRasmblyLastSendDataList" parameterType="statisticsSearchVO" resultMap="statisticsMap">
         <![CDATA[
         SELECT /*selectRasmblyLastSendDataList*/
-              (SELECT LOASM_NM	FROM ORGAN WHERE ORGAN.LOASM_CODE = CC.RASMBLY_ID) rasmblyNm
+              (SELECT LOASM_NM	FROM ORGAN WHERE ORGAN.LOASM_CODE = CCC.RASMBLY_ID) rasmblyNm
+            , CCC.RASMBLY_ID rasmblyNmNo
             , SUBSTR(MAX(UP1),1,4) || '-' || SUBSTR(MAX(UP1),5,2) || '-' || SUBSTR(MAX(UP1),7,2) || ' ' || SUBSTR(MAX(UP1),9,2) || ':' || SUBSTR(MAX(UP1),11,2) || ':' || SUBSTR(MAX(UP1),13,2) billMinutesFrstRegistDt
             , SUBSTR(MAX(UP2),1,4) || '-' || SUBSTR(MAX(UP2),5,2) || '-' || SUBSTR(MAX(UP2),7,2) || ' ' || SUBSTR(MAX(UP2),9,2) || ':' || SUBSTR(MAX(UP2),11,2) || ':' || SUBSTR(MAX(UP2),13,2) itemFrstRegistDt
-            , SUBSTR(MAX(UP3),1,4) || '-' || SUBSTR(MAX(UP3),5,2) || '-' || SUBSTR(MAX(UP3),7,2) || ' ' || SUBSTR(MAX(UP3),9,2) || ':' || SUBSTR(MAX(UP3),11,2) || ':' || SUBSTR(MAX(UP3),13,2) billFrstRegistDt
-            , SUBSTR(MAX(UP4),1,4) || '-' || SUBSTR(MAX(UP4),5,2) || '-' || SUBSTR(MAX(UP4),7,2) || ' ' || SUBSTR(MAX(UP4),9,2) || ':' || SUBSTR(MAX(UP4),11,2) || ':' || SUBSTR(MAX(UP4),13,2) minutesAppendixFrstRegistDt
-            , SUBSTR(MAX(UP5),1,4) || '-' || SUBSTR(MAX(UP5),5,2) || '-' || SUBSTR(MAX(UP5),7,2) || ' ' || SUBSTR(MAX(UP5),9,2) || ':' || SUBSTR(MAX(UP5),11,2) || ':' || SUBSTR(MAX(UP5),13,2) billFrstRegistDt
-            , SUBSTR(MAX(UP6),1,4) || '-' || SUBSTR(MAX(UP6),5,2) || '-' || SUBSTR(MAX(UP6),7,2) || ' ' || SUBSTR(MAX(UP6),9,2) || ':' || SUBSTR(MAX(UP6),11,2) || ':' || SUBSTR(MAX(UP6),13,2) minutesStatementFrstRegistDt
-            , CC.RASMBLY_ID rasmblyNmNo
+            , SUBSTR(MAX(UP3),1,4) || '-' || SUBSTR(MAX(UP3),5,2) || '-' || SUBSTR(MAX(UP3),7,2) || ' ' || SUBSTR(MAX(UP3),9,2) || ':' || SUBSTR(MAX(UP3),11,2) || ':' || SUBSTR(MAX(UP3),13,2) minutesStatementFrstRegistDt
+            , SUBSTR(MAX(UP4),1,4) || '-' || SUBSTR(MAX(UP4),5,2) || '-' || SUBSTR(MAX(UP4),7,2) || ' ' || SUBSTR(MAX(UP4),9,2) || ':' || SUBSTR(MAX(UP4),11,2) || ':' || SUBSTR(MAX(UP4),13,2) minutesAnswerFrstRegistDt
+            , SUBSTR(MAX(UP5),1,4) || '-' || SUBSTR(MAX(UP5),5,2) || '-' || SUBSTR(MAX(UP5),7,2) || ' ' || SUBSTR(MAX(UP5),9,2) || ':' || SUBSTR(MAX(UP5),11,2) || ':' || SUBSTR(MAX(UP5),13,2) minutesAppendixFrstRegistDt
+            , SUBSTR(MAX(UP6),1,4) || '-' || SUBSTR(MAX(UP6),5,2) || '-' || SUBSTR(MAX(UP6),7,2) || ' ' || SUBSTR(MAX(UP6),9,2) || ':' || SUBSTR(MAX(UP6),11,2) || ':' || SUBSTR(MAX(UP6),13,2) billFrstRegistDt
         FROM (
             SELECT AA.RASMBLY_ID, UP1, UP2, UP3, UP4, UP5, UP6 FROM
                (SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP1  FROM MINUTES WHERE CNTC_INPUT_SE_CODE = 'API'   GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) AA -- 회의록
@@ -219,11 +219,11 @@
                 AND AA.RASMBLY_ID = DD.RASMBLY_ID(+)
                 AND AA.RASMBLY_ID = EE.RASMBLY_ID(+)
                  AND AA.RASMBLY_ID = FF.RASMBLY_ID(+)
-            )BB, COLGOVER CC WHERE 1 = 1
+            ) AAA, COLGOVER CCC WHERE AAA.RASMBLY_ID = CCC.RASMBLY_ID
 		]]>
         <if test="keyWordSub == 1"> <!-- 기관유형 -->
             <if test="brtcCode == 'intsttcl_000024'"> <!-- 기초 -->
-                AND SUBSTR(CC.RASMBLY_ID,1,6) IN (
+                AND SUBSTR(CCC.RASMBLY_ID,1,6) IN (
                 SELECT LOASM_CODE AS LOASMCODE
                 FROM ORGAN, COLGOVER
                 WHERE INSTT_CL_CODE = 'INTSTTCL_000024'
@@ -231,7 +231,7 @@
                 )
             </if>
             <if test="brtcCode == 'intsttcl_000023'"> <!-- 광역 -->
-                AND SUBSTR(CC.RASMBLY_ID,1,6) IN (
+                AND SUBSTR(CCC.RASMBLY_ID,1,6) IN (
                 SELECT LOASM_CODE AS LOASMCODE
                 FROM ORGAN, COLGOVER
                 WHERE INSTT_CL_CODE != 'INTSTTCL_000024'
@@ -240,44 +240,44 @@
             </if>
         </if>
         <if test="keyWordSub == 2"> <!-- 지역 -->
-            AND CC.RASMBLY_ID LIKE #{insttClCode} || '%'
+            AND CCC.RASMBLY_ID LIKE #{insttClCode} || '%'
         </if>
         <if test="keyWordSub == 3"> <!-- 지방의회 -->
-            AND CC.RASMBLY_ID = #{loasmCode}
+            AND CCC.RASMBLY_ID = #{loasmCode}
         </if>
-        GROUP BY CC.RASMBLY_ID,CC.ORDR	ORDER BY CC.ORDR ASC
+        GROUP BY CCC.RASMBLY_ID,CCC.ORDR	ORDER BY CCC.ORDR ASC
     </select>
 
     <!--항목별 최종전송 데이터 목록 엑셀저장  -->
     <select id="selectRasmblyLastSendDataExcelExportList" parameterType="statisticsSearchVO" resultMap="statisticsMap">
         <![CDATA[
-        SELECT /*selectRasmblyLastSendDataExcelExportList*/
-             (SELECT LOASM_NM	FROM ORGAN WHERE ORGAN.LOASM_CODE = CC.RASMBLY_ID) rasmblyNm
+       SELECT /*selectRasmblyLastSendDataList*/
+              (SELECT LOASM_NM	FROM ORGAN WHERE ORGAN.LOASM_CODE = CCC.RASMBLY_ID) rasmblyNm
+            , CCC.RASMBLY_ID rasmblyNmNo
             , SUBSTR(MAX(UP1),1,4) || '-' || SUBSTR(MAX(UP1),5,2) || '-' || SUBSTR(MAX(UP1),7,2) || ' ' || SUBSTR(MAX(UP1),9,2) || ':' || SUBSTR(MAX(UP1),11,2) || ':' || SUBSTR(MAX(UP1),13,2) billMinutesFrstRegistDt
             , SUBSTR(MAX(UP2),1,4) || '-' || SUBSTR(MAX(UP2),5,2) || '-' || SUBSTR(MAX(UP2),7,2) || ' ' || SUBSTR(MAX(UP2),9,2) || ':' || SUBSTR(MAX(UP2),11,2) || ':' || SUBSTR(MAX(UP2),13,2) itemFrstRegistDt
-            , SUBSTR(MAX(UP3),1,4) || '-' || SUBSTR(MAX(UP3),5,2) || '-' || SUBSTR(MAX(UP3),7,2) || ' ' || SUBSTR(MAX(UP3),9,2) || ':' || SUBSTR(MAX(UP3),11,2) || ':' || SUBSTR(MAX(UP3),13,2) billFrstRegistDt
-            , SUBSTR(MAX(UP4),1,4) || '-' || SUBSTR(MAX(UP4),5,2) || '-' || SUBSTR(MAX(UP4),7,2) || ' ' || SUBSTR(MAX(UP4),9,2) || ':' || SUBSTR(MAX(UP4),11,2) || ':' || SUBSTR(MAX(UP4),13,2) minutesAppendixFrstRegistDt
-            , SUBSTR(MAX(UP5),1,4) || '-' || SUBSTR(MAX(UP5),5,2) || '-' || SUBSTR(MAX(UP5),7,2) || ' ' || SUBSTR(MAX(UP5),9,2) || ':' || SUBSTR(MAX(UP5),11,2) || ':' || SUBSTR(MAX(UP5),13,2) billFrstRegistDt
-            , SUBSTR(MAX(UP6),1,4) || '-' || SUBSTR(MAX(UP6),5,2) || '-' || SUBSTR(MAX(UP6),7,2) || ' ' || SUBSTR(MAX(UP6),9,2) || ':' || SUBSTR(MAX(UP6),11,2) || ':' || SUBSTR(MAX(UP6),13,2) minutesStatementFrstRegistDt
-            , CC.RASMBLY_ID rasmblyNmNo
-        FROM (
+            , SUBSTR(MAX(UP3),1,4) || '-' || SUBSTR(MAX(UP3),5,2) || '-' || SUBSTR(MAX(UP3),7,2) || ' ' || SUBSTR(MAX(UP3),9,2) || ':' || SUBSTR(MAX(UP3),11,2) || ':' || SUBSTR(MAX(UP3),13,2) minutesStatementFrstRegistDt
+            , SUBSTR(MAX(UP4),1,4) || '-' || SUBSTR(MAX(UP4),5,2) || '-' || SUBSTR(MAX(UP4),7,2) || ' ' || SUBSTR(MAX(UP4),9,2) || ':' || SUBSTR(MAX(UP4),11,2) || ':' || SUBSTR(MAX(UP4),13,2) minutesAnswerFrstRegistDt
+            , SUBSTR(MAX(UP5),1,4) || '-' || SUBSTR(MAX(UP5),5,2) || '-' || SUBSTR(MAX(UP5),7,2) || ' ' || SUBSTR(MAX(UP5),9,2) || ':' || SUBSTR(MAX(UP5),11,2) || ':' || SUBSTR(MAX(UP5),13,2) minutesAppendixFrstRegistDt
+            , SUBSTR(MAX(UP6),1,4) || '-' || SUBSTR(MAX(UP6),5,2) || '-' || SUBSTR(MAX(UP6),7,2) || ' ' || SUBSTR(MAX(UP6),9,2) || ':' || SUBSTR(MAX(UP6),11,2) || ':' || SUBSTR(MAX(UP6),13,2) billFrstRegistDt
+       FROM (
             SELECT AA.RASMBLY_ID, UP1, UP2, UP3, UP4, UP5, UP6 FROM
-               (SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP1  FROM MINUTES GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) AA
-              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP2 FROM ITEM GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) BB
-              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP3 FROM MINUTES_ANSWER GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) CC
-              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP4 FROM MINUTES_APPENDIX GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) DD
-              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP5 FROM BILL GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) EE
-        	  ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP6 FROM MINUTES_STATEMENT GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) FF
+               (SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP1  FROM MINUTES WHERE CNTC_INPUT_SE_CODE = 'API'   GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) AA -- 회의록
+              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP2 FROM ITEM WHERE CNTC_INPUT_SE_CODE = 'API'   GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) BB -- 안건
+              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP3 FROM MINUTES_ANSWER WHERE CNTC_INPUT_SE_CODE = 'API'   GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) CC -- 답변
+              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP4 FROM MINUTES_APPENDIX WHERE CNTC_INPUT_SE_CODE = 'API'   GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) DD -- 부록
+              ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP5 FROM BILL WHERE CNTC_INPUT_SE_CODE = 'API' GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) EE -- 의안
+         	  ,(SELECT RASMBLY_ID, MAX(LAST_UPDT_DT) UP6 FROM MINUTES_STATEMENT WHERE CNTC_INPUT_SE_CODE = 'API'   GROUP BY RASMBLY_ID ORDER BY RASMBLY_ID ASC) FF -- 발언
                 WHERE AA.RASMBLY_ID = BB.RASMBLY_ID(+)
                 AND AA.RASMBLY_ID = CC.RASMBLY_ID(+)
                 AND AA.RASMBLY_ID = DD.RASMBLY_ID(+)
                 AND AA.RASMBLY_ID = EE.RASMBLY_ID(+)
-                AND AA.RASMBLY_ID = FF.RASMBLY_ID(+)
-            ) BB, COLGOVER CC WHERE 1 = 1
+                 AND AA.RASMBLY_ID = FF.RASMBLY_ID(+)
+            ) AAA, COLGOVER CCC WHERE AAA.RASMBLY_ID = CCC.RASMBLY_ID
 		]]>
         <if test="keyWordSub == 1"> <!-- 기관유형 -->
             <if test="brtcCode == 'intsttcl_000024'"> <!-- 기초 -->
-                AND SUBSTR(CC.RASMBLY_ID,1,6) IN (
+                AND SUBSTR(CCC.RASMBLY_ID,1,6) IN (
                 SELECT LOASM_CODE AS LOASMCODE
                 FROM ORGAN, COLGOVER
                 WHERE INSTT_CL_CODE = 'INTSTTCL_000024'
@@ -285,7 +285,7 @@
                 )
             </if>
             <if test="brtcCode == 'intsttcl_000023'"> <!-- 광역 -->
-                AND SUBSTR(CC.RASMBLY_ID,1,6) IN (
+                AND SUBSTR(CCC.RASMBLY_ID,1,6) IN (
                 SELECT LOASM_CODE AS LOASMCODE
                 FROM ORGAN, COLGOVER
                 WHERE INSTT_CL_CODE != 'INTSTTCL_000024'
@@ -294,12 +294,12 @@
             </if>
         </if>
         <if test="keyWordSub == 2"> <!-- 지역 -->
-            AND CC.RASMBLY_ID LIKE #{insttClCode} || '%'
+            AND CCC.RASMBLY_ID LIKE #{insttClCode} || '%'
         </if>
         <if test="keyWordSub == 3"> <!-- 지방의회 -->
-            AND CC.RASMBLY_ID = #{loasmCode}
+            AND CCC.RASMBLY_ID = #{loasmCode}
         </if>
-        GROUP BY CC.RASMBLY_ID,CC.ORDR	ORDER BY CC.ORDR ASC
+        GROUP BY CCC.RASMBLY_ID,CCC.ORDR	ORDER BY CCC.ORDR ASC
     </select>
 
 

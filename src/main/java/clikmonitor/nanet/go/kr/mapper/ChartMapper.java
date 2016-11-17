@@ -19,7 +19,10 @@ public interface ChartMapper {
      */
     List<ChartVO> selectTotalAvgRequestCountList1(CommonSearchVO chartSearchVO);
     List<ChartVO> selectTotalAvgRequestCountList2(CommonSearchVO chartSearchVO);
+
     List<ChartVO> selectTotalAvgRequestCountList3(CommonSearchVO chartSearchVO);
+
+    int selectTotalAvgRequestCountList3Count(CommonSearchVO chartSearchVO);
 
     /**
      * 트랜잭션 목록 조회

@@ -59,8 +59,10 @@
                             <ul class="pagination"></ul>
                         </nav>
                     </div>
-                    <div style="text-align: left;">
+                    <div class="error-button">
                         <button class="edit-button" onclick="onCreateClass.btnEvent();">에러 정보 목록 보기</button>
+                        <button class="edit-button on" onclick="onCreateClass.btnOn();">그만보기</button>
+                        <button class="edit-button off" onclick="onCreateClass.btnOff();">보기</button>
                     </div>
                 </div>
             </div>
@@ -86,9 +88,11 @@
             if (popcheck == "true") {
                 $("#tpl-log-data-list").hide();
                 $("#idSaveChk").prop('checked', true);
+                onCreateClass.btnOn();
             } else {
                 $("#tpl-log-data-list").show();
                 $("#idSaveChk").prop('checked', false);
+                onCreateClass.btnOff();
             }
 
         });

@@ -4,6 +4,7 @@
     <tiles:putAttribute name="content">
 
         <div id="content">
+            <!-- 사이드 메뉴 -->
             <div id="sideBar">
                 <div class="sideBar_tabMenu">
                     <ul>
@@ -24,7 +25,7 @@
                     <div id="aTreeBox"></div> <!-- 지역별 -->
                 </div>
             </div>
-
+            <!-- 차트 및 모니터 -->
             <div id="rightBox">
                 <div class="inner_box">
                     <div id="errorBox">
@@ -43,7 +44,12 @@
                             <div id="agent_server_info_list1">
                                 <ul class="list">
                                     <li v-bind:id="'li_'+item.code" v-for="item in areas">
-                                        <a href="#" @click="agentClass.fnAgentDetailPopup(item.code)"><span class="listBox"><img class="areas_img" v-bind:src="'img/img/img_img0'+item.state+'.'+item.ext" alt="" /></span><span class="listTxt">{{item.name}} <br /> ({{item.upDate}})</span></a>
+                                        <a href="#" @click="agentClass.fnAgentDetailPopup(item.code)">
+                                            <span class="listBox">
+                                                <img class="areas_img" v-bind:src="'img/img/img_img0'+item.state+'.'+item.ext" alt="" />
+                                            </span>
+                                            <span class="listTxt">{{item.name}} <br /> ({{item.upDate}})</span>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -53,7 +59,11 @@
                             <div id="agent_server_info_list2">
                                 <ul class="list">
                                     <li v-bind:id="'li_'+item.code" v-for="item in areas2">
-                                        <a href="#" @click="agentClass.fnAgentDetailPopup(item.code)"><span class="listBox"><img class="areas_img" v-bind:src="'img/img/img_img0'+item.state+'.'+item.ext" alt="" /></span><span class="listTxt">{{item.name}} <br /> ({{item.upDate}})</span></a>
+                                        <a href="#" @click="agentClass.fnAgentDetailPopup(item.code)">
+                                            <span class="listBox">
+                                                <img class="areas_img" v-bind:src="'img/img/img_img0'+item.state+'.'+item.ext" alt="" /></span>
+                                            <span class="listTxt">{{item.name}} <br /> ({{item.upDate}})</span>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -71,7 +81,7 @@
                         </div>
                         <div class="rightTopBox">
                             <div class="leftTopBox">
-                                <!-- 트랜잭션 -->
+                                <!-- 월별 데이터 항목별 수집 현황 -->
                                 <div id="chart_scatter" class="chart_loding"><img src="/img/loading.gif" alt=""></div>
                                 <div class="tran-legend">
                                     <ul>
@@ -88,15 +98,19 @@
                         </div>
                         <div class="rightBottomBox">
                             <div class="leftTopBox">
-                                <!-- 전체요청 평균 건수-->
+                                <!-- 지방 의회별 데이터 전송건수 -->
                                 <div id="chart_column_title"><h1>(1개월)</h1></div>
-                                <div id="chart_cloumn" class="chart_loding"><img src="/img/loading.gif" alt=""></div>
-                                <div id="chart_cloumn_1" class="chart_loding"><img src="/img/loading.gif" alt=""></div>
-                                <button class="chart-column-postion button-chart-menu button-position-absolute button-chart-cloumn-top-left" onclick="chartClass.btnLeftClick();">광역의회</button>
-                                <button class="chart-column-postion button-chart-menu button-position-absolute button-chart-cloumn-top-right" onclick="chartClass.btnRightClick();">시의회</button>
+                                <div id="chart_column" class="chart_loding"><img src="/img/loading.gif" alt=""></div>
+                                <div id="chart_column_1" class="chart_loding"><img src="/img/loading.gif" alt=""></div>
+                                <button class="chart-column-postion button-chart-menu button-position-absolute button-chart-column-top-left" onclick="chartClass.btnLeftClick();">광역의회</button>
+                                <button class="chart-column-postion button-chart-menu button-position-absolute button-chart-column-top-right" onclick="chartClass.btnRightClick();">시의회</button>
                                 <button class="button-chart-menu button-position-absolute btn-month-6 btn-month" onclick="chartClass.btnMonthClick(6);">6개월</button>
                                 <button class="button-chart-menu button-position-absolute btn-month-3 btn-month" onclick="chartClass.btnMonthClick(3);">3개월</button>
                                 <button class="button-chart-menu button-position-absolute btn-month-1 btn-month" onclick="chartClass.btnMonthClick(1);">1개월</button>
+                                <img src="/img/next.png" alt="" class="fa fa-arrow-circle-right fa-2x button-chart-default button-position-absolute right" onclick="chartClass.btnColumnNext();">
+                                <img src="/img/prev.png" alt="" class="fa fa-arrow-circle-left fa-2x button-chart-default button-position-absolute left" onclick="chartClass.btnColumnPrev();">
+                                <%--<i onclick="chartClass.btnColumnNext();" class="fa fa-arrow-circle-right fa-2x button-chart-default button-position-absolute right" aria-hidden="true"></i>--%>
+                                <%--<i onclick="chartClass.btnColumnPrev();" class="fa fa-arrow-circle-left fa-2x button-chart-default button-position-absolute left" aria-hidden="true"></i>--%>
                             </div>
                             <div class="leftBottomBox">
                                 <!-- 연계파일 저장용량 모니터링 -->
@@ -107,14 +121,16 @@
                     </div>
                     <div class="bottomBox">
                         <!-- 데이터 수집 현황 -->
-                        <div id="chart_cloumn2" ></div>
+                        <div id="chart_column2" ></div>
                         <div class="chart_column2_screen">
-                            <div class="chart_cloumn2_loding"><img src="/img/loading.gif" alt=""></div>
+                            <div class="chart_column2_loding"><img src="/img/loading.gif" alt=""></div>
                         </div>
-                        <button class="chart-column-postion2 button-chart-menu button-position-absolute button-chart-cloumn2-top-left" onclick="chartClass.btnLeftClick();">광역의회</button>
-                        <button class="chart-column-postion2 button-chart-menu button-position-absolute button-chart-cloumn2-top-right" onclick="chartClass.btnRightClick();">시의회</button>
-                        <i onclick="chartClass.btnNext();" class="fa fa-arrow-circle-right fa-2x button-chart-default button-position-absolute right" aria-hidden="true"></i>
-                        <i onclick="chartClass.btnPrev();" class="fa fa-arrow-circle-left fa-2x button-chart-default button-position-absolute left" aria-hidden="true"></i>
+                        <button class="chart-column-postion2 button-chart-menu button-position-absolute button-chart-column2-top-right" onclick="chartClass.btnRightClick();">시의회</button>
+                        <button class="chart-column-postion2 button-chart-menu button-position-absolute button-chart-column2-top-left" onclick="chartClass.btnLeftClick();">광역의회</button>
+                        <%--<i onclick="chartClass.btnNext();" class="fa fa-arrow-circle-right fa-2x button-chart-default button-position-absolute right" aria-hidden="true"></i>--%>
+                        <%--<i onclick="chartClass.btnPrev();" class="fa fa-arrow-circle-left fa-2x button-chart-default button-position-absolute left" aria-hidden="true"></i>--%>
+                        <img src="/img/next.png" alt="" class="button-position-absolute right" onclick="chartClass.btnNext();">
+                        <img src="/img/prev.png" alt="" class="button-position-absolute left" onclick="chartClass.btnPrev();">
                     </div>
                 </div>
             </div>
@@ -319,11 +335,13 @@
 
         <script type="text/javascript">
             $(document).ready(function () {
+
                 var rasmblyId = "${param.rasmblyId}";
+
                 onCreateClass.init(rasmblyId);
 
+                // 에러 정복 목록 그만보기 상태
                 var popcheck = commonClass.getCookie('popup_check');
-
                 if (popcheck == "true") {
                     $("#tpl-log-data-list").hide();
                     $("#idSaveChk").prop('checked', true);
@@ -334,6 +352,7 @@
 
             });
 
+            // 에러 정복 목록 그만보기
             $("#idSaveChk").on("click", function () {
                 if ($(this).filter(":checked").length > 0) {
                     commonClass.setCookieExdays("popup_check", true, 365);

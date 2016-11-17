@@ -38,7 +38,8 @@
           WEBROBOT_SEED.SEEDNM,
           WEBROBOT_CONTENTS.DOCTYPE,
           WEBROBOT_CONTENTS.SEEDID,
-          WEBROBOT_CONTENTS.SEEDURL
+          WEBROBOT_CONTENTS.SEEDURL,
+          WEBROBOT_CONTENTS.REGION
         ORDER BY MAX(WEBROBOT_CONTENTS.REGDATE) DESC
     </sql>
 
@@ -46,6 +47,7 @@
     <select id="selectMetaExcelExportList" parameterType="metaDataSearchVO" resultMap="metaDataMap">
         <include refid="h_top" />
         SELECT /* selectMetaExcelExportList */
+            (SELECT CODE_ID_NM FROM COMMON_CODE WHERE CL_CODE='LMC' AND CODE_ID = WEBROBOT_CONTENTS.REGION) AREA,
             WEBROBOT_SITE.SITENM,
             WEBROBOT_SEED.SEEDNM,
             MAX(WEBROBOT_CONTENTS.REGDATE) REGDATE_ORG,
@@ -67,6 +69,7 @@
 
         <include refid="h_top" />
         SELECT /* selectMetaDataPagingList */
+            (SELECT CODE_ID_NM FROM COMMON_CODE WHERE CL_CODE='LMC' AND CODE_ID = WEBROBOT_CONTENTS.REGION) AREA,
             WEBROBOT_SITE.SITENM,
             WEBROBOT_SEED.SEEDNM,
             MAX(WEBROBOT_CONTENTS.REGDATE) REGDATE_ORG,

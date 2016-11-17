@@ -55,7 +55,6 @@ var onCreateClass = {
         commonClass.fnAjaxCallback(url, data, function(data){
             onCreateClass.fnPopupClose(); // 팝업 닫기
             location.href = "/range_setting_list.do";
-            //console.log(data);
         }, "put");
     },
     fnPopupClose: function() {
@@ -85,7 +84,6 @@ var onCreateClass = {
         };
         commonClass.fnAjaxCallback(url, data, function(data){
             onCreateClass.fnPopupClose(); // 팝업 닫기
-            //console.log(data);
         }, "delete");
     }
 }

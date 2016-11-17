@@ -51,13 +51,10 @@ var v_table_list_2 = new Vue({
         },
         isNullCheck: function(str) {
             if (str == 'null') {
-                console.log(str);
                 return '';
             } else if (str == '-- ::') {
-                console.log(str);
                 return '';
             } else {
-                console.log(str);
                 return str;
             }
         }
@@ -91,7 +88,7 @@ var onCreateClass = {
         commonClass.fnToday("datepicker", -7);
     },
     fnDateMonth: function() {
-        commonClass.fnToday("datepicker", -14);
+        commonClass.fnToday("datepicker", -30);
     },
     excelType: 1,
     btnTabSelect: function(s) {

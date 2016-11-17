@@ -106,18 +106,18 @@
                 </div>
                 <div class="w3-row">
                     <div class="w3-col" style="width:50%">
-                        <div id="chart_cloumn" style="width:100%; height: 300px;"></div>
-                        <button class="chart-column-postion button-chart-menu button-position-absolute button-chart-cloumn-top-left" onclick="chartClass.btnLeftClick();">광역시의회</button>
-                        <button class="chart-column-postion button-chart-menu button-position-absolute button-chart-cloumn-top-right" onclick="chartClass.btnRightClick();">시의회</button>
+                        <div id="chart_column" style="width:100%; height: 300px;"></div>
+                        <button class="chart-column-postion button-chart-menu button-position-absolute button-chart-column-top-left" onclick="chartClass.btnLeftClick();">광역시의회</button>
+                        <button class="chart-column-postion button-chart-menu button-position-absolute button-chart-column-top-right" onclick="chartClass.btnRightClick();">시의회</button>
                     </div>
                     <div class="w3-col" style="width:50%">
                         <div id="chart_bar" style="width:100%; height: 300px;"></div>
                     </div>
                 </div>
                 <div class="w3-row">
-                    <div id="chart_cloumn2"></div>
-                    <button class="chart-column-postion2 button-chart-menu button-position-absolute button-chart-cloumn2-top-left" onclick="chartClass.btnLeftClick();">광역시의회</button>
-                    <button class="chart-column-postion2 button-chart-menu button-position-absolute button-chart-cloumn2-top-right" onclick="chartClass.btnRightClick();">시의회</button>
+                    <div id="chart_column2"></div>
+                    <button class="chart-column-postion2 button-chart-menu button-position-absolute button-chart-column2-top-left" onclick="chartClass.btnLeftClick();">광역시의회</button>
+                    <button class="chart-column-postion2 button-chart-menu button-position-absolute button-chart-column2-top-right" onclick="chartClass.btnRightClick();">시의회</button>
                 </div>
 
             </div>

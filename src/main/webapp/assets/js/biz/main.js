@@ -259,7 +259,12 @@ var onCreateClass = {
         $("#btnExpend").on("click", function () {
             if ($("#agent-open-close").attr("src") === "/img/agent_open.png") {
 
-                $(this).closest("div.topBox").animate({"height": "234px", opacity: 1});
+                if($(window).width() < 1900) {
+                    $(this).closest("div.topBox").animate({"height": "400px", opacity: 1});
+                } else {
+                    $(this).closest("div.topBox").animate({"height": "234px", opacity: 1});
+                }
+                // $(this).closest("div.topBox").animate({"height": "234px", opacity: 1});
                 $("#content").height("1545px");
                 $("#agent-open-close").attr("src", "/img/agent_close.png");
 
@@ -300,6 +305,9 @@ $(window).resize(function() {
     commonClass.fnMiddleAlignSet('.agentServerInfo');
     // 로그 데이터 팝업 가운데 정렬
     commonClass.fnMiddleAlignSet('.logData');
+
+    // 화면 리사이징시 화면을 다시 그리기 위해 reload 함.
+    location.reload(false);
 });
 
 /**
@@ -433,6 +441,8 @@ var jsTreeClass = {
         // 지역별 트리 메뉴 체인지 이벤트 : id 지역번호
         $('#aTreeBox').on("changed.jstree", function (e, data) {
             jsTreeClass.arraySelectedData = [];
+            jsTreeClass.arraySelectWide = [];
+            jsTreeClass.arraySelectBasic = [];
 
             if(data == undefined)
                 return;
@@ -441,6 +451,19 @@ var jsTreeClass = {
                 if (!isNaN(parseInt(d))) { // 전체 체크박스 제외
                     if(d.length != 3)
                         jsTreeClass.arraySelectedData.push(d);
+
+                    _.each(jsTreeClass.arrayWide, function(dd) {
+                        if(dd == d) { // 광역
+                            jsTreeClass.wideFlag = true;
+                            jsTreeClass.arraySelectWide.push(d);
+                        }
+                    });
+                    _.each(jsTreeClass.arrayBasic, function(dd) {
+                        if(dd == d) { // 기초
+                            jsTreeClass.basicFlag = true;
+                            jsTreeClass.arraySelectBasic.push(d);
+                        }
+                    });
                 }
             });
             // agentClass.fnAjaxMainAreaData();
@@ -448,11 +471,10 @@ var jsTreeClass = {
 
         $.jstree.defaults.core.expand_selected_onload = true;
         // 최초 한번만 광역시 설정
-        //jsTreeClass.arraySelectedData = ["002001", "051001", "053001", "032001", "062001", "042001", "052001", "044001", "031001", "033001", "043001", "041001", "063001", "061001", "054001", "055001", "064001"];
+        jsTreeClass.arraySelectWide = ["002001", "051001", "053001", "032001", "062001", "042001", "052001", "044001", "031001", "033001", "043001", "041001", "063001", "061001", "054001", "055001", "064001"];
         jsTreeClass.arraySelectedData = ['002001','051001','053001','032001','062001','042001','052001','044001','031001','033001',
                      '043001','041001','063001','061001','054001','055001','064001','031012','031031','033002',
                      '043012','041900','041009','063014','061012','054010','055002','055005'];
-        chartClass.btnChartSearch();
     },
     arraySelectedData: [],
     arrayWide: [],

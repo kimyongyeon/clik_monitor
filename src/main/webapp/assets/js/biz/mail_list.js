@@ -251,7 +251,7 @@ var onCreateClass = {
         commonClass.fnToday("datepicker", -7);
     },
     fnDateMonth: function() {
-        commonClass.fnToday("datepicker", -14);    
+        commonClass.fnToday("datepicker", -30);    
     },
     fnDateToday2: function() {
         commonClass.fnToday2("datepicker", 0);
@@ -260,7 +260,7 @@ var onCreateClass = {
         commonClass.fnToday2("datepicker", -7);
     },
     fnDateMonth2: function() {
-        commonClass.fnToday2("datepicker", -14);
+        commonClass.fnToday2("datepicker", -30);
     },
     fnPopupSave: function() { // 저장 확인 팝업
         $(".q-popup-layout").show();

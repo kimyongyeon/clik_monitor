@@ -11,4 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class RangeSearchVO extends CommonSearchVO{
     private String colgoverSetId;
+    private String keyWordSub;
+
 }

@@ -38,13 +38,8 @@ public class ExcelComponent extends AbstractExcelView {
 
         String titles[] = {"의회별 전송 데이터 ", "임계값설정", "메일링관리", "메타데이터관리", "항목별 최종전송 데이터 "};
 
-        int conditionData = 0;
-        Iterator iterator = map.keySet().iterator();
-        while(iterator.hasNext()) {
-            conditionData = (Integer)iterator.next();
-        }
-
-        if(conditionData == KeyWordType.STATIS) {
+        String menu = (String)map.get("menu");
+        if(menu.equals(KeyWordType.STATIS)) {
 
             // 시트명
             list = (List<Object>) map.get(KeyWordType.STATIS);
@@ -52,7 +47,7 @@ public class ExcelComponent extends AbstractExcelView {
             sheet.setDefaultColumnWidth((short) 12);
             // 헤더명
             cell = getCell(sheet, 0, 0);
-            setText(cell, titles[0]);
+            setText(cell, titles[0] + "(" + map.get("100") + "~" +  map.get("200") + ")");
 
             // 데이터 : 의회별 전송 데이터
             // set header information
@@ -118,7 +113,7 @@ public class ExcelComponent extends AbstractExcelView {
                 }
             }
         }
-        if(conditionData == KeyWordType.SUB_STATIS) {
+        if(map.get("menu").equals(KeyWordType.SUB_STATIS)) {
 
             // 시트명
             list = (List<Object>) map.get(KeyWordType.SUB_STATIS);
@@ -126,7 +121,7 @@ public class ExcelComponent extends AbstractExcelView {
             sheet.setDefaultColumnWidth((short) 12);
             // 헤더명
             cell = getCell(sheet, 0, 0);
-            setText(cell, titles[4]);
+            setText(cell, titles[4] + "(" + map.get("100") + "~" +  map.get("200") + ")");
 
             // 데이터 : 의회별 전송 데이터
             // set header information
@@ -150,7 +145,7 @@ public class ExcelComponent extends AbstractExcelView {
                     cell = getCell(sheet, 3 + i, 1);
                     setText(cell, isNullCheck(vo.getBillMinutesFrstRegistDt()+"")); // 회의록
                     cell = getCell(sheet, 3 + i, 2);
-                    setText(cell, isNullCheck(vo.getItemFrstRegistDt()+"")); // 안건 itemFrstRegistDt
+                    setText(cell, isNullCheck(vo.getItemFrstRegistDt()+"")); // 안건
                     cell = getCell(sheet, 3 + i, 3);
                     setText(cell, isNullCheck(vo.getMinutesStatementFrstRegistDt()+"")); // 발언 minutesStatementFrstRegistDt
                     cell = getCell(sheet, 3 + i, 4);
@@ -158,11 +153,11 @@ public class ExcelComponent extends AbstractExcelView {
                     cell = getCell(sheet, 3 + i, 5);
                     setText(cell, isNullCheck(vo.getMinutesAppendixFrstRegistDt()+"")); // 부록 minutesAppendixFrstRegistDt
                     cell = getCell(sheet, 3 + i, 6);
-                    setText(cell, isNullCheck(vo.getBillFrstRegistDt()+"")); // 의안 billFrstRegistDt
+                    setText(cell, isNullCheck(vo.getBillFrstRegistDt()+"")); // 의안
                 }
             }
         }
-        if(conditionData == KeyWordType.RANGE) {
+        if(map.get("menu").equals(KeyWordType.RANGE)) {
 
             // 시트명
             list = (List<Object>) map.get(KeyWordType.RANGE);
@@ -197,7 +192,7 @@ public class ExcelComponent extends AbstractExcelView {
                 }
             }
         }
-        if(conditionData == KeyWordType.MAIL) {
+        if(map.get("menu").equals(KeyWordType.MAIL)) {
             list = (List<Object>) map.get( KeyWordType.MAIL);
             sheet = wb.createSheet(titles[2]);
             sheet.setDefaultColumnWidth((short) 12);
@@ -226,13 +221,12 @@ public class ExcelComponent extends AbstractExcelView {
                 }
             }
         }
-        // todo : 구현예정
-        if(conditionData == KeyWordType.META) {
+        if(map.get("menu").equals(KeyWordType.META)) {
             list = (List<Object>) map.get(KeyWordType.META);
             sheet = wb.createSheet(titles[3]);
             sheet.setDefaultColumnWidth((short) 12);
             cell = getCell(sheet, 0, 0);
-            setText(cell, titles[3]);
+            setText(cell, titles[3] + "(" + map.get("100") + "~" +  map.get("200") + ")");
 
             // 데이터 : 메타
             // set header information

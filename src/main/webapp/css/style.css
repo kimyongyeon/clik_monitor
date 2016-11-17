@@ -62,7 +62,10 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 #rasmblyId_empty {float: left; position: relative; width: 300px; display: none;}
 #rasmblyId_empty h1 {color: red !important; font-weight: bold;}
 
-#chart_column_title {display: inline; width: 106px; color: white; position: absolute; right: 148px; top: 4%; z-index: 2}
+
+#chart_column_title {display: inline; width: 106px; color: white; position: absolute; right: 153px; top: 4%; z-index: 2}
+#chart_column_title h1{font-size: 14pt; line-height: 13px;}
+
 .default-button {background: #3d3d3d; border:1px solid #fff; border-radius: 2px; color: #fff; }
 .edit-button { background: #3d3d3d; border:1px solid #fff; border-radius: 2px; width: 100px; height: 26px; color: white;}
 .insert-button { background: #3d3d3d; border:1px solid #fff; border-radius: 2px; width: 100px; height: 26px; color: white;}
@@ -71,7 +74,7 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 /* 테이블 */
 .table { width: 100%; border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; table-layout: fixed; word-break: break-all; background: white;}
 .table tr th { width: 100%; height: 38px; text-align: center; background: #3d3d3d; border-top: solid 1px #898989; border-bottom: solid 1px #898989; font-size: 10pt; line-height: 38px; padding-left: 10px;    border-left: none; color: #fff;}
-.table tr td { border-right: none; border-bottom: solid 1px #898989; border-top: solid 1px #898989; padding-left: 10px; line-height: 20px; font-size: 9pt; text-align: center; }
+.table tr td { border-right: none; border-bottom: solid 1px #898989; border-top: solid 1px #898989; padding-left: 10px; line-height: 35px; font-size: 9pt; text-align: center; }
 .table tr:hover {background: yellow;}
 .none-line-table { border: 0 none; width: 100%; border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; table-layout: fixed;}
 .none-line-table tr td { padding: 5px; border: 0px;}
@@ -86,7 +89,8 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 #content { overflow: hidden;}
 
 /* 사이드 왼쪽 */
-#sideBar { width: 13%; height: auto; float: left; margin-left: 0.5%; margin-top: 1%; background: #3d3d3d; webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; padding-bottom: 20px;}
+#sideBar { width: 14%; height: auto; float: left; margin-left: 0.5%; margin-top: 1%; background: #3d3d3d; webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; padding-bottom: 20px;}
+
 #sideBar .tab01 .sideBar_radioBox { margin-bottom: 15px; overflow: hidden; background: #3d3d3d;}
 #sideBar .tab01 .sideBar_radioBox ul {padding: 7px 0 19px; overflow: hidden; border-bottom: solid 1px #64666a;}
 #sideBar .tab01 .sideBar_radioBox ul li { float: left; padding: 8px 0 0; margin-left: 15px;}
@@ -143,6 +147,8 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 #rightBox .middleBox .rightBottomBox .leftTopBox { position: relative; width: 100%; margin-bottom: 20px;}
 #rightBox .middleBox .rightBottomBox .leftBottomBox { width: 100%; position: relative;}
 #rightBox .bottomBox { position: relative; width: 100%; margin-top: 20px;}
+.leftTopBox img {width: 30px; height: 30px;}
+.bottomBox img {width: 30px; height: 30px; top:89%;}
 .fullSub img#pipe-01{ position: absolute; top: 0; left: 690px;}
 .fullSub img#pipe-02{ position: absolute; top: 0; left: 690px;}
 .fullSub img#pipe-03{ position: absolute; top: 0; left: 690px;}
@@ -158,19 +164,19 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 
 /* 차트 레이아웃 영역 */
 #chart_scatter { width: 100%; height: 300px; border: solid 1px #898989 !important; margin-right: 10px !important; background: #39393b;}
-#chart_cloumn { width: 100%; height: 300px; margin-right: 10px !important; border: solid 1px #898989 !important; background: #39393b;}
+#chart_column { width: 100%; height: 300px; margin-right: 10px !important; border: solid 1px #898989 !important; background: #39393b;}
 #chart_bar { width: 100%; height: 300px; margin-right: 10px !important; border: solid 1px #898989 !important;}
 #chart_bar2{width:1261px; height: 295px;}
-#chart_cloumn2 { width: 99%; !important; border: solid 1px #898989; margin-right: 10px !important; height: 400px;}
+#chart_column2 { width: 99%; !important; border: solid 1px #898989; margin-right: 10px !important; height: 400px;}
 #chart_spline { width: 100%; height: 300px; border: solid 1px #898989 !important; margin-right: 10px !important;}
 
 .chart_loding { display: table; width: 100%; z-index: 4;}
 .chart_loding i { color: white; display: table-cell; text-align: center; vertical-align: middle;}
 .chart_loding img { position: absolute; top: 40%; left: 50%;}
 
-.chart_cloumn2_loding { display: table; width: 100%; z-index: 3}
-.chart_cloumn2_loding i { color: white; display: table-cell; text-align: center; vertical-align: middle;}
-.chart_cloumn2_loding img { position: absolute; top: 40%; left: 50%;}
+.chart_column2_loding { display: table; width: 100%; z-index: 3}
+.chart_column2_loding i { color: white; display: table-cell; text-align: center; vertical-align: middle;}
+.chart_column2_loding img { position: absolute; top: 40%; left: 50%;}
 
 .full_screen_loding {width: 100%; height: 100%; position: absolute; top: 232px; background: black; opacity: 0.9; z-index: 1; display:none;}
 .full_screen_loding img { position: absolute; top: 40%; left: 50%;}
@@ -191,14 +197,14 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .btn-month-6 {top:2%; width:50px !important; height:30px; left:118px; border: none; background: #38383a; color: #999}
 .btn-month-3 {top:2%; width:50px !important; height:30px; left:64px; border: none; background: #38383a; color: #999}
 .btn-month-1 {top:2%; width:50px !important; height:30px; left:9px; border: 1px solid white;}
-#chart_cloumn_1 { width: 100%; position: absolute; height: 300px; z-index: 2; top: 0; opacity: 0.8; background: black;}
+#chart_column_1 { width: 100%; position: absolute; height: 300px; z-index: 2; top: 0; opacity: 0.8; background: black;}
 .button-position-absolute { position: absolute; z-index:1;}
-.right {top: 89%; right: 25px;cursor: pointer;}
-.left {top: 89%; left: 20px;cursor: pointer;}
-.button-chart-cloumn2-top-left {top: 89%;left: calc(100% - 937px);}
-.button-chart-cloumn2-top-right {top: 89%;right: calc(100% - 934px);}
-.button-chart-cloumn-top-left {top: 85%;left: calc(100% - 524px);}
-.button-chart-cloumn-top-right {top: 85%;right: calc(100% - 522px);}
+.right {top: 85%; right: 25px;cursor: pointer;}
+.left {top: 85%; left: 20px;cursor: pointer;}
+.button-chart-column2-top-left {top: 89%;right: calc(100% - 50%);}
+.button-chart-column2-top-right {top: 89%;left: calc(100% - 50%);}
+.button-chart-column-top-left {top: 85%;right: calc(100% - 50%);}
+.button-chart-column-top-right {top: 85%;left: calc(100% - 50%);}
 .blink_me { animation: blinker 1s linear infinite;}
 @keyframes blinker { 50% { opacity: 0; }}
 
@@ -270,7 +276,7 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .layer-pop-1280-760 .top .closeBtn a {font-size: 20px;line-height: 20px;font-weight: bold; color: #fff;}
 .layer-pop-1280-760 table { border: 1px solid #656565; color: #fff; border: none;}
 .layer-pop-1280-760 table tr th {background: #414141; color: #fff;}
-.layer-pop-1280-760 table tr td {background: #383838; color: #fff;}
+.layer-pop-1280-760 table tr td {background: #383838; color: #fff; display: table-cell; text-align: left;}
 .layer-pop-1280-760 table tr th:nth-child(1){width: 100px;}
 .layer-pop-1280-760 textarea {width: 835px; border-radius: 2px; border: none; overflow: hidden;}
 .layer-pop-1280-760 hr {border-style: dashed; color:#666;margin-top: 40px;}
@@ -474,6 +480,19 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .calendar01 input {width: 80px;}
 .calendarBtn {margin-left: 5px;}
 
-.tab01Box button {width: 104px !important;}
+.error-button {text-align: left;}
+.error-button button {width: 150px; height: 50px; float: left; margin-right:5px;}
 
 .chart_column2_screen {position: absolute; top:0; width: 100%; height: 403px; background: black; z-index: 2; opacity: 0.9; display: none;}
+
+@media only screen and (min-width:968px) and (max-width:1900px) {
+    .main-search-button { width: 144px; height: 35px; background: #777; color: #fff; border: none;}
+    #chart_column_title {display: inline; width: 106px; color: white; position: absolute; right: -60px; top: 4%; z-index: 2}
+    #chart_column_title h1{font-size: 10pt; line-height: 13px;}
+    tspan { font-size: 10pt;}
+    #sideBar { width: 16%; }
+    #rightBox { width: 83%; }
+}
+
+.btn-enabled {background : #3d3d3d; border: 1px solid white; color: #fff;}
+.btn-disabled {background : rgb(56, 56, 58); border: none; color: rgb(153, 153, 153);}

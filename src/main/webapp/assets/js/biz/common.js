@@ -6,7 +6,7 @@ var v_combo_data_list = new Vue({
         commonList_3: [],
         commonList_4: [],
         brtcCode: 'intsttcl_000023',
-        insttClCode: '002',
+        insttClCode: '',
         loasmCode: '',
         siteId: '',
     },
@@ -44,6 +44,15 @@ var v_log_data_list = new Vue({
     },
     methods: {
         fetchData: function(url, data, page){
+            var popcheck = commonClass.getCookie('popup_check');
+            if (popcheck == "true") {
+                $("#tpl-log-data-list").hide();
+                $("#idSaveChk").prop('checked', true);
+            } else {
+                $("#tpl-log-data-list").show();
+                $("#idSaveChk").prop('checked', false);
+            }
+
             commonClass.fnAjaxCallback(url, data, function(data){
 
                 if(data.status == '404') {
@@ -143,13 +152,6 @@ var commonClass = {
             }
         };
         $("#apiServerUpdateForm").ajaxForm(option);
-
-        // $(".log-row").css("cursor", "pointer");
-        // $(".log-row").on("click", function () {
-        //     $(".log-row").css("background", "");
-        //     $(this).css("background", "red");
-        // });
-
     },
     fnMiddleAlignSet: function(select) {
         // 로그 데이터 팝업 가운데 정렬
@@ -212,48 +214,58 @@ var commonClass = {
 
         // jquery 1.7 ->
         $(tab01).on("click", function (e) {
-            e.preventDefault(e);
-            $(tab01).addClass("hover");
-            $(tab02).removeClass("hover");
 
-            $("#rTreeBox").show();
-            $("#aTreeBox").hide();
+            e.preventDefault(e);
 
             commonClass.tabCurrentIdx = 1;
 
-            $(".button-chart-cloumn-top-left").show();
-            $(".button-chart-cloumn-top-right").show();
-            $(".button-chart-cloumn2-top-left").show();
-            $(".button-chart-cloumn2-top-right").show();
+            // 화면전체 UI 초기화
+            $(tab01).addClass("hover");
+            $(tab02).removeClass("hover");
+            $("#rTreeBox").show();
+            $("#aTreeBox").hide();
+            // $(".button-chart-column-top-left").show();
+            // $(".button-chart-column-top-right").show();
+            // $(".button-chart-column2-top-left").show();
+            // $(".button-chart-column2-top-right").show();
 
+            // 의회 전체 열고, 선택
             $("#rTreeBox").jstree('open_all');
             $("#rTreeBox").jstree('check_all');
 
+            // 전체 선택된 데이터를 서버로 보낼 전역배열에 담는다.
             jsTreeClass.arraySelectedData = $("#rTreeBox").jstree("get_selected");
-            agentClass.fnAjaxMainAreaData();
+
+            // 검색 버튼 호출
+            chartClass.btnChartSearch();
 
         });
 
         $(tab02).on("click", function (e) {
-            e.preventDefault(e);
-            $(tab01).removeClass("hover");
-            $(tab02).addClass("hover");
-
-            $("#rTreeBox").hide();
-            $("#aTreeBox").show();
 
             commonClass.tabCurrentIdx = 2;
 
-            $(".button-chart-cloumn-top-left").hide();
-            $(".button-chart-cloumn-top-right").hide();
-            $(".button-chart-cloumn2-top-left").hide();
-            $(".button-chart-cloumn2-top-right").hide();
+            e.preventDefault(e);
 
+            // 화면 전체 UI 초기화
+            $(tab01).removeClass("hover");
+            $(tab02).addClass("hover");
+            $("#rTreeBox").hide();
+            $("#aTreeBox").show();
+            // $(".button-chart-column-top-left").hide();
+            // $(".button-chart-column-top-right").hide();
+            // $(".button-chart-column2-top-left").hide();
+            // $(".button-chart-column2-top-right").hide();
+
+            // 지역 전체 열고, 선택
             $("#aTreeBox").jstree('open_all');
             $("#aTreeBox").jstree('check_all');
 
+            // 전체 선택된 데이터를 서버로 보낼 전역배열에 담는다.
             jsTreeClass.arraySelectedData = $("#aTreeBox").jstree("get_selected");
-            agentClass.fnAjaxMainAreaData();
+
+            // 검색 버튼 호출
+            chartClass.btnChartSearch();
 
         });
     },
@@ -261,11 +273,6 @@ var commonClass = {
         var size = $(window).height();
         $(".screen").css("height", size + "px");
         $(".screen").css("display", "block");
-    },
-    getHtmlText: function(templateID) {
-        var templateText = $("#" + templateID).html();
-        var compiledText = Handlebars.compile(templateText);
-        return compiledText;
     },
     page_go: function(sel) {
         if(sel === "main") {
@@ -305,6 +312,7 @@ var commonClass = {
             type: type, // default : get
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
+            cache: false,
             data: (type === "GET") ? jQuery.param(data) : JSON.stringify(data),
             success: function(d) {
                 deferred.resolve(d);
@@ -332,7 +340,7 @@ var commonClass = {
     },
     fnAjaxInsttClCodeList: function() { // 지역선택 : 기관유형 EventHandle
 
-        var brtcCode = $('select[name=brtcCode] option:selected').val();
+        var brtcCode = v_combo_data_list.brtcCode || ''; // 기관유형
         if(brtcCode === '') {
             $('select[name=insttClCode]').empty(); // 지역선택 초기화
             $('select[name=insttClCode]').append("<option value=''>지역선택</option>");
@@ -347,8 +355,8 @@ var commonClass = {
     },
     fnAjaxLoasmCodeList: function() { // 지방의회선택 : 지역 EventHandle
         var url = "/getLoasmInfo.do";
-        var brtcCode = $('select[name=brtcCode] option:selected').val() || '';
-        var insttClCode = $('select[name=insttClCode] option:selected').val() || '';
+        var brtcCode = v_combo_data_list.brtcCode || ''; // 기관유형
+        var insttClCode = v_combo_data_list.insttClCode || ''; // 지역선택
         insttClCode = insttClCode + "";
         var data = {
             brtcCode: brtcCode.toUpperCase(),

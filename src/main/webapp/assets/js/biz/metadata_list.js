@@ -87,22 +87,20 @@ var onCreateClass = {
             endDate = endDate.replace(/-/gi,'');
         }
 
-        if(region == '') {
-            alert("지역명을 선택하세요.");
-            $("#insttClCode").focus();
-            return;
-        }
+        // if(region == '') {
+        //     alert("지역명을 선택하세요.");
+        //     $("#insttClCode").focus();
+        //     return;
+        // }
         // if(siteId == '') {
         //     alert("사이트명을 선택하세요.");
         //     $("#siteId").focus();
         //     return;
         // }
 
-        console.log(this.currentPage);
-
         var params = "?startDate=" + startDate;
         params += "&endDate=" + endDate;
-        params += "&region=" + region || "002";
+        params += "&region=" + region;
         params += "&siteId=" + siteId;
         params += "&pageIndex=" + this.currentPage;
         params += "&pageUnit=" + 20;
@@ -136,11 +134,11 @@ var onCreateClass = {
             endDate = parseInt(endDate) + 1;
         }
 
-        if(region == '') {
-            alert("지역명을 선택하세요.");
-            $("#insttClCode").focus();
-            return;
-        }
+        // if(region == '') {
+        //     alert("지역명을 선택하세요.");
+        //     $("#insttClCode").focus();
+        //     return;
+        // }
         // if(siteId == '') {
         //     alert("사이트명을 선택하세요.");
         //     $("#siteId").focus();
@@ -150,7 +148,7 @@ var onCreateClass = {
         var data = {
             startDate: startDate,
             endDate: endDate,
-            region: region || "002",
+            region: region,
             siteId: siteId,
             "pageIndex": page,
             "pageUnit":20
@@ -164,6 +162,6 @@ var onCreateClass = {
         commonClass.fnToday("datepicker", -7);
     },
     fnDateMonth: function() {
-        commonClass.fnToday("datepicker", -14);
+        commonClass.fnToday("datepicker", -30);
     }
 }

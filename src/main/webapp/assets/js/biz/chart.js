@@ -33,27 +33,28 @@ var chartClass = {
         });
 
         // 비활성
-        $(".button-chart-cloumn-top-right").css("background", "#38383a");
-        $(".button-chart-cloumn-top-right").css("color", "#999");
-        $(".button-chart-cloumn-top-right").css("border", "none");
-        $(".button-chart-cloumn2-top-right").css("background", "#38383a");
-        $(".button-chart-cloumn2-top-right").css("color", "#999");
-        $(".button-chart-cloumn2-top-right").css("border", "none");
+        $(".button-chart-column-top-right").css("background", "#38383a");
+        $(".button-chart-column-top-right").css("color", "#999");
+        $(".button-chart-column-top-right").css("border", "none");
+        $(".button-chart-column2-top-right").css("background", "#38383a");
+        $(".button-chart-column2-top-right").css("color", "#999");
+        $(".button-chart-column2-top-right").css("border", "none");
 
         // 활성
-        $(".button-chart-cloumn-top-left").css("background", "#38383a");
-        $(".button-chart-cloumn-top-left").css("color","#fff");
-        $(".button-chart-cloumn-top-left").css("border","1px solid #fff");
-        $(".button-chart-cloumn2-top-left").css("background", "#38383a");
-        $(".button-chart-cloumn2-top-left").css("color","#fff");
-        $(".button-chart-cloumn2-top-left").css("border","1px solid #fff");
+        $(".button-chart-column-top-left").css("background", "#38383a");
+        $(".button-chart-column-top-left").css("color","#fff");
+        $(".button-chart-column-top-left").css("border","1px solid #fff");
+        $(".button-chart-column2-top-left").css("background", "#38383a");
+        $(".button-chart-column2-top-left").css("color","#fff");
+        $(".button-chart-column2-top-left").css("border","1px solid #fff");
 
-        $("#chart_cloumn_1").css("visibility", "hidden");
+        $("#chart_column_1").css("visibility", "hidden");
+        
+        this.btnChartSearch();
     },
     monthText: '1',
     btnMonthClick: function(mm) {
         this.monthText = mm;
-        $("#chart_cloumn_1").css("visibility", "visible");
         $("#chart_column_title h1").text("(" + mm +"개월)");
         var arrayDataType = [];
         var data = {};
@@ -65,19 +66,49 @@ var chartClass = {
             dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
             month: mm || 1
         }
+        $("#chart_column_1").css("visibility", "visible");
         commonClass.fnAjaxCallback("/getTotalAvgReqCntList.do", data, function (data) {
-            $("#chart_cloumn_1").css("visibility", "hidden");
-            chart_cloumn(data)
+            $("#chart_column_1").css("visibility", "hidden");
+            chart_column(data)
         },'post'); // 지방 의회별 데이터 전송건수
     },
     dataCollectionPaginationInfo: {},
-    btnNext: function() {
+    dataColumn1PaginationInfo: {},
+    dataCollectionCurrentPage : 1,
+    dataColumn1CurrentPag : 1,
+    dataAreaArray : ["002001", "051001", "053001", "032001", "062001", "042001", "052001", "044001", "031001", "033001", "043001", "041001", "063001", "061001", "054001", "055001", "064001"],
+    fnNextRightProc: function() {
+
+        if(jsTreeClass.arraySelectBasic.length == 0) {
+            return;
+        }
+
+        // 다음 버튼 공통
         var arrayDataType = [];
-        var sendData = {};
         var data = {};
         $.each($("input[name=radioBox01]:checked"), function (idx, value) {
             arrayDataType.push($(this).val());
         });
+        data.paginationInfo = chartClass.dataColumn1PaginationInfo;
+        if(data.paginationInfo.lastPageNo > data.paginationInfo.currentPageNo) {
+            chartClass.dataColumn1CurrentPag = data.paginationInfo.currentPageNo+1;
+        } else {
+            chartClass.dataColumn1CurrentPag = data.paginationInfo.currentPageNo;
+        }
+        var sendData = {
+            ramblyList: jsTreeClass.arraySelectBasic, // 의회(기초,광역,지역)
+            dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
+            month: this.monthText || 1,
+            pageIndex: chartClass.dataColumn1CurrentPag,
+            pageUnit: 17
+        }
+        $("#chart_column_1").css("visibility", "visible");
+        commonClass.fnAjaxCallback("/getTotalAvgReqCntList.do", sendData, function (data) {
+            $("#chart_column_1").css("visibility", "hidden");
+            chartClass.dataColumn1PaginationInfo = data.paginationInfo;
+            chart_column(data)
+        },'post'); // 데이터 수집 현황
+
         data.paginationInfo = chartClass.dataCollectionPaginationInfo;
         if(data.paginationInfo.lastPageNo > data.paginationInfo.currentPageNo) {
             chartClass.dataCollectionCurrentPage = data.paginationInfo.currentPageNo+1;
@@ -85,25 +116,59 @@ var chartClass = {
             chartClass.dataCollectionCurrentPage = data.paginationInfo.currentPageNo;
         }
         sendData = {
-            ramblyList: jsTreeClass.arraySelectedData, // 의회(기초,광역,지역)
+            ramblyList: jsTreeClass.arraySelectBasic, // 의회(기초,광역,지역)
             dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
             pageIndex: chartClass.dataCollectionCurrentPage,
             pageUnit: 17
         }
+
         $(".chart_column2_screen").show();
         commonClass.fnAjaxCallback("/getDataCollectionList.do", sendData, function (data) {
             $(".chart_column2_screen").hide();
             chartClass.dataCollectionPaginationInfo = data.paginationInfo;
-            chart_cloumn2(data)
+            chart_column2(data)
         },'post'); // 데이터 수집 현황
+
+        agentClass.fnAjaxMainAreaData();
+
+        // 광역도시 이외에 도시가 선택되었는지 체크
+        var c = _.difference(jsTreeClass.arraySelectedData, chartClass.dataAreaArray);
+        if(c.length > 0) {
+            chartClass.fnButtonRightEnable();
+        }
     },
-    btnPrev: function() {
+    fnPrevLeftProc: function() {
+
+        if(jsTreeClass.arraySelectWide.length == 0) {
+            return;
+        }
+
+        // 이전 버튼 공통
         var arrayDataType = [];
-        var sendData = {};
         var data = {};
         $.each($("input[name=radioBox01]:checked"), function (idx, value) {
             arrayDataType.push($(this).val());
         });
+        data.paginationInfo = chartClass.dataColumn1PaginationInfo;
+        if(2 <= data.paginationInfo.currentPageNo) {
+            chartClass.dataColumn1CurrentPag = data.paginationInfo.currentPageNo-1;
+        } else {
+            chartClass.dataColumn1CurrentPag = data.paginationInfo.currentPageNo;
+        }
+        var sendData = {
+            ramblyList: jsTreeClass.arraySelectWide, // 의회(기초,광역,지역)
+            dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
+            month: this.monthText || 1,
+            pageIndex: chartClass.dataColumn1CurrentPag,
+            pageUnit: 17
+        }
+        $("#chart_column_1").css("visibility", "visible");
+        commonClass.fnAjaxCallback("/getTotalAvgReqCntList.do", sendData, function (data) {
+            $("#chart_column_1").css("visibility", "hidden");
+            chartClass.dataColumn1PaginationInfo = data.paginationInfo;
+            chart_column(data)
+        },'post'); // 데이터 수집 현황
+
         data.paginationInfo = chartClass.dataCollectionPaginationInfo;
         if(2 <= data.paginationInfo.currentPageNo) {
             chartClass.dataCollectionCurrentPage = data.paginationInfo.currentPageNo-1;
@@ -111,7 +176,7 @@ var chartClass = {
             chartClass.dataCollectionCurrentPage = data.paginationInfo.currentPageNo;
         }
         sendData = {
-            ramblyList: jsTreeClass.arraySelectedData, // 의회(기초,광역,지역)
+            ramblyList: jsTreeClass.arraySelectWide, // 의회(기초,광역,지역)
             dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
             pageIndex: chartClass.dataCollectionCurrentPage,
             pageUnit: 17
@@ -120,87 +185,69 @@ var chartClass = {
         commonClass.fnAjaxCallback("/getDataCollectionList.do", sendData, function (data) {
             $(".chart_column2_screen").hide();
             chartClass.dataCollectionPaginationInfo = data.paginationInfo;
-            chart_cloumn2(data)
+            chart_column2(data)
         },'post'); // 데이터 수집 현황
+
+        agentClass.fnAjaxMainAreaData();
+
+        // 광역도시 이외에 도시가 선택되었는지 체크
+        chartClass.fnButtonLeftEnable();
     },
-    btnLeftClick: function() { // 광역
-
-        var arrayDataType = [];
-        var data = {};
-        $.each($("input[name=radioBox01]:checked"), function (idx, value) {
-            arrayDataType.push($(this).val());
-        });
-
-        $(".topNemo").show();
-        this.fnAgentServerInfoListShowHide();
-
-        data = {
-            ramblyList: jsTreeClass.arraySelectWide, // 의회(기초,광역,지역)
-            dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
-            month: 1
-        }
-        this.fnAllChartCallback(data); // 차트 데이터 호출
-
-        if(jsTreeClass.arraySelectWide.length === 0)
-            $(".topNemo").hide();
-
+    btnColumnNext: function() {
+        // 지방 의회별 데이터 전송건수 다음 버튼
+        this.fnNextRightProc();
+    },
+    btnColumnPrev: function() {
+        // 지방 의회별 데이터 전송건수 이전 버튼
+        this.fnPrevLeftProc();
+    },
+    btnNext: function() {
+        // 데이터 수집 현황 다음 버튼
+        this.fnNextRightProc();
+    },
+    btnPrev: function() {
+        // 데이터 수집 현황 이전 버튼
+        this.fnPrevLeftProc();
+    },
+    btnLeftClick: function() { // 광역 버튼
+        this.fnPrevLeftProc();
+    },
+    btnRightClick: function() { // 기초 버튼
+        this.fnNextRightProc();
+    },
+    fnButtonLeftEnable: function() {
         // 비활성
-        $(".button-chart-cloumn-top-right").css("background", "#38383a");
-        $(".button-chart-cloumn-top-right").css("color", "#999");
-        $(".button-chart-cloumn-top-right").css("border", "none");
-        $(".button-chart-cloumn2-top-right").css("background", "#38383a");
-        $(".button-chart-cloumn2-top-right").css("color", "#999");
-        $(".button-chart-cloumn2-top-right").css("border", "none");
+        $(".button-chart-column-top-right").css("background", "#38383a");
+        $(".button-chart-column-top-right").css("color", "#999");
+        $(".button-chart-column-top-right").css("border", "none");
+        $(".button-chart-column2-top-right").css("background", "#38383a");
+        $(".button-chart-column2-top-right").css("color", "#999");
+        $(".button-chart-column2-top-right").css("border", "none");
 
         // 활성
-        $(".button-chart-cloumn-top-left").css("background", "#38383a");
-        $(".button-chart-cloumn-top-left").css("color","#fff");
-        $(".button-chart-cloumn-top-left").css("border","1px solid #fff");
-        $(".button-chart-cloumn2-top-left").css("background", "#38383a");
-        $(".button-chart-cloumn2-top-left").css("color","#fff");
-        $(".button-chart-cloumn2-top-left").css("border","1px solid #fff");
+        $(".button-chart-column-top-left").css("background", "#38383a");
+        $(".button-chart-column-top-left").css("color","#fff");
+        $(".button-chart-column-top-left").css("border","1px solid #fff");
+        $(".button-chart-column2-top-left").css("background", "#38383a");
+        $(".button-chart-column2-top-left").css("color","#fff");
+        $(".button-chart-column2-top-left").css("border","1px solid #fff");
     },
-    btnRightClick: function() { // 기초
-        var arrayDataType = [];
-        var data = {};
-        $.each($("input[name=radioBox01]:checked"), function (idx, value) {
-            arrayDataType.push($(this).val());
-        });
-        $(".topNemo").hide();
-        this.fnAgentServerInfoListShowHide();
-        data = {
-            ramblyList: jsTreeClass.arraySelectBasic, // 의회(기초,광역,지역)
-            dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
-            month: 1
-        }
-        this.fnAllChartCallback(data); // 차트 데이터 호출
-
-        if(jsTreeClass.arraySelectWide.length === 0)
-            $(".topNemo").hide();
-
+    fnButtonRightEnable: function() {
         // 비활성
-        $(".button-chart-cloumn-top-left").css("background", "#38383a");
-        $(".button-chart-cloumn-top-left").css("color", "#999");
-        $(".button-chart-cloumn-top-left").css("border", "none");
-        $(".button-chart-cloumn2-top-left").css("background", "#38383a");
-        $(".button-chart-cloumn2-top-left").css("color", "#999");
-        $(".button-chart-cloumn2-top-left").css("border", "none");
+        $(".button-chart-column-top-left").css("background", "#38383a");
+        $(".button-chart-column-top-left").css("color", "#999");
+        $(".button-chart-column-top-left").css("border", "none");
+        $(".button-chart-column2-top-left").css("background", "#38383a");
+        $(".button-chart-column2-top-left").css("color", "#999");
+        $(".button-chart-column2-top-left").css("border", "none");
 
         // 활성
-        $(".button-chart-cloumn-top-right").css("background", "#38383a");
-        $(".button-chart-cloumn-top-right").css("color","#fff");
-        $(".button-chart-cloumn-top-right").css("border","1px solid #fff");
-        $(".button-chart-cloumn2-top-right").css("background", "#38383a");
-        $(".button-chart-cloumn2-top-right").css("color","#fff");
-        $(".button-chart-cloumn2-top-right").css("border","1px solid #fff");
-    },
-    fnAgentServerInfoListShowHide: function () {
-        $("#agent_server_info_list1 ul li").hide();
-        $("#agent_server_info_list2 ul li").hide();
-        var dataLen = jsTreeClass.arraySelectedData.length;
-        for (var i = 0; i < dataLen; i++) {
-            $("#li_" + jsTreeClass.arraySelectedData[i]).show();
-        }
+        $(".button-chart-column-top-right").css("background", "#38383a");
+        $(".button-chart-column-top-right").css("color","#fff");
+        $(".button-chart-column-top-right").css("border","1px solid #fff");
+        $(".button-chart-column2-top-right").css("background", "#38383a");
+        $(".button-chart-column2-top-right").css("color","#fff");
+        $(".button-chart-column2-top-right").css("border","1px solid #fff");
     },
     btnChartSearch: function () { // 차트 검색(회의록, 부록, 의안, 의원, 의회별)
 
@@ -216,38 +263,47 @@ var chartClass = {
             arrayDataType.push(3);
             arrayDataType.push(4);
         }
-
-        // if(jsTreeClass.arraySelectedData.length == 0) {
-        //     // jsTreeClass.arraySelectedData = ['002001','051001','053001','032001','062001','042001','052001','044001','031001','033001',
-        //     //     '043001','041001','063001','061001','054001','055001','064001','031012','031031','033002',
-        //     //     '043012','041900','041009','063014','061012','054010','055002','055005'];
-
-        // 광역
-        // var arraySelectedData = ["002001", "051001", "053001", "032001", "062001", "042001", "052001", "044001", "031001", "033001", "043001", "041001", "063001", "061001", "054001", "055001", "064001"];
         data = {
-            ramblyList: jsTreeClass.arraySelectedData, // 의회(기초,광역,지역)
+            ramblyList: (function() {
+                if(jsTreeClass.arraySelectWide.length == 0) {
+                    return jsTreeClass.arraySelectedData;
+                } else {
+                    return jsTreeClass.arraySelectWide;
+                }
+            })(), // 의회(기초,광역,지역)
             dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
             cntcIdList: arrayDataType, // 회의록, 부록, 의안, 의원
-            month: 1 // 1개월
+            month: this.monthText // 1개월
         }
         agentClass.fnAjaxMainAreaData();
         this.fnAllChartCallback(data); // 차트 데이터 호출
-        // this.fnAgentServerInfoListShowHide();
+        var c = _.difference(jsTreeClass.arraySelectedData, chartClass.dataAreaArray);
+        if(c.length > 0) {
+            this.fnButtonLeftEnable();
+            var d = _.intersection(jsTreeClass.arraySelectedData, chartClass.dataAreaArray);
+            if(d.length == 0) {
+                this.fnButtonRightEnable();
+            }
+        }
+        if(jsTreeClass.arraySelectWide.length > 0) {
+            this.fnButtonLeftEnable();
+        }
     },
     fnAllChartCallback: function (sendData) {
         $(".chart_column2_screen").show();
+        sendData.pageIndex = 1;
+        sendData.pageUnit = 17;
         commonClass.fnAjaxCallback("/getTransactionList.do", sendData, function (data) {
             chart_scatter(data)
         },'post'); // 트랜잭션 뷰
         commonClass.fnAjaxCallback("/getTotalAvgReqCntList.do", sendData, function (data) {
-            chart_cloumn(data)
+            chartClass.dataColumn1PaginationInfo = data.paginationInfo;
+            chart_column(data)
         },'post'); // 지방 의회별 데이터 전송건수
-        sendData.pageIndex = 1;
-        sendData.pageUnit = 17;
         commonClass.fnAjaxCallback("/getDataCollectionList.do", sendData, function (data) {
             $(".chart_column2_screen").hide();
             chartClass.dataCollectionPaginationInfo = data.paginationInfo;
-            chart_cloumn2(data)
+            chart_column2(data)
         },'post'); // 데이터 수집 현황
     }
 };
@@ -358,7 +414,7 @@ function chart_spline() {
             yAxis: [{
                 min: 0,
                 max: 100,
-                tickInterval: 100,
+                tickInterval: 10,
                 labels: {
                     format: "{value} %"
                 },
@@ -441,7 +497,7 @@ function chart_spline() {
     });
 }
 
-function chart_cloumn(ajaxData) {
+function chart_column(ajaxData) {
 
     // if(commonClass.fnIsObjectNullCheck(ajaxData))
     //     return;
@@ -453,7 +509,7 @@ function chart_cloumn(ajaxData) {
     var max = _.max(list3);
 
     $(function () {
-        $('#chart_cloumn').highcharts({
+        $('#chart_column').highcharts({
             chart: {
                 type: 'column',
                 height: '290'
@@ -484,7 +540,13 @@ function chart_cloumn(ajaxData) {
             yAxis: {
                 min: 0,
                 max: max,
-                tickInterval: 100,
+                tickInterval: (function(max) {
+                    if(max < 10) {
+                        return 10;
+                    } else {
+                        max;
+                    }
+                })(),
                 title: {
                     text: '',
                     rotation: 360,
@@ -535,7 +597,7 @@ function chart_cloumn(ajaxData) {
     });
 }
 
-function chart_cloumn2(ajaxData) {
+function chart_column2(ajaxData) {
 
     // if(commonClass.fnIsObjectNullCheck(ajaxData))
     //     return;
@@ -577,7 +639,7 @@ function chart_cloumn2(ajaxData) {
 
     $(function () {
 
-        $('#chart_cloumn2').highcharts({
+        $('#chart_column2').highcharts({
             chart: {
                 type: 'column'
             },
@@ -876,8 +938,8 @@ function chart_bar(ajaxData) {
             tooltip: {
                 formatter: function() {
                     var points = this.points;
-                    var y = points[0].series.name + " :<span style='float:right;'> " + commonClass.fnComma(points[0].y) + " GB</span><br />";
-                    y += points[1].series.name + " :<span style='float:right;'> " + commonClass.fnComma(points[1].y) + " GB</span><br />";
+                    var y = points[1].series.name + " :<span style='float:right;'> " + commonClass.fnComma(points[1].y) + " GB</span><br />";
+                    y += points[0].series.name + " :<span style='float:right;'> " + commonClass.fnComma(points[0].y) + " GB</span><br />";
                     var x = this.x;
                     //var series_name =  points[0].key;
                     var header = '<span style="font-size:16px">'+x+'</span><table style="width:150px;">';

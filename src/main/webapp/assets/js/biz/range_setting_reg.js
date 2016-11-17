@@ -39,9 +39,7 @@ var onCreateClass = {
             , setInterval:setInterval
             , reqProcessingRatio:reqProcessingRatio
         };
-        //console.log(data);
         commonClass.fnAjaxCallback(url, data, function(data){
-            //console.log(data);
 
             if(data === 201) {
                 // 팝업 닫기

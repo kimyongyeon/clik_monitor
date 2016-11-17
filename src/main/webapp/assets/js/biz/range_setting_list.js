@@ -47,7 +47,9 @@ var onCreateClass = {
         location.href = "/range_setting_edit.do?rasmblyId=" + rasmblyId;
     },
     btnExcelSave: function() {
-        location.href = "/excelDownload.do?keyWordType=2";
+        var data = this.fnSearchCodition();
+        data = jQuery.param(data) + "&keyWordType=2";
+        location.href = "/excelDownload.do?" + data;
     },
     btnSearch: function() {
         this.fnAjaxTableList();
@@ -63,39 +65,57 @@ var onCreateClass = {
         commonClass.fnToday("datepicker", -7);
     },
     fnDateMonth: function() {
-        commonClass.fnToday("datepicker", -14);
+        commonClass.fnToday("datepicker", -30);
     },
     fnPopupSave: function() { // 저장 확인 팝업
         $(".savePop").show();
     },
     fnSearchCodition: function() {
-        var brtcCode = $('select[name=brtcCode] option:selected').val() || ''; // 기관유형
-        var insttClCode = $('select[name=insttClCode] option:selected').val() || ''; // 지역선택
+        var brtcCode = v_combo_data_list.brtcCode || ''; // 기관유형
+        var insttClCode = v_combo_data_list.insttClCode || ''; // 지역선택
         var loasmCode = $('select[name=loasmCode] option:selected').val() || ''; // 지방의회선택
-        var keyWordType = "1";
+        var keyWordSub = "1";
 
         if (brtcCode !== "") { // 기관유형
-            keyWordType = '1';
+            keyWordSub = '1';
         }
         if (insttClCode !== "") { // 지역 선택시
-            keyWordType = '2';
+            keyWordSub = '2';
         }
         if (loasmCode !== "") { // 지방의회
-            keyWordType = '3';
+            keyWordSub = '3';
         }
 
         var data = {
             brtcCode: brtcCode || 'intsttcl_000024',
             insttClCode: insttClCode,
             loasmCode: loasmCode,
-            keyWordType: keyWordType
+            keyWordSub: keyWordSub
         };
         return data;
     },
     fnAjaxTableList: function() {
         var url = "getRangeSettingList.do";
-        var brtcCode = $('select[name=brtcCode] option:selected').val(); // 
+        //var brtcCode = $('select[name=brtcCode] option:selected').val(); //
         var sdata = this.fnSearchCodition();
         v_table_list.fetchData(url, sdata);
+    },
+    btnOn: function() {
+        $(".error-button > .on").removeClass('btn-disabled');
+        $(".error-button > .on").addClass('btn-enabled');
+
+        $(".error-button > .off").removeClass('btn-enabled');
+        $(".error-button > .off").addClass('btn-disabled');
+
+        commonClass.setCookieExdays("popup_check", true, 365);
+    },
+    btnOff: function() {
+        $(".error-button > .off").removeClass('btn-disabled');
+        $(".error-button > .off").addClass('btn-enabled');
+
+        $(".error-button > .on").removeClass('btn-enabled');
+        $(".error-button > .on").addClass('btn-disabled');
+
+        commonClass.setCookieExdays("popup_check", false, 365);
     }
 };

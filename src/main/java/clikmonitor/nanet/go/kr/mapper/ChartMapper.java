@@ -12,20 +12,16 @@ import java.util.List;
 @Mapper("chartMapper")
 public interface ChartMapper {
     /**
-     * 전체평균요청건수 목록 조회
+     * 지방 의회별 데이터 전송건수
      *
-     * @param chartSearchVO : 전체, 어제, 오늘, 주간
-     * @return : 요청건수
+     * @param chartSearchVO : 1개월, 3개월 6개월
+     * @return : 전송건수
      */
-    List<ChartVO> selectTotalAvgRequestCountList1(CommonSearchVO chartSearchVO);
-    List<ChartVO> selectTotalAvgRequestCountList2(CommonSearchVO chartSearchVO);
-
-    List<ChartVO> selectTotalAvgRequestCountList3(CommonSearchVO chartSearchVO);
-
-    int selectTotalAvgRequestCountList3Count(CommonSearchVO chartSearchVO);
+    List<ChartVO> selectTotalAvgRequestCountList(CommonSearchVO chartSearchVO);
+    int selectTotalAvgRequestCountListCount(CommonSearchVO chartSearchVO);
 
     /**
-     * 트랜잭션 목록 조회
+     * 원별 데이터 항목별 수집 현황
      *
      * @param chartSearchVO : 회의록, 부록, 의안, 의원, 이벤트
      * @return 회의록, 부록, 의안, 의원 요청 건수

@@ -6,7 +6,6 @@ import clikmonitor.nanet.go.kr.service.ChartService;
 import clikmonitor.nanet.go.kr.service.CommonService;
 import clikmonitor.nanet.go.kr.service.LogService;
 import clikmonitor.nanet.go.kr.vo.*;
-import com.sun.management.OperatingSystemMXBean;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -24,18 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.InputStreamReader;
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by kimyongyeon on 2016-07-14.
@@ -393,7 +385,7 @@ public class MainRestController  {
     }
 
     /**
-     * 전체평균요청건수 목록 조회
+     * 지방 의회별 데이터 전송건수
      *
      * @param chartSearchVO
      * @return
@@ -409,7 +401,7 @@ public class MainRestController  {
             return map;
         }
 
-        map = chartService.selectTotalAvgRequestCountList3(chartSearchVO);
+        map = chartService.selectTotalAvgRequestCountList(chartSearchVO);
 
         return map;
     }

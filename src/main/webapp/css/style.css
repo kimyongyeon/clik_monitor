@@ -63,7 +63,7 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 #rasmblyId_empty h1 {color: red !important; font-weight: bold;}
 
 
-#chart_column_title {display: inline; width: 106px; color: white; position: absolute; right: 153px; top: 4%; z-index: 2}
+#chart_column_title {width: 106px; color: white; position: absolute; right: 153px; top: 4%; z-index: 2; display: none;}
 #chart_column_title h1{font-size: 14pt; line-height: 13px;}
 
 .default-button {background: #3d3d3d; border:1px solid #fff; border-radius: 2px; color: #fff; }
@@ -73,8 +73,34 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .search-button { background: #3d3d3d; border:1px solid #fff; border-radius: 2px;width: 100px; height: 26px; color: white;}
 /* 테이블 */
 .table { width: 100%; border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; table-layout: fixed; word-break: break-all; background: white;}
-.table tr th { width: 100%; height: 38px; text-align: center; background: #3d3d3d; border-top: solid 1px #898989; border-bottom: solid 1px #898989; font-size: 10pt; line-height: 38px; padding-left: 10px;    border-left: none; color: #fff;}
-.table tr td { border-right: none; border-bottom: solid 1px #898989; border-top: solid 1px #898989; padding-left: 10px; line-height: 35px; font-size: 9pt; text-align: center; }
+.table tr th { width: 100%; height: 38px; text-align: left; background: #3d3d3d; border-top: solid 1px #898989; border-bottom: solid 1px #898989; font-size: 10pt; line-height: 38px; padding-left: 10px;    border-left: none; color: #fff;}
+.table tr td { border-right: none; border-bottom: solid 1px #898989; border-top: solid 1px #898989; padding-left: 10px; line-height: 35px; font-size: 9pt; text-align: left; }
+/* 의회별 전송 데이터 */
+#tpl-table-list-1 tr th { text-align: center;}
+#tpl-table-list-1 tr td:nth-child(1) { text-align: center;}
+#tpl-table-list-1 tr td { text-align: right; padding-right: 5px;}
+/* 항목별 최종전송 데이터 */
+#tpl-table-list-2 tr th { text-align: center;}
+#tpl-table-list-2 tr td:nth-child(1) { text-align: center;}
+#tpl-table-list-2 tr td { text-align: center;}
+/* 지방정책정보 */
+#tpl-table-list tr th { text-align: center;}
+#tpl-table-list tr td:nth-child(1) { text-align: center;}
+#tpl-table-list tr th:nth-child(5) { cursor: pointer;}
+#tpl-table-list tr td { text-align: left; padding-left: 5px;}
+/* 환경설정 */
+.range_table_list tr th { text-align: center;}
+.range_table_list tr td:nth-child(1) { text-align: center;}
+.range_table_list tr td { text-align: center !important; }
+
+/*.table tr td:nth-child(1) { text-align: center; }
+.table tr td:nth-child(2) { text-align: left; }
+.table tr td:nth-child(3) { text-align: left; }
+.table tr td:nth-child(4) { text-align: left; }
+.table tr td:nth-child(5) { text-align: left; }
+.table tr td:nth-child(6) { text-align: left; }
+.table tr td:nth-child(7) { text-align: left; }
+.table tr td:nth-child(8) { text-align: left; }*/
 .table tr:hover {background: yellow;}
 .none-line-table { border: 0 none; width: 100%; border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; table-layout: fixed;}
 .none-line-table tr td { padding: 5px; border: 0px;}
@@ -178,7 +204,7 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .chart_column2_loding i { color: white; display: table-cell; text-align: center; vertical-align: middle;}
 .chart_column2_loding img { position: absolute; top: 40%; left: 50%;}
 
-.full_screen_loding {width: 100%; height: 100%; position: absolute; top: 232px; background: black; opacity: 0.9; z-index: 1; display:none;}
+.full_screen_loding {width: 100%; height: 100%; position: absolute; background: black; opacity: 0.9; z-index: 1; display:none;}
 .full_screen_loding img { position: absolute; top: 40%; left: 50%;}
 
 .BottomTable img { position: absolute; top: 40%; left: 50%; margin-left: -300px;}
@@ -363,7 +389,7 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .lw-100 { margin-right: 5px; width: 100%; }
 
 .fl-mr-5 { float: left; margin-right: 5px; }
-.fr-mr-5 { float: right; margin-right: 5px; }
+.fr-mr-5 { float: right; width: 400px; margin-right: 10px; display: table-cell; text-align: right; line-height: 15px;}
 
 /* 가로테이블(상세화면 같은거 */
 .common-table-h { table-layout: fixed; width: 100%; background: white; color: black; padding: 1em;}

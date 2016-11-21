@@ -63,6 +63,7 @@
 
 	</select>
 
+    <!-- Agent업데이트시 -->
     <select id="selectAgentUpdateOne" parameterType="agentSearchVO" resultMap="agentMap">
         SELECT /* selectAgentUpdateOne */
           RASMBLY_ID
@@ -73,6 +74,14 @@
         AND ROWNUM = 1
     </select>
 
+    <!-- 최종수집일자 -->
+    <select id="selectAgentLastDateOne" parameterType="agentSearchVO" resultMap="agentMap">
+        SELECT /*SELECTAGENTINFOONE*/
+        MAX(OCCRRNC_DE) OCCRRNC_DE
+        FROM TAR_LOG
+        WHERE REQUST_INSTT_ID = #{rasmblyId}
+    </select>
+
     <!-- Agent 상태 정보 상세 조회 -->
     <select id="selectAgentInfoOne" parameterType="agentSearchVO" resultMap="agentMap">
 		SELECT /*selectAgentInfoOne*/
@@ -81,7 +90,7 @@
 		   /*, CST.SYSTEM_STTUS_CODE systemSttusCode -- 상태코드*/
 		   , DECODE (CR.SYSTEM_STTUS_CODE,'000','정상',null,'설치안됨','비정상') AS SYSTEM_STTUS_CODE
 		   , CST.NOTE note
-           , CR.LAST_CNTC_DT lastCntcDt
+           , CR.LAST_CNTC_DT lastCntcDt /* 상태 확인 일시 */
 		FROM COLGOVER_SET CST, COLGOVER CR
 	  	WHERE CST.RASMBLY_ID = CR.RASMBLY_ID
 	  	AND CST.RASMBLY_ID = #{rasmblyId}

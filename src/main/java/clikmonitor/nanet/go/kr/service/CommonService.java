@@ -28,6 +28,8 @@ public interface CommonService {
 
     List<CommonVO> selectLoasmInfo(CommonSearchVO commonSearchVO);
 
+    CommonVO selectRasmblyNm(CommonVO commonVO); // 지방의회명
+
     /**
      * The type Common service.
      */
@@ -39,6 +41,11 @@ public interface CommonService {
          */
         @Resource(name = "commonMapper")
         CommonMapper commonMapper;
+
+        @Override
+        public CommonVO selectRasmblyNm(CommonVO commonVO) {
+            return commonMapper.selectRasmblyNm(commonVO);
+        }
 
         @Override
         public List<CommonVO> selectChartXdataList(CommonSearchVO commonSearchVO) {

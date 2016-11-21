@@ -46,12 +46,12 @@ var onCreateClass = {
     fnDetail: function(rasmblyId) {
         location.href = "/range_setting_edit.do?rasmblyId=" + rasmblyId;
     },
-    btnExcelSave: function() {
+    btnExcelSave: function() { // 엑셀저장
         var data = this.fnSearchCodition();
         data = jQuery.param(data) + "&keyWordType=2";
         location.href = "/excelDownload.do?" + data;
     },
-    btnSearch: function() {
+    btnSearch: function() { // 검색
         this.fnAjaxTableList();
     },
     btnEvent: function() {
@@ -67,7 +67,7 @@ var onCreateClass = {
     fnDateMonth: function() {
         commonClass.fnToday("datepicker", -30);
     },
-    fnPopupSave: function() { // 저장 확인 팝업
+    fnPopupSave: function() { // 등록 확인 팝업
         $(".savePop").show();
     },
     fnSearchCodition: function() {

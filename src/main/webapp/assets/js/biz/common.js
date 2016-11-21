@@ -14,9 +14,13 @@ var v_combo_data_list = new Vue({
         fetchData: function(url, data){
             commonClass.fnAjaxCallback(url, data, function(data){
                 if(url == '/getBrtcCodeList.do') {
+                    v_combo_data_list.insttClCode = '';
+                    v_combo_data_list.loasmCode = '';
                     Vue.set(v_combo_data_list, 'commonList_1', data);
                 }
                 if(url == '/getInsttClCodeList.do') {
+                    v_combo_data_list.insttClCode = '';
+                    v_combo_data_list.loasmCode = '';
                     Vue.set(v_combo_data_list, 'commonList_2', data);
                 }
                 if(url == '/getLoasmInfo.do') {
@@ -26,6 +30,9 @@ var v_combo_data_list = new Vue({
                     Vue.set(v_combo_data_list, 'commonList_4', data);
                 }
             });
+        },
+        codeGenerate: function(str) {
+            return str.substring(0,3);
         }
     }
 });
@@ -334,13 +341,14 @@ var commonClass = {
         });
     },
     fnAjaxBrtcCodeList: function() { // 기관유형 : 공통함수에서 초기화용으로 사용하고 화면에서 호출되는 부분이 없음.
+        var brtcCode = $('select[name=brtcCode] option:selected').val() || ''; // 기관유형
         var url = "/getBrtcCodeList.do";
-        var data = {};
+        var data = {brtcCode: brtcCode};
         v_combo_data_list.fetchData(url,data);
     },
     fnAjaxInsttClCodeList: function() { // 지역선택 : 기관유형 EventHandle
 
-        var brtcCode = v_combo_data_list.brtcCode || ''; // 기관유형
+        var brtcCode = $('select[name=brtcCode] option:selected').val() || v_combo_data_list.brtcCode; // 기관유형
         if(brtcCode === '') {
             $('select[name=insttClCode]').empty(); // 지역선택 초기화
             $('select[name=insttClCode]').append("<option value=''>지역선택</option>");
@@ -350,13 +358,13 @@ var commonClass = {
         }
 
         var url = "/getInsttClCodeList.do";
-        var data = {brtcCode: 'LMC'};
+        var data = {brtcCode: brtcCode};
         v_combo_data_list.fetchData(url,data);
     },
     fnAjaxLoasmCodeList: function() { // 지방의회선택 : 지역 EventHandle
         var url = "/getLoasmInfo.do";
-        var brtcCode = v_combo_data_list.brtcCode || ''; // 기관유형
-        var insttClCode = v_combo_data_list.insttClCode || ''; // 지역선택
+        var brtcCode = $('select[name=brtcCode] option:selected').val() || v_combo_data_list.brtcCode; // 기관유형
+        var insttClCode = $('select[name=insttClCode] option:selected').val() || v_combo_data_list.insttClCode; // 지역선택
         insttClCode = insttClCode + "";
         var data = {
             brtcCode: brtcCode.toUpperCase(),
@@ -469,6 +477,7 @@ var commonClass = {
     fnLogDataClose: function () {
         $(".logData").removeClass("openPop");
         $(".screen").css("display", "none");
+        document.body.style.overflow = 'auto';
     },
     /**
      * 에러정보목록

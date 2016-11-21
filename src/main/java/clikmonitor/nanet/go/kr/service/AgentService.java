@@ -261,14 +261,20 @@ public interface AgentService {
             if(agentVO.getRasmblyId() == null) {
                 return null;
             }
-            AgentVO agentVO1 = agentMapper.selectAgentInfoOne(agentVO);
+            AgentVO agentVO1 = agentMapper.selectAgentInfoOne(agentVO); // 상태확인일시
 
-            AgentVO agentVO2 = agentMapper.selectAgentUpdateOne(agentVO); // Agent 업데이트 일자 구하기.
-            System.out.println(">>>>>>>>>>>>> " + agentVO2);
+            AgentVO agentVO2 = agentMapper.selectAgentUpdateOne(agentVO); // Agent업데이트일시
+
+            AgentVO agentVO3 = agentMapper.selectAgentLastDateOne(agentVO); // 최종수집일자
+
             if(agentVO2 != null) {
                 if(agentVO2.getUpdateDt() != null) {
                     agentVO1.setUpdateDt(agentVO2.getUpdateDt());
                 }
+            }
+
+            if(agentVO3 != null) {
+                agentVO1.setOccrrncDe(agentVO3.getOccrrncDe());
             }
 
             if (agentVO1.getSystemSttusCode() == null) {

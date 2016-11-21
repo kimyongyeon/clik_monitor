@@ -158,18 +158,20 @@
                             <tr>
                                 <th>의회</th>
                                 <td>{{item.rasmblyNm}}</td>
-                                <th>최종수집일</th>
-                                <td>{{item.lastCntcDt}}</td>
+                                <th>최종수집일자</th>
+                                <td>{{dataFormat(item.occrrncDe)}}</td>
                             </tr>
                             <tr>
                                 <th>Agent 버전</th>
                                 <td>1.0</td>
-                                <th>Agent업데이트 일자 </th>
-                                <td>{{item.lastCntcDt}}</td>
+                                <th>Agent업데이트일시 </th>
+                                <td>{{item.updateDate}}</td>
                             </tr>
                             <tr>
                                 <th>현재상태</th>
-                                <td colspan="3">{{item.systemSttusCode}}</td>
+                                <td>{{item.systemSttusCode}}</td>
+                                <th>상태확인일시</th>
+                                <td>{{item.lastCntcDt}}</td>
                             </tr>
                             <tr>
                                 <th>Memo</th>
@@ -200,7 +202,7 @@
                     <div class="tab">
                         <ul class="tab_menu" style="position: relative;">
                             <li><button onclick="onCreateClass.fnAgentTab1();">이력정보</button></li>
-                            <li><button onclick="onCreateClass.fnAgentTab2();">전송건수</button></li>
+                            <%--<li><button onclick="onCreateClass.fnAgentTab2();">전송건수</button></li>--%>
                             <div class="menu-tab-left" id="tab-under-left"></div>
                             <div id="tab-under-right"></div>
                         </ul>
@@ -209,6 +211,10 @@
                             <input id="rasmblyId" type="hidden" v-bind:value="item.rasmblyId">
                             <div>
                                 <table class="table">
+                                    <colgroup>
+                                        <col style="width:50%">
+                                        <col style="width:50%">
+                                    </colgroup>
                                     <tr>
                                         <th>상태</th>
                                         <%--<th>명령어시작</th>
@@ -237,10 +243,10 @@
                                 </nav>
                             </div>
                         </div>
-                        <div class="tab-box-2">
+                        <%--<div class="tab-box-2">
                             <div class="line"></div>
                             <div id="chart_bar2"></div>
-                        </div>
+                        </div>--%>
                     </div>
 
                 </div>
@@ -287,6 +293,20 @@
             <div id="tpl-agent-server-state-info-list">
                 <div class="middle">
                     <table class="table">
+                        <colgroup>
+                            <col style="width:12.3%">
+                            <col style="width:12.3%">
+                            <col style="width:6.3%">
+                            <col style="width:8.3%">
+                            <col style="width:9.3%">
+                            <col style="width:7.3%">
+                            <col style="width:11.3%">
+                            <col style="width:6.3%">
+                            <col style="width:15.3%">
+                            <col style="width:7.3%">
+                            <col style="width:20.3%">
+                            <col style="width:15.3%">
+                        </colgroup>
                         <tr>
                             <th>지방의회</th>
                             <th>서버 IP</th>

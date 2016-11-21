@@ -22,6 +22,7 @@ public class CommonVO {
 
     private String code;
     private String codenm;
+    private String brtcCode;
 
     private String text;
     private boolean state;

@@ -41,4 +41,20 @@ public class StatisticsVO {
     private String minutesAppendixFrstRegistDt; // 부록최종일자
     private String billFrstRegistDt; // 의안최종일자
 
+    private String REQ101; // 대수 1
+    private String REQ102; // 회기 2
+    private String REQ201; // 선거구 3
+    private String REQ202; // 회의명 4
+    private String REQ203; // 의원 5
+    private String REQ204; // 의원활동 6
+    private String REQ205; // 의원직위 7
+    private String REQ301; // 회의록 8
+    private String REQ302; // 안건 9
+    private String REQ303; // 발언 10
+    private String REQ304; // 발언답변 11
+    private String REQ401; // 의안 12
+    private String REQ402; // 발의의원 13
+    private String REQ403; // 의안파일 14
+    private String REQ404; // 의안회의록 15
+
 }

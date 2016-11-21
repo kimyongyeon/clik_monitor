@@ -37,9 +37,10 @@
                                 <span class="pado">~</span>
                                 <span class="calendar01"><input type="text" id="datepicker22"/></span>
                                 <span class="calendarBtn">
-                                    <button class="edit-button" type="button" value="당일" name="dateToday" id="dateToday2" onclick="onCreateClass.fnDateToday2()">당일</button>
-                                    <button class="edit-button" type="button" value="1주일" name="dateWeek" id="dateWeek2" onclick="onCreateClass.fnDateWeek2()">1주일</button>
-                                    <button class="edit-button" type="button" value="1개월" name="dateMonth" id="dateMonth2" onclick="onCreateClass.fnDateMonth2()">1개월</button>
+
+                                    <button class="edit-button" type="button" value="1개월" name="dateToday" id="dateToday2" onclick="onCreateClass.fnDateMonth2_30()">1개월</button>
+                                    <button class="edit-button" type="button" value="3개월" name="dateWeek" id="dateWeek2" onclick="onCreateClass.fnDateMonth2_60()">3개월</button>
+                                    <button class="edit-button" type="button" value="6개월" name="dateMonth" id="dateMonth2" onclick="onCreateClass.fnDateMonth2_90()">6개월</button>
                                 </span>
                             </td>
                         </tr>
@@ -64,6 +65,13 @@
                         <div class="tab01Box" id="sendList" >
                             <div id="myTable5" class="chart_loding">
                                 <table class="table" id="tpl-mail-list">
+                                    <colgroup>
+                                        <col style="width:20%">
+                                        <col style="width:20%">
+                                        <col style="width:20%">
+                                        <col style="width:20%">
+                                        <col style="width:20%">
+                                    </colgroup>
                                     <tr>
                                         <th>번호</th>
                                         <th>받는사람</th>
@@ -95,9 +103,9 @@
                                 <span class="pado">~</span>
                                 <span class="calendar01"><input type="text" id="datepicker2"/></span>
                                 <span class="calendarBtn">
-                                    <button class="edit-button" type="button" value="당일" name="dateToday" id="dateToday" onclick="onCreateClass.fnDateToday()">당일</button>
-                                    <button class="edit-button" type="button" value="1주일" name="dateWeek" id="dateWeek" onclick="onCreateClass.fnDateWeek()">1주일</button>
-                                    <button class="edit-button" type="button" value="1개월" name="dateMonth" id="dateMonth" onclick="onCreateClass.fnDateMonth()">1개월</button>
+                                    <button class="edit-button" type="button" value="1개월" name="dateToday" id="dateToday" onclick="onCreateClass.fnDateMonth_30()">1개월</button>
+                                    <button class="edit-button" type="button" value="3개월" name="dateWeek" id="dateWeek" onclick="onCreateClass.fnDateMonth_60()">3개월</button>
+                                    <button class="edit-button" type="button" value="6개월" name="dateMonth" id="dateMonth" onclick="onCreateClass.fnDateMonth_90()">6개월</button>
                                 </span>
                             </td>
                         </tr>
@@ -123,6 +131,11 @@
                         <div class="tab01Box">
                             <div id="myTable4" class="chart_loding">
                                 <table class="table" id="tpl-send-list">
+                                    <colgroup>
+                                        <col style="width:33.33%">
+                                        <col style="width:33.33%">
+                                        <col style="width:33.33%">
+                                    </colgroup>
                                     <tr>
                                         <th>번호</th>
                                         <th>제목</th>

@@ -71,6 +71,12 @@ public interface StatisticsService {
 
         @Override
         public List<StatisticsVO> getRasmblyLastSendData(StatisticsSearchVO statisticsSearchVO) {
+            if(statisticsSearchVO.getKeyWordSub().equals("intsttcl_000024")) {
+
+            }
+            if(statisticsSearchVO.getKeyWordSub().equals("intsttcl_000023")) {
+
+            }
             return statisticsMapper.selectRasmblyLastSendDataList(statisticsSearchVO);
         }
 

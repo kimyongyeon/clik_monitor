@@ -9,14 +9,18 @@ var v_table_list = new Vue({
         next : false,
         page : 0,
         prevPage : 0,
-        nextPage : 0
+        nextPage : 0,
+        orderby : 'desc',
     },
     methods: {
         fetchData: function(url, data, page){
+            $(".full_screen_loding").show();
             commonClass.fnAjaxCallback(url, data, function(data){
-
+                $(".full_screen_loding").hide();
                 if(data.status == '404') {
                     Vue.set(v_table_list, 'items', data.list);
+                    Vue.set(v_table_list, 'orderby', orderby);
+
                     $("#myTable4 img").hide();
                     return
                 }
@@ -45,6 +49,19 @@ var v_table_list = new Vue({
                 Vue.set(v_table_list, 'nextPage', lastPageNoOnPageList + 1);
                 $("#myTable4 img").hide();
             });
+        },
+        isNulltoString: function(str) {
+            str = str || '';
+            if(str == '') {
+                return '정부부처';
+            }else {
+                return str;
+            }
+            
+        },
+        fnOrdr: function(str) {
+            this.orderby = this.orderby == "asc" ? "desc" : "asc";
+            onCreateClass.fnAjaxTableList(onCreateClass.currentPage);
         }
     }
 });
@@ -69,7 +86,7 @@ var onCreateClass = {
         //달력 소스(jQuery UI)
         $("#datepicker1, #datepicker2").datepicker(commonClass.fnDatePickerUiInit());
 
-        this.fnDateMonth();
+        this.fnDateMonth1();
         this.fnSearch(1);
     },
     fnOnchage : function() {
@@ -151,7 +168,8 @@ var onCreateClass = {
             region: region,
             siteId: siteId,
             "pageIndex": page,
-            "pageUnit":20
+            "pageUnit":20,
+            orderby: v_table_list.orderby
         };
         v_table_list.fetchData(url, data, page);
     },
@@ -163,5 +181,14 @@ var onCreateClass = {
     },
     fnDateMonth: function() {
         commonClass.fnToday("datepicker", -30);
+    },
+    fnDateMonth1: function() {
+        commonClass.fnToday("datepicker", -30);
+    },
+    fnDateMonth3: function() {
+        commonClass.fnToday("datepicker", -60);
+    },
+    fnDateMonth6: function() {
+        commonClass.fnToday("datepicker", -90);
     }
 }

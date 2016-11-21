@@ -26,7 +26,13 @@
                     <tr>
                         <th scope="row">지방의회</th>
                         <td>
+                            <c:if test="${rasmblyId == ''}">
                             <%@ include file="/WEB-INF/jsp/hbs/combo_list_script.jsp" %>
+                            </c:if>
+                            <c:if test="${rasmblyId != ''}">
+                                <input type="hidden" id="rasmblyId" name="rasmblyId" value="${rasmblyId}" disabled>
+                                <input type="text" id="rasmblyNm" name="rasmblyNm" value="${rasmblyNm}" disabled>
+                            </c:if>
                         </td>
                     </tr>
                     <tr>
@@ -79,7 +85,10 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            onCreateClass.init();
+            var rasmblyId = '${rasmblyId}';
+            var rasmblyNm = '${rasmblyNm}';
+            console.log(rasmblyId, rasmblyNm);
+            onCreateClass.init(rasmblyId);
         });
     </script>
 

@@ -30,9 +30,11 @@ public interface AgentMapper {
      * @param agentVO : 의회정보(의회ID)
      * @return : 의회명, 설치년도, 서버명, 서버IP, OS, WAS, CPU, RAM, 최종수집일, 모듈설치경로, 비고
      */
-    AgentVO selectAgentInfoOne(CommonSearchVO agentVO); // Agent 상태 정보 상세
+    AgentVO selectAgentInfoOne(CommonSearchVO agentVO); // 상태확인일시
 
-    AgentVO selectAgentUpdateOne(CommonSearchVO agentVO); // Agent 상태 정보 상세
+    AgentVO selectAgentUpdateOne(CommonSearchVO agentVO); // Agent업데이트일시
+
+    AgentVO selectAgentLastDateOne(CommonSearchVO agentVO); // 최종수집일자
 
     /**
      * Agent 정보 등록

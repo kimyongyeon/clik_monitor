@@ -38,7 +38,13 @@
             <div class="BottomTable">
                 <div class="tab01Box">
                     <div id="myTable3" class="chart_loding">
-                        <table class="table" id="tpl-table-list">
+                        <table class="table range_table_list" id="tpl-table-list">
+                            <colgroup>
+                                <col style="width:25%">
+                                <col style="width:25%">
+                                <col style="width:25%">
+                                <col style="width:25%">
+                            </colgroup>
                             <tr>
                                 <th>지방의회</th>
                                 <th>지방응답시간</th>

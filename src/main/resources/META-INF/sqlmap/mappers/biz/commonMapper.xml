@@ -4,6 +4,13 @@
 <!-- 메인화면 의회별 / 지역별 TreeView 매퍼 -->
 <mapper namespace="clikmonitor.nanet.go.kr.mapper.CommonMapper">
 
+    <resultMap id="commonMap" type="commonVO"></resultMap>
+
+    <!-- 의회명 뽑기 -->
+    <select id="selectRasmblyNm" parameterType="commonVO" resultMap="commonMap">
+        SELECT RASMBLY_NM as CODENM FROM COLGOVER WHERE RASMBLY_ID = #{code}
+    </select>
+
     <select id="selectChartXdataList" parameterType="commonVO" resultType="commonVO">
         SELECT
             DECODE (REPLACE(REPLACE(REPLACE(LOASM_NM,'의회',''),'특별',''),'시','')
@@ -181,14 +188,40 @@
 
 	<!-- 지역선택 콤보 조회 -->
 	<select id="selectBrtcCodeDetails" parameterType="commonSearchVO" resultType="commonVO">
-		<![CDATA[
+        <if test="brtcCode == 'intsttcl_000023' " >
+            SELECT /* getBroadList : 광역별 의회 목록 조회 */
+                LOASM_NM AS codenm,
+                LOASM_CODE AS code ,
+                CTPRVNGUGUN_CODE AS CTPRVNGUGUNCODE ,
+                INSTT_CL_CODE AS INSTTCLCODE
+            FROM ORGAN,
+              COLGOVER
+            WHERE INSTT_CL_CODE != 'INTSTTCL_000024'
+            AND ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+            AND ISVIEW = 'Y'
+            ORDER BY ORDR ASC, LOASM_CODE ASC
+        </if>
+        <if test="brtcCode == 'intsttcl_000024' " >
+            SELECT /* getBasicList : 기초별 의회 목록 조회 */
+                LOASM_NM AS codenm ,
+                LOASM_CODE AS code ,
+                CTPRVNGUGUN_CODE AS CTPRVNGUGUNCODE ,
+                INSTT_CL_CODE AS INSTTCLCODE
+            FROM ORGAN,
+              COLGOVER
+            WHERE INSTT_CL_CODE = 'INTSTTCL_000024'
+            AND ORGAN.LOASM_CODE = COLGOVER.RASMBLY_ID
+            AND ISVIEW = 'Y'
+            ORDER BY ORDR ASC, LOASM_CODE ASC
+        </if>
+		<!--<![CDATA[
 			SELECT CODE_ID AS code ,
 				   CODE_ID_NM AS codenm
 			FROM COMMON_CODE
 			WHERE CL_CODE = #{brtcCode}
 			  AND USE_AT = 'Y'
 			ORDER BY CODE_ORDR ASC
-		]]>
+		]]>-->
 	</select>
 	<!-- 의회명 콤보 조회 -->
     <!-- brtcCode : 지역코드, 특이사항 : 서울이 02이라면 002 로 나옴. -->

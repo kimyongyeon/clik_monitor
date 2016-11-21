@@ -146,7 +146,14 @@ var v_agent_server_info_detail = new Vue({
             return commonClass.fnComma(numbers);
         },
         dataFormat: function(strDate) {
-            return commonClass.fnStringToDate(strDate);
+            var strDate = strDate || '';
+            if(strDate == '') {
+                return '';
+            }
+            var year = strDate.substring(0,4);
+            var mm = strDate.substring(4,6);
+            var dd = strDate.substring(6,8);
+            return year + "-" + mm + "-" + dd;
         }
     }
 });
@@ -305,9 +312,6 @@ $(window).resize(function() {
     commonClass.fnMiddleAlignSet('.agentServerInfo');
     // 로그 데이터 팝업 가운데 정렬
     commonClass.fnMiddleAlignSet('.logData');
-
-    // 화면 리사이징시 화면을 다시 그리기 위해 reload 함.
-    location.reload(false);
 });
 
 /**

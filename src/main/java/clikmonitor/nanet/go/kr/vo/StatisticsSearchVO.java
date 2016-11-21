@@ -8,5 +8,6 @@ import lombok.Data;
  */
 @Data
 public class StatisticsSearchVO extends CommonSearchVO {
-    public String keyWordSub;
+    private String keyWordSub;
+    private String[] ramblyList;
 }

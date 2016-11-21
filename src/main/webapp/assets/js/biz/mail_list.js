@@ -39,8 +39,8 @@ var onCreateClass = {
         $("#datepicker1, #datepicker2").datepicker(commonClass.fnDatePickerUiInit());
         $("#datepicker21, #datepicker22").datepicker(commonClass.fnDatePickerUiInit());
 
-        this.fnDateMonth();
-        this.fnDateMonth2();
+        this.fnDateMonth_30();
+        this.fnDateMonth2_30();
 
         // 검색
         this.btnSearch();
@@ -244,23 +244,23 @@ var onCreateClass = {
         $(".send_list").hide();
         $(".mail_set").show();
     },
-    fnDateToday: function() {
+    fnDateMonth_30: function() {
         commonClass.fnToday("datepicker", 0);
     },
-    fnDateWeek: function () {
+    fnDateMonth_60: function () {
         commonClass.fnToday("datepicker", -7);
     },
-    fnDateMonth: function() {
+    fnDateMonth_90: function() {
         commonClass.fnToday("datepicker", -30);    
     },
-    fnDateToday2: function() {
-        commonClass.fnToday2("datepicker", 0);
-    },
-    fnDateWeek2: function () {
-        commonClass.fnToday2("datepicker", -7);
-    },
-    fnDateMonth2: function() {
+    fnDateMonth2_30: function() {
         commonClass.fnToday2("datepicker", -30);
+    },
+    fnDateMonth2_60: function () {
+        commonClass.fnToday2("datepicker", -60);
+    },
+    fnDateMonth2_90: function() {
+        commonClass.fnToday2("datepicker", -90);
     },
     fnPopupSave: function() { // 저장 확인 팝업
         $(".q-popup-layout").show();

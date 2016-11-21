@@ -6,6 +6,9 @@
     <%@ include file="/WEB-INF/jsp/common/error_info_list_popup.jsp" %>
 
     <div id="container">
+        <div class="full_screen_loding" >
+            <img src="/img/loading.gif" alt="">
+        </div>
         <div id="subRightBox">
             <!-- 메뉴 로케이션 -->
             <div class="titleArea">
@@ -26,7 +29,7 @@
                         <div class="selectBox" id="tpl_commbo_list">
                             <select name="insttClCode" id="insttClCode" class="select02" onchange="onCreateClass.fnOnchage();" v-model="insttClCode">
                                 <option value="">지역선택</option>
-                                <option v-for="item in commonList_2" v-bind:value="item.code">{{item.codenm}}</option>
+                                <option v-for="item in commonList_2" v-bind:value="codeGenerate(item.code)">{{item.codenm}}</option>
                             </select>
                             <select name="siteId" id="siteId" class="select02" onchange="" v-model="siteId">
                                 <option value="">사이트선택</option>
@@ -34,12 +37,6 @@
                             </select>
                         </div>
                     </td>
-                    <%--<th scope="row">사이트명</th>
-                    <td>
-                        <div>
-                            <input type="text" id="site-title" name="site-title" />
-                        </div>
-                    </td>--%>
                 </tr>
                 <tr>
                     <th scope="row">최종 등록일</th>
@@ -49,9 +46,9 @@
                             <span class="pado">~</span>
                             <span class="calendar01"><input type="text" id="datepicker2" /></span>
                             <span class="calendarBtn">
-                                <button class="edit-button" type="button" value="당일" name="dateToday" id="dateToday" onclick="onCreateClass.fnDateToday()">당일</button>
-                                <button class="edit-button" type="button" value="1주일" name="dateWeek" id="dateWeek" onclick="onCreateClass.fnDateWeek()">1주일</button>
-                                <button class="edit-button" type="button" value="1개월" name="dateMonth" id="dateMonth" onclick="onCreateClass.fnDateMonth()">1개월</button>
+                                <button class="edit-button" type="button" value="1개월" name="dateToday" id="dateToday" onclick="onCreateClass.fnDateMonth1()">1개월</button>
+                                <button class="edit-button" type="button" value="3개월" name="dateWeek" id="dateWeek" onclick="onCreateClass.fnDateMonth3()">3개월</button>
+                                <button class="edit-button" type="button" value="6개월" name="dateMonth" id="dateMonth" onclick="onCreateClass.fnDateMonth6()">6개월</button>
                             </span>
                             <div class="fr-mr-5">
                                 <div>
@@ -66,31 +63,31 @@
             <!-- 결과 페이지  -->
             <div class="BottomTable" id="tpl-table-list">
                 <div class="tab01Box">
-                    <div id="myTable4" class="chart_loding" >
+                    <div id="myTable4" >
                         <table class="table" >
                             <colgroup>
-                                <col width="50px">
-                                <col width="80px">
-                                <col width="150px">
-                                <col width="150px">
-                                <col width="100px">
-                                <col width="100px">
-                                <col width="100px">
-                                <col width="350px">
+                                <col style="width:5%">
+                                <col style="width:5%">
+                                <col style="width:10%">
+                                <col style="width:15%">
+                                <col style="width:5%">
+                                <col style="width:5%">
+                                <col style="width:5%">
+                                <col style="width:37%">
                             </colgroup>
                             <tr>
                                 <th>번호</th>
                                 <th>지역</th>
                                 <th>사이트명</th>
                                 <th>게시판명</th>
-                                <th>최종등록일</th>
+                                <th @click="fnOrdr(orderby)">최종등록일자 <i v-if="orderby == 'desc'" class="fa fa-sort-desc" aria-hidden="true"></i><i v-if="orderby == 'asc'" class="fa fa-sort-asc" aria-hidden="true"></i></th>
                                 <th>자료유형</th>
                                 <th>사이트ID</th>
                                 <th>사이트 URL</th>
                             </tr>
                             <tr v-for="item in items">
                                 <td>{{item.rnum}}</td>
-                                <td>{{item.area}}</td>
+                                <td>{{isNulltoString(item.area)}}</td>
                                 <td>{{item.sitenm}}</td>
                                 <td>{{item.seednm}}</td>
                                 <td>{{item.regdate}}</td>

@@ -54,9 +54,9 @@
                                 <span class="pado">~</span>
                                 <span class="calendar01"><input type="text" id="datepicker2" /></span>
                                 <span class="calendarBtn">
-                                    <button class="edit-button" type="button" value="당일" name="dateToday" id="dateToday" onclick="onCreateClass.fnDateToday()">당일</button>
-                                    <button class="edit-button" type="button" value="1주일" name="dateWeek" id="dateWeek" onclick="onCreateClass.fnDateWeek()">1주일</button>
-                                    <button class="edit-button" type="button" value="1개월" name="dateMonth" id="dateMonth" onclick="onCreateClass.fnDateMonth()">1개월</button>
+                                    <button class="edit-button" type="button" value="1개월" name="dateToday" id="dateToday" onclick="onCreateClass.fnDateMonth1()">1개월</button>
+                                    <button class="edit-button" type="button" value="3개월" name="dateWeek" id="dateWeek" onclick="onCreateClass.fnDateMonth3()">3개월</button>
+                                    <button class="edit-button" type="button" value="6개월" name="dateMonth" id="dateMonth" onclick="onCreateClass.fnDateMonth6()">6개월</button>
                                 </span>
                                 <div class="fr-mr-5">
                                     <button class="search-button" onclick="onCreateClass.btnSearch()"><i class="fa fa-search" aria-hidden="true"></i> 검색</button>
@@ -72,23 +72,22 @@
                         <div id="myTable" class="overflow-auto">
                             <table class="table" id="tpl-table-list-1">
                                 <colgroup>
-                                    <col width="120px">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
-                                    <col width="">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
+                                    <col style="width:5.8%">
                                 </colgroup>
                                 <tr>
                                     <th>지방의회</th>
@@ -103,7 +102,6 @@
                                     <th>안건</th>
                                     <th>발언</th>
                                     <th>발언답변</th>
-                                    <th>부록</th>
                                     <th>의안정보</th>
                                     <th>발의의원</th>
                                     <th>의안파일</th>
@@ -111,22 +109,21 @@
                                 </tr>
                                 <tr v-for="item in items">
                                     <td>{{item.rasmblyNm}}</td>
-                                    <td>{{comma(item.numprCount)}}</td>
-                                    <td>{{comma(item.sesnCount)}}</td>
-                                    <td>{{comma(item.estCount)}}</td>
-                                    <td>{{comma(item.mtgnmCount)}}</td>
-                                    <td>{{comma(item.asembyCount)}}</td>
-                                    <td>{{comma(item.asembyactCount)}}</td>
-                                    <td>{{comma(item.ofcpsCount)}}</td>
-                                    <td>{{comma(item.mintsCount)}}</td>
-                                    <td>{{comma(item.mtrCount)}}</td>
-                                    <td>{{comma(item.spkngCount)}}</td>
-                                    <td>{{comma(item.numprCount)}}</td>
-                                    <td>{{comma(item.biCountmintsCount)}}</td>
-                                    <td>{{comma(item.asembyCount)}}</td>
-                                    <td>{{comma(item.itncasembyCountasembyCount)}}</td>
-                                    <td>{{comma(item.bifileCount)}}</td>
-                                    <td>{{comma(item.bimintsCount)}}</td>
+                                    <td>{{comma(item.req101)}}</td>
+                                    <td>{{comma(item.req102)}}</td>
+                                    <td>{{comma(item.req201)}}</td>
+                                    <td>{{comma(item.req202)}}</td>
+                                    <td>{{comma(item.req203)}}</td>
+                                    <td>{{comma(item.req204)}}</td>
+                                    <td>{{comma(item.req205)}}</td>
+                                    <td>{{comma(item.req301)}}</td>
+                                    <td>{{comma(item.req302)}}</td>
+                                    <td>{{comma(item.req303)}}</td>
+                                    <td>{{comma(item.req304)}}</td>
+                                    <td>{{comma(item.req401)}}</td>
+                                    <td>{{comma(item.req402)}}</td>
+                                    <td>{{comma(item.req403)}}</td>
+                                    <td>{{comma(item.req404)}}</td>
                                 </tr>
                             </table>
                         </div>
@@ -134,23 +131,29 @@
                     <div class="tab0Box">
                         <div id="myTable2" class="overflow-auto">
                             <table class="table" id="tpl-table-list-2">
+                                <colgroup>
+                                    <col style="width:14.28%">
+                                    <col style="width:14.28%">
+                                    <col style="width:14.28%">
+                                    <col style="width:14.28%">
+                                    <col style="width:14.28%">
+                                    <col style="width:14.28%">
+                                </colgroup>
                                 <tr>
                                     <th>지방의회</th>
-                                    <th>회의록최종일자</th>
-                                    <th>안건최종일자</th>
-                                    <th>발언최종일자</th>
-                                    <th>발언답변최종일자</th>
-                                    <th>부록최종일자</th>
-                                    <th>의안최종일자</th>
+                                    <th>회의록최종수집일자</th>
+                                    <th>의안최종수집일자</th>
+                                    <th>의원최종수집일자</th>
+                                    <th>발언최종수집일자</th>
+                                    <th>안건최종수집일자</th>
                                 </tr>
                                 <tr v-for="item in items">
                                     <td>{{item.rasmblyNm}}</td>
-                                    <td>{{isNullCheck(item.billMinutesFrstRegistDt)}}</td>
-                                    <td>{{isNullCheck(item.itemFrstRegistDt)}}</td>
-                                    <td>{{isNullCheck(item.minutesStatementFrstRegistDt)}}</td>
-                                    <td>{{isNullCheck(item.minutesAnswerFrstRegistDt)}}</td>
-                                    <td>{{isNullCheck(item.minutesAppendixFrstRegistDt)}}</td>
-                                    <td>{{isNullCheck(item.billFrstRegistDt)}}</td>
+                                    <td>{{dataFormat(item.req301)}}</td>
+                                    <td>{{dataFormat(item.req401)}}</td>
+                                    <td>{{dataFormat(item.req203)}}</td>
+                                    <td>{{dataFormat(item.req303)}}</td>
+                                    <td>{{dataFormat(item.req302)}}</td>
                                 </tr>
                             </table>
                         </div>

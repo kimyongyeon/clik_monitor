@@ -56,21 +56,24 @@ var chartClass = {
     btnMonthClick: function(mm) {
         this.monthText = mm;
         $("#chart_column_title h1").text("(" + mm +"개월)");
-        var arrayDataType = [];
-        var data = {};
-        $.each($("input[name=radioBox01]:checked"), function (idx, value) {
-            arrayDataType.push($(this).val());
-        });
-        data = {
-            ramblyList: jsTreeClass.arraySelectedData, // 의회(기초,광역,지역)
-            dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
-            month: mm || 1
-        }
-        $("#chart_column_1").css("visibility", "visible");
-        commonClass.fnAjaxCallback("/getTotalAvgReqCntList.do", data, function (data) {
-            $("#chart_column_1").css("visibility", "hidden");
-            chart_column(data)
-        },'post'); // 지방 의회별 데이터 전송건수
+        this.fnPrevLeftProc();
+        // var arrayDataType = [];
+        // var data = {};
+        // $.each($("input[name=radioBox01]:checked"), function (idx, value) {
+        //     arrayDataType.push($(this).val());
+        // });
+        // data = {
+        //     ramblyList: jsTreeClass.arraySelectedData, // 의회(기초,광역,지역)
+        //     dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
+        //     month: mm || 1,
+        //     pageIndex: chartClass.dataColumn1CurrentPag,
+        //     pageUnit: 17
+        // }
+        // $("#chart_column_1").css("visibility", "visible");
+        // commonClass.fnAjaxCallback("/getTotalAvgReqCntList.do", data, function (data) {
+        //     $("#chart_column_1").css("visibility", "hidden");
+        //     chart_column(data)
+        // },'post'); // 지방 의회별 데이터 전송건수
     },
     dataCollectionPaginationInfo: {},
     dataColumn1PaginationInfo: {},
@@ -378,10 +381,10 @@ function fnSystemInfoCallback(data) {
     var shift1 = series1.data.length > 5;
 
     var x = (new Date()).getTime(), // current time
-        y = parseFloat(data.memList).toFixed(4);
+        y = parseFloat(data.memList).toFixed(1);
     series.addPoint([x, parseFloat(y)], true, shift);
 
-    var y2 = parseFloat(data.cpuList).toFixed(4);
+    var y2 = parseFloat(data.cpuList).toFixed(1);
     series1.addPoint([x, parseFloat(y2)], true, shift);
     //chart_spline();
     setTimeout(fnAjaxJsonpSystemInfoDataCall, 1000);
@@ -502,11 +505,11 @@ function chart_column(ajaxData) {
     // if(commonClass.fnIsObjectNullCheck(ajaxData))
     //     return;
 
-    var categories = _(ajaxData.list3).pluck('rasmblyNm');
-    var list3 = _(ajaxData.list3).pluck('ydata').map(function (v) {
+    var categories = _(ajaxData.list).pluck('rasmblyNm');
+    var list = _(ajaxData.list).pluck('ydata').map(function (v) {
         return parseInt(v);
     });
-    var max = _.max(list3);
+    var max = _.max(list);
 
     $(function () {
         $('#chart_column').highcharts({
@@ -591,7 +594,7 @@ function chart_column(ajaxData) {
             },
             series: [{
                 name: '최근1개월',
-                data: list3
+                data: list
             }]
         });
     });
@@ -653,6 +656,20 @@ function chart_column2(ajaxData) {
                 enabled: false
             },
             tooltip: {
+                positioner: function (labelWidth, labelHeight, point) {
+                    var tooltipX, tooltipY;
+                    tooltipY = point.plotY - 20;
+                    if(point.plotX > 1200) {
+                        tooltipX = point.plotX - 160;
+                    } else {
+                        tooltipX = point.plotX + 20;
+                    }
+
+                    return {
+                        x: tooltipX,
+                        y: tooltipY
+                    };
+                },
                 formatter: function() {
                     var points = this.points;
                     var y = "";
@@ -704,28 +721,28 @@ function chart_column2(ajaxData) {
             },
             yAxis: {
                 min: 0,
-                tickInterval: 3500,
+                //tickInterval: 3500,
                 title: {
                     text: '',
                 }
             },
-            plotOptions: {
-                column: {
-                    dataLabels: {
-                        pointPadding: 0,
-                        borderWidth: 0,
-                        y: 0,
-                        enabled: false,
-                        formatter: function() {
-                            var temp = "";
-                            for (var i = 0; i < this.x.length; i++) {
-                                temp += this.x.charAt(i) + '<br />';
-                            }
-                            return temp;
-                        }
-                    }
-                }
-            },
+            // plotOptions: {
+            //     column: {
+            //         dataLabels: {
+            //             pointPadding: 0,
+            //             borderWidth: 0,
+            //             y: 0,
+            //             enabled: false,
+            //             formatter: function() {
+            //                 var temp = "";
+            //                 for (var i = 0; i < this.x.length; i++) {
+            //                     temp += this.x.charAt(i) + '<br />';
+            //                 }
+            //                 return temp;
+            //             }
+            //         }
+            //     }
+            // },
             series: [{
                 name: '회의록',
                 data: data1
@@ -802,6 +819,26 @@ function chart_scatter(ajaxData) {
         arrayList4.push(arrayData4);
     }
 
+    if(ajaxData.list1.length != 0) {
+        var xdata = _(ajaxData.list1).pluck('xdata');
+        xdata = _.sortBy(xdata, function(num){ return num });
+    }
+    if(ajaxData.list2.length != 0) {
+        var xdata = _(ajaxData.list2).pluck('xdata');
+        xdata = _.sortBy(xdata, function(num){ return num });
+    }
+    if(ajaxData.list3.length != 0) {
+        var xdata = _(ajaxData.list3).pluck('xdata');
+        xdata = _.sortBy(xdata, function(num){ return num });
+    }
+    if(ajaxData.list4.length != 0) {
+        var xdata = _(ajaxData.list4).pluck('xdata');
+        xdata = _.sortBy(xdata, function(num){ return num });
+    }
+
+
+
+
     $(function () {
         $('#chart_scatter').highcharts({
             chart: {
@@ -836,7 +873,7 @@ function chart_scatter(ajaxData) {
                     }
                     var x = this.x;
                     //var series_name =  points[0].key;
-                    var header = '<span style="font-size:16px; z-index:9999;">'+x+'</span><table style="width: 130px;">';
+                    var header = '<span style="font-size:16px; z-index:9999;">'+x+'</span><table style="width: 150px;">';
                     var template = "";
                     template += header;
                     template += '<tr>' +
@@ -852,7 +889,7 @@ function chart_scatter(ajaxData) {
                 text: '월별 데이터 항목별 수집 현황'
             },
             xAxis: {
-                categories: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+                categories: xdata,
                 title: {
                     enabled: true,
                     text: '<span style="color:#3c3c3e">1</span><br/><span style="color:#3c3c3e">1</span><br/> '

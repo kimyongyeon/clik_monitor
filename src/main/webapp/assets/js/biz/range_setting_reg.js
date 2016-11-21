@@ -1,8 +1,10 @@
 var onCreateClass = {
-    init: function() {
+    init: function(rasmblyId) {
         commonClass.init(); // 콤보박스 데이터 초기화
         commonClass.fnErrorLogListClose(); // 에러목록페이지 닫기
+        this.rasmblyId = rasmblyId;
     },
+    rasmblyId : '',
     fnInsert: function() { // 등록 팝업
         $(".q-popup-layout").css("display", "block");
     },
@@ -14,6 +16,10 @@ var onCreateClass = {
         var rasmblyId = $("select[name=loasmCode] option:selected").val() || ''; // 지방의회
         var setInterval = $("#setInterval").val() || 0; // 응답시간
         var reqProcessingRatio = $("#reqProcessingRatio").val() || 0; // 서비스 요청 처리율
+
+        if(rasmblyId == '') {
+            rasmblyId = this.rasmblyId;
+        }
 
         if(rasmblyId == '') {
             alert("의회는 필수 항목 입니다.");
@@ -41,11 +47,13 @@ var onCreateClass = {
         };
         commonClass.fnAjaxCallback(url, data, function(data){
 
-            if(data === 201) {
-                // 팝업 닫기
-                onCreateClass.fnPopupClose();
-                // UI 초기화
-                onCreateClass.fnUiInit();
+            // 팝업 닫기
+            onCreateClass.fnPopupClose();
+            // UI 초기화
+            onCreateClass.fnUiInit();
+
+            if(data === 201 || data.responseText == 'success') {
+
                 var result = confirm("목록 화면으로 이동하겠습니까?");
                 if(result) {
                     commonClass.page_go("range");

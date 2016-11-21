@@ -30,6 +30,9 @@ var v_table_list_1 = new Vue({
             },'post');
         },
         comma: function (numbers) {
+            if(numbers == null){
+                return 0;
+            }
             return commonClass.fnComma(numbers);
         }
     }
@@ -57,6 +60,16 @@ var v_table_list_2 = new Vue({
             } else {
                 return str;
             }
+        },
+        dataFormat: function(strDate) {
+            var strDate = strDate || '';
+            if(strDate == '0') {
+                return '';
+            }
+            var year = strDate.substring(0,4);
+            var mm = strDate.substring(4,6);
+            var dd = strDate.substring(6,8);
+            return year + "-" + mm + "-" + dd;
         }
     }
 });
@@ -67,7 +80,7 @@ var onCreateClass = {
         commonClass.init(); // 콤보박스 데이터 초기화
 
         //달력 소스(jQuery UI)
-        this.fnDateWeek();
+        this.fnDateMonth1();
         $("#datepicker1, #datepicker2").datepicker(commonClass.fnDatePickerUiInit());
 
         $(".tab-search-2").hide();
@@ -89,6 +102,15 @@ var onCreateClass = {
     },
     fnDateMonth: function() {
         commonClass.fnToday("datepicker", -30);
+    },
+    fnDateMonth1: function() {
+        commonClass.fnToday("datepicker", -30);
+    },
+    fnDateMonth3: function() {
+        commonClass.fnToday("datepicker", -60);
+    },
+    fnDateMonth6: function() {
+        commonClass.fnToday("datepicker", -90);
     },
     excelType: 1,
     btnTabSelect: function(s) {
@@ -136,6 +158,8 @@ var onCreateClass = {
             $(".tab-search-1").show();
 
             onCreateClass.currentTabIndex = 1;
+
+            onCreateClass.fnAjaxTab1List(); // 의회별 전소 데이터 호출
         });
 
         $(tab002).on("click", function (e) {
@@ -149,6 +173,8 @@ var onCreateClass = {
             $(".tab-search-2").show();
 
             onCreateClass.currentTabIndex = 2;
+
+            onCreateClass.fnAjaxTab2List(); // 항목별 최종전송 데이터 호출
 
         });
     },

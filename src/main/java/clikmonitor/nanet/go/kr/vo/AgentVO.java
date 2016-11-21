@@ -29,6 +29,7 @@ public class AgentVO {
     private String ram; // ram
     private String lastUpdtDt; // 수정일
     private String lastCntcDt; // 수정일
+    private String updateDate; // agent 업데이트 일자
     private String deleteDt; // 삭제일
     private String moduleInstallPath; // 모듈설치경로
     private String isview; // 화면 출력 여부
@@ -59,6 +60,7 @@ public class AgentVO {
     private String frstRegisterId;
     private String frstRegistDt;
     private String trgetFileStrePath;
+    private String occrrncDe;
     private MultipartFile files;
 
 }

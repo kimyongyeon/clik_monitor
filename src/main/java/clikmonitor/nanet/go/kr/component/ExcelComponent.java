@@ -63,11 +63,10 @@ public class ExcelComponent extends AbstractExcelView {
             setText(getCell(sheet, 2, 9), "안건");
             setText(getCell(sheet, 2, 10), "발언");
             setText(getCell(sheet, 2, 11), "발언답변");
-            setText(getCell(sheet, 2, 12), "부록");
-            setText(getCell(sheet, 2, 13), "의안정보");
-            setText(getCell(sheet, 2, 14), "발의의원");
-            setText(getCell(sheet, 2, 15), "의안파일");
-            setText(getCell(sheet, 2, 16), "의안회의록");
+            setText(getCell(sheet, 2, 12), "의안정보");
+            setText(getCell(sheet, 2, 13), "발의의원");
+            setText(getCell(sheet, 2, 14), "의안파일");
+            setText(getCell(sheet, 2, 15), "의안회의록");
             boolean isVO = false;
             if (list.size() > 0) {
                 Object obj = list.get(0);
@@ -76,40 +75,42 @@ public class ExcelComponent extends AbstractExcelView {
             for (int i = 0; i < list.size(); i++) {
                 if (isVO) {	// VO
                     StatisticsVO vo = (StatisticsVO) list.get(i);
+                    if(vo == null) {
+                        continue;
+                    }
                     cell = getCell(sheet, 3 + i, 0);
                     setText(cell, vo.getRasmblyNm()+"");
                     cell = getCell(sheet, 3 + i, 1);
-                    setText(cell, vo.getNumprCount()+"");
+                    setText(cell, vo.getREQ101()+"");
                     cell = getCell(sheet, 3 + i, 2);
-                    setText(cell, vo.getSesnCount()+"");
+                    setText(cell, vo.getREQ102()+"");
                     cell = getCell(sheet, 3 + i, 3);
-                    setText(cell, vo.getEstCount()+"");
+                    setText(cell, vo.getREQ201()+"");
                     cell = getCell(sheet, 3 + i, 4);
-                    setText(cell, vo.getMtgnmCount()+"");
+                    setText(cell, vo.getREQ202()+"");
                     cell = getCell(sheet, 3 + i, 5);
-                    setText(cell, vo.getAsembyCount()+"");
+                    setText(cell, vo.getREQ203()+"");
                     cell = getCell(sheet, 3 + i, 6);
-                    setText(cell, vo.getAsembyactCount()+"");
+                    setText(cell, vo.getREQ204()+"");
                     cell = getCell(sheet, 3 + i, 7);
-                    setText(cell, vo.getOfcpsCount()+"");
+                    setText(cell, vo.getREQ205()+"");
                     cell = getCell(sheet, 3 + i, 8);
-                    setText(cell, vo.getMintsCount()+"");
+                    setText(cell, vo.getREQ301()+"");
                     cell = getCell(sheet, 3 + i, 9);
-                    setText(cell, vo.getMtrCount()+"");
+                    setText(cell, vo.getREQ302()+"");
                     cell = getCell(sheet, 3 + i, 10);
-                    setText(cell, vo.getSpkngCount()+"");
+                    setText(cell, vo.getREQ303()+"");
                     cell = getCell(sheet, 3 + i, 11);
-                    setText(cell, vo.getNumprCount()+"");
+                    setText(cell, vo.getREQ304()+"");
                     cell = getCell(sheet, 3 + i, 12);
-                    setText(cell, vo.getApndxCount()+"");
+                    setText(cell, vo.getREQ401()+"");
                     cell = getCell(sheet, 3 + i, 13);
-                    setText(cell, vo.getAsembyCount()+"");
+                    setText(cell, vo.getREQ402()+"");
                     cell = getCell(sheet, 3 + i, 14);
-                    setText(cell, vo.getItncasembyCountasembyCount()+"");
+                    setText(cell, vo.getREQ403()+"");
                     cell = getCell(sheet, 3 + i, 15);
-                    setText(cell, vo.getBifileCount()+"");
-                    cell = getCell(sheet, 3 + i, 16);
-                    setText(cell, vo.getBimintsCount()+"");
+                    setText(cell, vo.getREQ404()+"");
+
                 }
             }
         }
@@ -129,9 +130,8 @@ public class ExcelComponent extends AbstractExcelView {
             setText(getCell(sheet, 2, 1), "회의록최종일자");
             setText(getCell(sheet, 2, 2), "안건최종일자");
             setText(getCell(sheet, 2, 3), "발언최종일자");
-            setText(getCell(sheet, 2, 4), "발언답변최종일자");
-            setText(getCell(sheet, 2, 5), "부록최종일자");
-            setText(getCell(sheet, 2, 6), "의안최종일자");
+            setText(getCell(sheet, 2, 4), "부록최종일자");
+            setText(getCell(sheet, 2, 5), "의안최종일자");
             boolean isVO = false;
             if (list.size() > 0) {
                 Object obj = list.get(0);
@@ -143,17 +143,15 @@ public class ExcelComponent extends AbstractExcelView {
                     cell = getCell(sheet, 3 + i, 0);
                     setText(cell, vo.getRasmblyNm()+""); // 지방의회
                     cell = getCell(sheet, 3 + i, 1);
-                    setText(cell, isNullCheck(vo.getBillMinutesFrstRegistDt()+"")); // 회의록
+                    setText(cell, isNullCheck(vo.getREQ301()+"")); // 회의록
                     cell = getCell(sheet, 3 + i, 2);
-                    setText(cell, isNullCheck(vo.getItemFrstRegistDt()+"")); // 안건
+                    setText(cell, isNullCheck(vo.getREQ401()+"")); // 안건
                     cell = getCell(sheet, 3 + i, 3);
-                    setText(cell, isNullCheck(vo.getMinutesStatementFrstRegistDt()+"")); // 발언 minutesStatementFrstRegistDt
+                    setText(cell, isNullCheck(vo.getREQ203()+"")); // 발언 getMinutesAnswerFrstRegistDt
                     cell = getCell(sheet, 3 + i, 4);
-                    setText(cell, isNullCheck(vo.getMinutesAnswerFrstRegistDt()+"")); // 발언답변 minutesAnswerFrstRegistDt
+                    setText(cell, isNullCheck(vo.getREQ303()+"")); // 부록 minutesAppendixFrstRegistDt
                     cell = getCell(sheet, 3 + i, 5);
-                    setText(cell, isNullCheck(vo.getMinutesAppendixFrstRegistDt()+"")); // 부록 minutesAppendixFrstRegistDt
-                    cell = getCell(sheet, 3 + i, 6);
-                    setText(cell, isNullCheck(vo.getBillFrstRegistDt()+"")); // 의안
+                    setText(cell, isNullCheck(vo.getREQ302()+"")); // 의안
                 }
             }
         }

@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
  */
 @Data
 public class MailSearchVO extends CommonSearchVO {
-
+    private String keyWordSub;
 }

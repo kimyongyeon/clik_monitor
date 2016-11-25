@@ -268,8 +268,8 @@ public interface AgentService {
             AgentVO agentVO3 = agentMapper.selectAgentLastDateOne(agentVO); // 최종수집일자
 
             if(agentVO2 != null) {
-                if(agentVO2.getUpdateDt() != null) {
-                    agentVO1.setUpdateDt(agentVO2.getUpdateDt());
+                if(agentVO2.getUpdateDate() != null) {
+                    agentVO1.setUpdateDate(agentVO2.getUpdateDate());
                 }
             }
 

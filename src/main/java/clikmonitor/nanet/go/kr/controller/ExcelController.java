@@ -37,10 +37,6 @@ public class ExcelController {
 
     @RequestMapping(value = "/excelDownload.do")
     public ModelAndView getListExcel(HttpServletRequest request) throws Exception {
-//        int keyWordType = 0;
-//        if (request.getParameter("keyWordType") != null ) {
-//            keyWordType = Integer.parseInt(request.getParameter("keyWordType"));
-//        }
         String keyWordType = request.getParameter("keyWordType");
         List list = new ArrayList();
         Map map = new HashMap();
@@ -79,7 +75,27 @@ public class ExcelController {
             map.put("menu", KeyWordType.RANGE);
         }
         else if (KeyWordType.MAIL.equals(keyWordType)) { // 메일링
-            list = mailService.selectMailingExcelExportList(new MailSearchVO());
+            MailSearchVO mailSearchVO = new MailSearchVO();
+            String startDate = request.getParameter("startDate");
+            String endDate = request.getParameter("endDate");
+            String keyWordSub = request.getParameter("keyWordSub");
+            String keyWordText = request.getParameter("keyWordText");
+            mailSearchVO.setStartDate(startDate);
+            mailSearchVO.setEndDate(endDate);
+            mailSearchVO.setKeyWordSub(keyWordSub);
+            mailSearchVO.setKeyWordText(keyWordText);
+
+            PaginationInfo paginationInfo = new PaginationInfo();
+            int pageIndex = Integer.parseInt(request.getParameter("pageIndex"));
+            int pageUnit = Integer.parseInt(request.getParameter("pageUnit"));
+            paginationInfo.setCurrentPageNo(pageIndex); // 현재 페이지
+            paginationInfo.setRecordCountPerPage(pageUnit); // 페이지 갯수
+            paginationInfo.setTotalRecordCount(mailService.selectMailingSendPagingTotalCount(mailSearchVO));  // 전체카운트
+
+            mailSearchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+            mailSearchVO.setRecordCountPerPage(pageUnit);
+
+            list = mailService.selectMailingExcelExportList(mailSearchVO);
             map.put(KeyWordType.MAIL, list);
             map.put("menu", KeyWordType.MAIL);
         }

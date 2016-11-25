@@ -107,10 +107,10 @@ var onCreateClass = {
         commonClass.fnToday("datepicker", -30);
     },
     fnDateMonth3: function() {
-        commonClass.fnToday("datepicker", -60);
+        commonClass.fnToday("datepicker", -90);
     },
     fnDateMonth6: function() {
-        commonClass.fnToday("datepicker", -90);
+        commonClass.fnToday("datepicker", -180);
     },
     excelType: 1,
     btnTabSelect: function(s) {

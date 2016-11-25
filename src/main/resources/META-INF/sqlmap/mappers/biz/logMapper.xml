@@ -42,21 +42,29 @@
 		]]>
     </select>
     <select id="selectErrorLogButtonShowHideOne" parameterType="logSearchVO" resultMap="logMap">
+
         <![CDATA[
-        SELECT /*selectErrorLogInfoOne*/
-            REQUST_INSTT_ID
-            , RASMBLY_NM
-            , TAR_LOG.SERVER_IP
-            , PROVD_INSTT_ID   /* 요청코드 */
-            , REQUST_RECPTN_TM  /* 요청일자 */
-            , RESULT_CODE  /* 결과코드*/
-            , RESULT_MSSAGE  /* 결과메세지 */
-        FROM TAR_LOG, COLGOVER
-        WHERE TAR_LOG.REQUST_INSTT_ID = COLGOVER.RASMBLY_ID
-        AND REQUST_INSTT_ID = #{requstInsttId} /* 지방의회 아이디 */
-        AND REQUST_RECPTN_TM LIKE TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
-        AND RESULT_CODE != '000'
-        AND ROWNUM = 1
+
+        SELECT /*selectErrorLogButtonShowHideOne*/
+                 REQUST_ID
+               , REQUST_INSTT_ID
+               , RASMBLY_NM
+               , TAR_LOG.SERVER_IP
+               , PROVD_INSTT_ID   /* 요청코드 */
+               , REQUST_RECPTN_TM  /* 요청일자 */
+               , RESULT_CODE  /* 결과코드*/
+               , CODE_NM  /* 결과코드명 */
+               , RESULT_MSSAGE  /* 결과메세지 */
+            FROM TAR_LOG, COLGOVER, COMMON_DETAIL_CODE
+            WHERE TAR_LOG.REQUST_INSTT_ID = COLGOVER.RASMBLY_ID
+            AND REQUST_INSTT_ID = #{requstInsttId} /* 지방의회 아이디 */
+            AND RESULT_CODE = CODE
+            AND CODE_ID = 'RIS007'
+            AND RESULT_CODE != '000'
+            AND RESULT_CODE != '104'
+            AND OCCRRNC_DE = TO_CHAR(SYSDATE,'YYYYMMDD')
+            AND CNTC_ID IS NOT NULL
+            AND ROWNUM = 1
         ]]>
     </select>
 
@@ -64,7 +72,7 @@
     <select id="selectErrorLogInfoList" parameterType="logSearchVO" resultMap="logMap">
         <include refid="h_top" />
         <![CDATA[
-            SELECT /*+ INDEX_DESC(TAR_LOG CLIK_TAR_LOG_CHART_IDX2) */
+            SELECT /*selectErrorLogInfoList*/
                  REQUST_ID
                , REQUST_INSTT_ID
                , RASMBLY_NM
@@ -80,24 +88,23 @@
             AND CODE_ID = 'RIS007'
             AND RESULT_CODE != '000'
             AND RESULT_CODE != '104'
---             AND OCCRRNC_DE BETWEEN TO_CHAR(TRUNC(SYSDATE,'YYYY'),'YYYYMMDD') AND TO_CHAR(LAST_DAY(ADD_MONTHS(TO_CHAR(TRUNC(SYSDATE,'YYYY'),'YYYYMMDD'),+11)),'YYYYMMDD')
--- todo: 운영서버 반영시 아래 주석 풀어야 함.
-            AND OCCRRNC_DE BETWEEN TO_CHAR(TRUNC(SYSDATE+1)-TO_CHAR(SYSDATE,'D'),'YYYYMMDD') AND TO_CHAR(TRUNC(SYSDATE+1)-TO_CHAR(SYSDATE,'D'),'YYYYMMDD')
+            AND OCCRRNC_DE = TO_CHAR(SYSDATE,'YYYYMMDD')
             AND CNTC_ID IS NOT NULL
 		]]>
-        -- SELECT CODE, CODE_NM FROM COMMON_DETAIL_CODE WHERE CODE_ID = 'RIS007' -- 코드 테이블
         <include refid="h_bottom" />
     </select>
 
     <select id="selectErrorLogInfoListTotalRecordCount" parameterType="logSearchVO" resultType="int">
-        SELECT SUM(CNT) FROM (
-            SELECT REQUST_INSTT_ID, COUNT(*) CNT
-            FROM TAR_LOG
-            WHERE RESULT_CODE != '000'
+        SELECT /*selectErrorLogInfoListTotalRecordCount*/
+                COUNT(*)
+            FROM TAR_LOG, COLGOVER, COMMON_DETAIL_CODE
+            WHERE TAR_LOG.REQUST_INSTT_ID = COLGOVER.RASMBLY_ID
+            AND RESULT_CODE = CODE
+            AND CODE_ID = 'RIS007'
+            AND RESULT_CODE != '000'
             AND RESULT_CODE != '104'
-            AND OCCRRNC_DE BETWEEN TO_CHAR(TRUNC(SYSDATE+1)-TO_CHAR(SYSDATE,'D'),'YYYYMMDD') AND TO_CHAR(TRUNC(SYSDATE+1)-TO_CHAR(SYSDATE,'D'),'YYYYMMDD')
-            GROUP BY REQUST_INSTT_ID
-        )
+            AND OCCRRNC_DE = TO_CHAR(SYSDATE,'YYYYMMDD')
+            AND CNTC_ID IS NOT NULL
 
     </select>
 

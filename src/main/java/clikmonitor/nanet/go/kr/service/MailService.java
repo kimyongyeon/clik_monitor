@@ -26,6 +26,10 @@ public interface MailService {
 
     List<MailVO> selectMailingSetPagingList(CommonSearchVO mailSearchVO);
 
+    int selectMailingSendPagingTotalCount(CommonSearchVO mailSearchVO);
+
+    int selectMailingSetPagingTotalCount(CommonSearchVO mailSearchVO);
+
     /**
      * 메일링 발송내역 목록 엑셀저장
      *
@@ -62,6 +66,16 @@ public interface MailService {
         MailMapper mailMapper;
 
         @Override
+        public int selectMailingSendPagingTotalCount(CommonSearchVO mailSearchVO) {
+            return mailMapper.selectMailingSendPagingTotalCount(mailSearchVO);
+        }
+
+        @Override
+        public int selectMailingSetPagingTotalCount(CommonSearchVO mailSearchVO) {
+            return mailMapper.selectMailingSetPagingTotalCount(mailSearchVO);
+        }
+
+        @Override
         public List<MailVO> selectMailingSetPagingList(CommonSearchVO mailSearchVO) {
             return mailMapper.selectMailingSetPagingList(mailSearchVO);
         }
@@ -79,35 +93,22 @@ public interface MailService {
         @Override
         public void insertMailingSetProc(MailVO mailVO) {
 
-            Set<String> rasmlyIds = new TreeSet<>();
-            Set<String> recvs = new TreeSet<>();
-            // 지방의회 광역중 선택된 의회만 String으로 저장한다.
-//            rasmlyIds.addAll(mailVO.getAreas1().stream().filter(m->m.getChecked().equals("true")).map(m->m.getName()).collect(Collectors.toList()));
-            // 지방의회 기초중 선택된 의회만 String으로 저장한다.
-//            rasmlyIds.addAll(mailVO.getAreas2().stream().filter(m->m.getChecked().equals("true")).map(m->m.getName()).collect(Collectors.toList()));
-            // 관리할 지방의회를 콤바로 저장
-//            mailVO.setRasmlyIds(rasmlyIds.stream().collect(Collectors.joining(",")));
-            // 받을사람중 선택된 이메일로 String으로 저장한다.
-//            recvs.addAll(mailVO.getRecvs().stream().filter(m->m.getChecked().equals("true")).map(m->m.getName()).collect(Collectors.toList()));
-            // 의회별 관리에 대한 받을사람 이메일 주소를 콤바로 저장
-//            mailVO.setReceiver(recvs.stream().collect(Collectors.joining(",")));
-            // select로 바뀌면서 아래 로직을 바꿈. VO checkbox vo도 변경함.
-            if(!"".equals(mailVO.getAreas1()[0])) {
-                if(mailVO.getAreas1().length != 0) {
-                    mailVO.setRasmlyIds(mailVO.getAreas1()[0]);
-                }
+            if(!"Fail".equals(mailVO.getAreas1()[0])) {
+                mailVO.setRasmlyIds(mailVO.getAreas1()[0]);
             }
-            if(!"".equals(mailVO.getAreas2()[0])) {
-                if(mailVO.getAreas2().length != 0) {
-                    mailVO.setRasmlyIds(mailVO.getAreas2()[0]);
-                }
+            if(!"Fail".equals(mailVO.getAreas2()[0])) {
+                mailVO.setRasmlyIds(mailVO.getAreas2()[0]);
             }
 
-            mailVO.setReceiver(mailVO.getReceiver());
             try {
-                mailMapper.insertMailingSetProc(mailVO);
+                int i = mailMapper.selectMailSetCheck(mailVO);
+                if(i > 0) {
+                    mailMapper.updateMailingSetProc(mailVO);
+                } else {
+                    mailMapper.insertMailingSetProc(mailVO);
+                }
             } catch (Exception e) {
-                mailMapper.updateMailingSetProc(mailVO);
+                System.out.println(e.getStackTrace());
             }
         }
 

@@ -46,7 +46,7 @@
 
     <select id="selectMetaExcelExportList" parameterType="metaDataSearchVO" resultMap="metaDataMap">
         <include refid="h_top" />
-        SELECT /* selectMetaExcelExportList */
+        SELECT /* selectMetaExcelExportList */ /*+ LEADING(WEBROBOT_SITE) FULL(WEBROBOT_SEED) */
             (SELECT CODE_ID_NM FROM COMMON_CODE WHERE CL_CODE='LMC' AND CODE_ID = WEBROBOT_CONTENTS.REGION) AREA,
             WEBROBOT_SITE.SITENM,
             WEBROBOT_SEED.SEEDNM,
@@ -68,7 +68,7 @@
     <select id="selectMetaDataPagingList" parameterType="metaDataSearchVO" resultMap="metaDataMap">
 
         <include refid="h_top" />
-        SELECT /* selectMetaDataPagingList */
+        SELECT /* selectMetaDataPagingList */ /*+ LEADING(WEBROBOT_SITE) FULL(WEBROBOT_SEED) */
             (SELECT CODE_ID_NM FROM COMMON_CODE WHERE CL_CODE='LMC' AND CODE_ID = WEBROBOT_CONTENTS.REGION) AREA,
             WEBROBOT_SITE.SITENM,
             WEBROBOT_SEED.SEEDNM,
@@ -93,7 +93,7 @@
 
         <![CDATA[
 			SELECT  COUNT(*) AS CNT FROM (
-                SELECT /* selectMetaDataPagingList */
+                SELECT /* selectMetaDataPagingList */ /*+ LEADING(WEBROBOT_SITE) FULL(WEBROBOT_SEED) */
                     WEBROBOT_SITE.SITENM,
                     WEBROBOT_SEED.SEEDNM,
                     MAX(WEBROBOT_CONTENTS.REGDATE) REGDATE_ORG,

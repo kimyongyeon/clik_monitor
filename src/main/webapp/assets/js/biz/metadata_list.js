@@ -151,17 +151,6 @@ var onCreateClass = {
             endDate = parseInt(endDate) + 1;
         }
 
-        // if(region == '') {
-        //     alert("지역명을 선택하세요.");
-        //     $("#insttClCode").focus();
-        //     return;
-        // }
-        // if(siteId == '') {
-        //     alert("사이트명을 선택하세요.");
-        //     $("#siteId").focus();
-        //     return;
-        // }
-
         var data = {
             startDate: startDate,
             endDate: endDate,
@@ -186,9 +175,9 @@ var onCreateClass = {
         commonClass.fnToday("datepicker", -30);
     },
     fnDateMonth3: function() {
-        commonClass.fnToday("datepicker", -60);
+        commonClass.fnToday("datepicker", -90);
     },
     fnDateMonth6: function() {
-        commonClass.fnToday("datepicker", -90);
+        commonClass.fnToday("datepicker", -180);
     }
 }

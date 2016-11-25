@@ -73,7 +73,6 @@
                         <div class="fullBox">
                             <div class="fullSub" onclick="agentClass.fnAgentServerStateInfoPopup();">
                                 <img id="network-img" src="/img/network_on.gif" />
-                                <img id="network-img-1400" src="/img/network_on_1400.gif" />
                                 <img id="pipe-01" src="/img/pipe_01.png" />
                                 <img id="pipe-02" src="/img/pipe_02.png" />
                                 <img id="pipe-03" src="/img/pipe_03.png" />
@@ -157,7 +156,7 @@
                             </colgroup>
                             <tr>
                                 <th>의회</th>
-                                <td>{{item.rasmblyNm}}</td>
+                                <td>{{item.rasmblyNm}} ({{item.rasmblyId}})</td>
                                 <th>최종수집일자</th>
                                 <td>{{dataFormat(item.occrrncDe)}}</td>
                             </tr>

@@ -29,12 +29,27 @@ public interface MailMapper {
     List<MailVO> selectMailingSetPagingList(CommonSearchVO mailSearchVO);
 
     /**
+     * 메일링 발송내역 전체 카운트
+     * @param mailSearchVO
+     * @return
+     */
+    int selectMailingSendPagingTotalCount(CommonSearchVO mailSearchVO);
+    /**
+     * 메일링 설정 전체 카운트
+     * @param mailSearchVO
+     * @return
+     */
+    int selectMailingSetPagingTotalCount(CommonSearchVO mailSearchVO);
+
+    /**
      * 메일링 발송내역 목록 엑셀저장
      *
      * @param mailSearchVO : 발송일자(당일,1주일,1개월) , 검색항목, 페이지번호
      * @return : 번호, 제목, 발송일시
      */
     List<MailVO> selectMailingExcelExportList(CommonSearchVO mailSearchVO);
+
+    int selectMailSetCheck(MailVO mailVO);
 
     /**
      * 메일설정 저장

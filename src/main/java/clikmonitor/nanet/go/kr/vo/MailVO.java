@@ -15,14 +15,12 @@ import java.util.List;
 public class MailVO {
 
     // 발송내역
-    private int rownum;
+    private int rnum;
     private String no;
     private String title; // 제목
     private String sendDate; // 보낸일자
     private String insertDate; // 등록일자
     private List<CheckBoxVO> recvs;
-//    private List<CheckBoxVO> areas1;
-//    private List<CheckBoxVO> areas2;
     private String[] areas1;
     private String[] areas2;
 

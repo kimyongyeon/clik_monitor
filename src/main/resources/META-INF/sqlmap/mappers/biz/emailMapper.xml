@@ -19,7 +19,7 @@
         <![CDATA[
 							) ALL_LIST
 					)
-			WHERE  	RNUM  >= #{firstIndex}
+			WHERE  	RNUM  > #{firstIndex}
 	        AND  	RNUM <= #{firstIndex} + #{recordCountPerPage}
 	    ]]>
     </sql>
@@ -33,13 +33,13 @@
 
     <sql id="email_where">
         <include refid="mail_date_where" />
-        <if test="keyWordType == 1">
+        <if test="keyWordSub == 1">
             AND TITLE LIKE '%' || #{keyWordText} || '%'
         </if>
-        <if test="keyWordType == 2">
+        <if test="keyWordSub == 2">
             AND RECEIVER LIKE '%' || #{keyWordText} || '%'
         </if>
-        <if test="keyWordType == ''">
+        <if test="keyWordSub == ''">
             AND (RECEIVER LIKE '%' ||  #{keyWordText} || '%' OR TITLE LIKE '%' ||  #{keyWordText} || '%')
         </if>
         ORDER BY SEND_DATE DESC
@@ -47,23 +47,26 @@
 
     <sql id="email_set_where">
         <include refid="mail_set_date_where" />
-        <if test="keyWordType == 1">
+        <if test="keyWordSub == 1">
             AND TITLE LIKE '%' || #{keyWordText} || '%'
         </if>
-        <if test="keyWordType == 2">
+        <if test="keyWordSub == 2">
             AND RECEIVER LIKE '%' || #{keyWordText} || '%'
         </if>
-        <if test="keyWordType == ''">
+        <if test="keyWordSub == ''">
             AND (RECEIVER LIKE '%' ||  #{keyWordText} || '%' OR TITLE LIKE '%' ||  #{keyWordText} || '%')
         </if>
         ORDER BY INSERT_DATE DESC
     </sql>
 
     <select id="selectMailingExcelExportList" parameterType="mailSearchVO" resultMap="mailMap">
+        <include refid="h_top" />
         SELECT /*selectMailingExcelExportList*/ROWNUM no
           , TITLE title
           , SEND_DATE sendDate
-        FROM EMAIL_MNG
+        FROM EMAIL_MNG WHERE 1 = 1
+        <include refid="email_where" />
+        <include refid="h_bottom" />
     </select>
 
     <!--이메일 발송 내역 목록  -->
@@ -115,6 +118,21 @@
 
     </select>
 
+    <!-- 메일 전체 레코드 수 -->
+    <select id="selectMailingSetPagingTotalCount" parameterType="mailSearchVO" resultType="int" >
+
+        SELECT 	/*selectMailingSendPagingTotalCount*/COUNT(1)
+        FROM	EMAIL_SET WHERE 1 = 1
+        <include refid="email_set_where" />
+
+    </select>
+
+    <select id="selectMailSetCheck" parameterType="mailVO" resultType="int">
+
+        SELECT COUNT(*) FROM EMAIL_SET WHERE EMAIL_ID = '${emailId}'
+
+    </select>
+
     <!-- 메일 등록 -->
     <insert id="insertMailingSetProc">
         INSERT INTO /*insertMailingSetProc*/EMAIL_SET
@@ -127,7 +145,7 @@
         )
         VALUES
         (
-           (SELECT MAX(EMAIL_ID) + 1 FROM EMAIL_SET)
+           (SELECT COUNT(EMAIL_ID) + 1 FROM EMAIL_SET)
          , #{receiver}
          , #{title}
          , #{rasmlyIds}
@@ -144,7 +162,7 @@
     </update>
     <!-- 메일 삭제 -->
     <delete id="deleteMailingSetProc">
-        DELETE FROM /*deleteMailingSetProc*/EMAIL_SET WHERE EMAIL_ID = #emailId#
+        DELETE FROM /*deleteMailingSetProc*/EMAIL_SET WHERE EMAIL_ID = #{emailId}
     </delete>
 
 

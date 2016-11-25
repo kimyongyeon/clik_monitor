@@ -57,23 +57,6 @@ var chartClass = {
         this.monthText = mm;
         $("#chart_column_title h1").text("(" + mm +"개월)");
         this.fnPrevLeftProc();
-        // var arrayDataType = [];
-        // var data = {};
-        // $.each($("input[name=radioBox01]:checked"), function (idx, value) {
-        //     arrayDataType.push($(this).val());
-        // });
-        // data = {
-        //     ramblyList: jsTreeClass.arraySelectedData, // 의회(기초,광역,지역)
-        //     dataTypeList: arrayDataType, // 회의록, 부록, 의안, 의원
-        //     month: mm || 1,
-        //     pageIndex: chartClass.dataColumn1CurrentPag,
-        //     pageUnit: 17
-        // }
-        // $("#chart_column_1").css("visibility", "visible");
-        // commonClass.fnAjaxCallback("/getTotalAvgReqCntList.do", data, function (data) {
-        //     $("#chart_column_1").css("visibility", "hidden");
-        //     chart_column(data)
-        // },'post'); // 지방 의회별 데이터 전송건수
     },
     dataCollectionPaginationInfo: {},
     dataColumn1PaginationInfo: {},
@@ -385,7 +368,7 @@ function fnSystemInfoCallback(data) {
     series.addPoint([x, parseFloat(y)], true, shift);
 
     var y2 = parseFloat(data.cpuList).toFixed(1);
-    series1.addPoint([x, parseFloat(y2)], true, shift);
+    series1.addPoint([x, parseFloat(y2)], true, shift1);
     //chart_spline();
     setTimeout(fnAjaxJsonpSystemInfoDataCall, 1000);
 }
@@ -465,13 +448,11 @@ function chart_spline() {
                 //     var data = [],
                 //         time = (new Date()).getTime(),
                 //         i, y = 0;
-                //     for (i = -19; i <= 0; i += 1) {
-                //         y = y * 100;
+                //     for (i = -10; i <= 0; i += 1) {
                 //         data.push({
-                //             x: time + i * 500,
-                //             y: y
+                //             x: time + i * 100,
+                //             y: i
                 //         });
-                //         y = 1;
                 //     }
                 //     return data;
                 // }())
@@ -485,13 +466,11 @@ function chart_spline() {
                 //     var data = [],
                 //         time = (new Date()).getTime(),
                 //         i, y = 0;
-                //     for (i = -19; i <= 0; i += 1) {
-                //         y = y * 100;
+                //     for (i = -10; i <= 0; i += 1) {
                 //         data.push({
-                //             x: time + i * 1000,
-                //             y: y
+                //             x: time + i * 100,
+                //             y: i
                 //         });
-                //         y = 1;
                 //     }
                 //     return data;
                 // }())
@@ -559,6 +538,20 @@ function chart_column(ajaxData) {
                 enabled: false
             },
             tooltip: {
+                positioner: function (labelWidth, labelHeight, point) {
+                    var tooltipX, tooltipY;
+                    tooltipY = point.plotY - 10;
+                    if(point.plotX > 500) {
+                        tooltipX = point.plotX - 100;
+                    } else {
+                        tooltipX = point.plotX + 20;
+                    }
+
+                    return {
+                        x: tooltipX,
+                        y: tooltipY
+                    };
+                },
                 shared: true,
                 formatter: function() {
                     var y = commonClass.fnComma(this.y);

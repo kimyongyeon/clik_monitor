@@ -2,12 +2,41 @@
 var v_mail_list = new Vue({
     el: '#tpl-mail-list',
     data: {
-        items: []
+        items: [],
+        prev : false,
+        firstPageNoOnPageList : 0,
+        lastPageNoOnPageList : 0,
+        next : false,
+        page : 0,
+        prevPage : 0,
+        nextPage : 0,
     },
     methods: {
-        fetchData: function(url, data){
+        fetchData: function(url, data, page){
             commonClass.fnAjaxCallback(url, data, function(data){
-                Vue.set(v_mail_list, 'items', data);
+
+                var firstPageNoOnPageList = data.paginationInfo.firstPageNoOnPageList;
+                var lastPageNoOnPageList = data.paginationInfo.lastPageNoOnPageList;
+                var recordCountPerPage = data.paginationInfo.recordCountPerPage;
+                var totalRecordCount = data.paginationInfo.totalRecordCount;
+
+                var totalPageCount = data.paginationInfo.totalPageCount;
+                if(totalPageCount <= lastPageNoOnPageList) {
+                    lastPageNoOnPageList = totalPageCount;
+                } else {
+                    lastPageNoOnPageList = 10;
+                }
+
+                var prev = firstPageNoOnPageList === 1 ? false : true;
+                var next = lastPageNoOnPageList * recordCountPerPage >= totalRecordCount ? false : true;
+                Vue.set(v_mail_list, 'items', data.list);
+                Vue.set(v_mail_list, 'firstPageNoOnPageList', firstPageNoOnPageList - 1);
+                Vue.set(v_mail_list, 'lastPageNoOnPageList', lastPageNoOnPageList);
+                Vue.set(v_mail_list, 'prev', prev);
+                Vue.set(v_mail_list, 'next', next);
+                Vue.set(v_mail_list, 'page', page);
+                Vue.set(v_mail_list, 'prevPage', firstPageNoOnPageList - 1);
+                Vue.set(v_mail_list, 'nextPage', lastPageNoOnPageList + 1);
                 $("#myTable5 img").hide();
             });
         }
@@ -18,14 +47,45 @@ var v_mail_list = new Vue({
 var v_send_list = new Vue({
     el: '#tpl-send-list',
     data: {
-        items: []
+        items: [],
+        prev : false,
+        firstPageNoOnPageList : 0,
+        lastPageNoOnPageList : 0,
+        next : false,
+        page : 0,
+        prevPage : 0,
+        nextPage : 0,
     },
     methods: {
-        fetchData: function(url, data){
+        fetchData: function(url, data, page){
             commonClass.fnAjaxCallback(url, data, function(data){
-                Vue.set(v_send_list, 'items', data)
+                var firstPageNoOnPageList = data.paginationInfo.firstPageNoOnPageList;
+                var lastPageNoOnPageList = data.paginationInfo.lastPageNoOnPageList;
+                var recordCountPerPage = data.paginationInfo.recordCountPerPage;
+                var totalRecordCount = data.paginationInfo.totalRecordCount;
+
+                var totalPageCount = data.paginationInfo.totalPageCount;
+                if(totalPageCount <= lastPageNoOnPageList) {
+                    lastPageNoOnPageList = totalPageCount;
+                } else {
+                    lastPageNoOnPageList = 10;
+                }
+
+                var prev = firstPageNoOnPageList === 1 ? false : true;
+                var next = lastPageNoOnPageList * recordCountPerPage >= totalRecordCount ? false : true;
+                Vue.set(v_send_list, 'items', data.list)
+                Vue.set(v_send_list, 'firstPageNoOnPageList', firstPageNoOnPageList - 1);
+                Vue.set(v_send_list, 'lastPageNoOnPageList', lastPageNoOnPageList);
+                Vue.set(v_send_list, 'prev', prev);
+                Vue.set(v_send_list, 'next', next);
+                Vue.set(v_send_list, 'page', page);
+                Vue.set(v_send_list, 'prevPage', firstPageNoOnPageList - 1);
+                Vue.set(v_send_list, 'nextPage', lastPageNoOnPageList + 1);
                 $("#myTable4 img").hide();
             });
+        },
+        dataFormat: function(strDate) {
+            return commonClass.fnStringToDate(strDate);
         }
     }
 });
@@ -39,42 +99,47 @@ var onCreateClass = {
         $("#datepicker1, #datepicker2").datepicker(commonClass.fnDatePickerUiInit());
         $("#datepicker21, #datepicker22").datepicker(commonClass.fnDatePickerUiInit());
 
-        this.fnDateMonth_30();
-        this.fnDateMonth2_30();
+        this.fnDateMonth_30(); // 1개월
+        this.fnDateMonth2_30(); // 1개월
 
         // 검색
-        this.btnSearch();
-        this.btnMailListSearch();
+        this.btnSearch(); // 발송내역
+        this.btnMailListSearch(); // 메일목록
         // 의회 목록
         this.fnAjaxAreaList();
-        // 검색어 입력후 엔터
+
+        // 발송내역
         $("#keyWordText").keydown(function(e){
             if(e.which === 13) {
                 e.preventDefault();
                 onCreateClass.btnSearch();
             }
         });
+
+        // 메일목록
         $("#keyWordText2").keydown(function(e){
             if(e.which === 13) {
                 e.preventDefault();
                 onCreateClass.btnMailListSearch();
             }
         });
+        // 모든 input 엔터
         $("input").keydown(function(e){
             if(e.which === 13) {
                 e.preventDefault();
             }
         });
+        // 메뉴 바 설정
         commonClass.fnMenuStyle("mail");
-
+        // 탭 초기화
         this.mailInit(); // 메일링관리 탭 초기화
 
     },
-    btnSearch: function() {
-        this.fnAjaxTableList();
+    btnSearch: function() { // 발송내역 검색
+        this.fnAjaxTableList(1);
     },
-    btnMailListSearch: function() {
-        this.fnAjaxTableMailList();
+    btnMailListSearch: function() { // 메일목록 검색
+        this.fnAjaxTableMailList(1);
     },
     fnAjaxAreaList: function() {
         var url = "getJstree.do";
@@ -120,24 +185,57 @@ var onCreateClass = {
         });
     },
     btnExcelSave: function() {
-        location.href = "/excelDownload.do?keyWordType=3";
+        var startDate = $("#datepicker1").val();
+        var endDate = $("#datepicker2").val();
+        var keyWordType = $("select[name=keyWordType] option:selected").val(); // 검색항목
+        var keyWordText = $("#keyWordText").val(); // 검색명
+        if(startDate != '') {
+            startDate = startDate.replace(/-/gi,'');
+        }
+        if(endDate != '') {
+            endDate = endDate.replace(/-/gi,'');
+        }
+        var data = {
+            startDate: startDate,
+            endDate: endDate,
+            keyWordText: keyWordText || '',
+            keyWordSub: keyWordType || '',
+            pageIndex: this.currentPage,
+            pageUnit:10,
+            keyWordType:3
+        };
+        location.href = "/excelDownload.do?" + jQuery.param(data);
     },
-    fnAjaxTableList: function() {
+    currentPage: 1,
+    fnAjaxTableList: function(page) { // 발송 내역
+
+        page = page || 1;
+        this.currentPage = page;
 
         var url = "getMailList.do";
         var startDate = $("#datepicker1").val();
         var endDate = $("#datepicker2").val();
         var keyWordType = $("select[name=keyWordType] option:selected").val(); // 검색항목
         var keyWordText = $("#keyWordText").val(); // 검색명
+        if(startDate != '') {
+            startDate = startDate.replace(/-/gi,'');
+        }
+        if(endDate != '') {
+            endDate = endDate.replace(/-/gi,'');
+        }
         var data = {
             startDate: startDate,
             endDate: endDate,
             keyWordText: keyWordText,
-            keyWordType: keyWordType
+            keyWordSub: keyWordType,
+            "pageIndex": page,
+            "pageUnit":10
         };
-        v_send_list.fetchData(url, data);
+        v_send_list.fetchData(url, data, page);
     },
-    fnAjaxTableMailList: function() {
+    fnAjaxTableMailList: function(page) { // 메일 목록
+
+        page = page || 1;
 
         var url = "getMailSetList.do";
         var startDate = $("#datepicker21").val();
@@ -148,9 +246,11 @@ var onCreateClass = {
             startDate: startDate,
             endDate: endDate,
             keyWordText: keyWordText,
-            keyWordType: keyWordType
+            keyWordSub: keyWordType,
+            "pageIndex": page,
+            "pageUnit":10
         };
-        v_mail_list.fetchData(url, data);
+        v_mail_list.fetchData(url, data, page);
     },
     mailInit: function() {
         /*메일링 관리*/
@@ -162,6 +262,7 @@ var onCreateClass = {
         $(".mail_set").hide();
         $(tab0003).addClass("active");
 
+        // 발송내역
         $(tab0001).on("click", function (e) {
             e.preventDefault();
             $(tab0001).addClass("active");
@@ -171,8 +272,12 @@ var onCreateClass = {
             $(".mail_list").hide();
             $(".send_list").show();
             $(".mail_set").hide();
+
+            onCreateClass.fnAjaxTableList(1);
+
         });
 
+        // 메일설정
         $(tab0002).on("click", function (e) {
             e.preventDefault();
 
@@ -188,8 +293,11 @@ var onCreateClass = {
             $(".mail_list").hide();
             $(".send_list").hide();
             $(".mail_set").show();
+
+            $("#btn-mail-set-delete").hide();
         });
 
+        // 메일목록
         $(tab0003).on("click", function (e) {
             e.preventDefault();
             $(tab0003).addClass("active");
@@ -198,7 +306,10 @@ var onCreateClass = {
             $(".mail_list").show();
             $(".send_list").hide();
             $(".mail_set").hide();
+
+            onCreateClass.fnAjaxTableMailList(1);
         });
+
     },
     fnList: function() {
         var tab0003 = $(".listTab03");
@@ -243,98 +354,106 @@ var onCreateClass = {
         $(".mail_list").hide();
         $(".send_list").hide();
         $(".mail_set").show();
+        $("#btn-mail-set-delete").show();
     },
     fnDateMonth_30: function() {
-        commonClass.fnToday("datepicker", 0);
+        commonClass.fnToday("datepicker", -30);
     },
     fnDateMonth_60: function () {
-        commonClass.fnToday("datepicker", -7);
+        commonClass.fnToday("datepicker", -90);
     },
     fnDateMonth_90: function() {
-        commonClass.fnToday("datepicker", -30);    
+        commonClass.fnToday("datepicker", -180);
     },
     fnDateMonth2_30: function() {
         commonClass.fnToday2("datepicker", -30);
     },
     fnDateMonth2_60: function () {
-        commonClass.fnToday2("datepicker", -60);
-    },
-    fnDateMonth2_90: function() {
         commonClass.fnToday2("datepicker", -90);
     },
+    fnDateMonth2_90: function() {
+        commonClass.fnToday2("datepicker", -180);
+    },
     fnPopupSave: function() { // 저장 확인 팝업
-        $(".q-popup-layout").show();
+        $("#insertPopup").show();
     },
-    fnAjaxCheckboxDataCreate: function(t, o) {
-        if(t.filter(":checked").val()) { // 체크 된거
-            o.push(
-                {
-                    name: t.filter(":checked").val(),
-                    checked: true
-                }
-            );
-        } else { // 체크 안되거
-            o.push(
-                {
-                    name: t.val(),
-                    checked: false
-                }
-            );
-        }
+    fnPopupDel: function() { // 삭제 확인 팝업
+        $("#deletePopup").show();
     },
-    fnSave: function() { // DB 저장
+    fnSaveProc: function() { // DB 저장
 
         var url = "getMailSettingSaveProc.do";
         var areas1 = [];
         var areas2 = [];
 
-        var emailId = $("#receiver").val() || '';
+        var emailId = $("#emailId").val() || '';
+        var receiver = $("#receiver").val() || '';
         var title = $("#mailTitle").val()  || '';
 
         areas1.push($("#areas option:selected").val());
         areas2.push($("#areas2 option:selected").val());
 
-        if(emailId == '') {
+        if(receiver == '') {
             alert("이메일은 필수 항목 입니다.");
             $("#receiver").focus();
-            $(".q-popup-layout").hide();
+            $("#insertPopup").hide();
             return;
         }
         if(title == '') {
             alert("제목은 필수 항목 입니다.");
             $("#mailTitle").focus();
-            $(".q-popup-layout").hide();
+            $("#insertPopup").hide();
             return;
         }
         if(areas1 == '' && areas2 == '' ) {
             alert("기초의회, 광역의회는 필수 항목 입니다.");
             $("#areas").focus();
-            $(".q-popup-layout").hide();
+            $("#insertPopup").hide();
             return;
         }
         if(areas1 != '' && areas2 != '' ) {
             alert("기초의회, 광역의회는 하나만 선택 가능 합니다.");
             $("#areas").focus();
-            $(".q-popup-layout").hide();
+            $("#insertPopup").hide();
             return;
         }
 
+        if(areas1[0] == '') {
+            areas1[0] = "Fail";
+        }
+        if(areas2[0] == '') {
+            areas2[0] = "Fail";
+        }
+
         var data = {
-            emailId: emailId || '', // 이메일아이디
-            receiver: emailId, // 받는사람
+            emailId: emailId || 0, // 이메일시컨스
+            receiver: receiver, // 받는사람
             title: title, // 제목
             areas1: areas1, // 광역
             areas2: areas2, // 기초
         };
         commonClass.fnAjaxCallback(url, data, function(data){
-            $(".q-popup-layout").hide();
+            $("#insertPopup").hide();
 
             onCreateClass.fnList();
-            onCreateClass.fnAjaxTableMailList();
+            onCreateClass.fnAjaxTableMailList(1);
 
         }, "post");
     },
+    fnDelProc: function() { // 삭제 처리
+        var url = "getMailSettingDelProc.do";
+        var emailId = $("#emailId").val() || '';
+        var data = {
+            emailId: emailId || 0 // 이메일시컨스
+        };
+        commonClass.fnAjaxCallback(url, data, function(data){
+            $("#deletePopup").hide();
+            onCreateClass.fnList();
+            onCreateClass.fnAjaxTableMailList(1);
+        }, "post");
+    },
     fnCancel: function() { // 저장 취소
-        $(".q-popup-layout").hide();
+        $("#insertPopup").hide();
+        $("#deletePopup").hide();
     }
 }

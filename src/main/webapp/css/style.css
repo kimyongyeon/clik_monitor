@@ -92,6 +92,10 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 .range_table_list tr th { text-align: center;}
 .range_table_list tr td:nth-child(1) { text-align: center;}
 .range_table_list tr td { text-align: center !important; }
+/*발송내역*/
+#tpl-send-list tr th {text-align: center;}
+#tpl-send-list tr td:nth-child(1) { text-align: center;}
+#tpl-send-list tr td { text-align: left !important; }
 
 /*.table tr td:nth-child(1) { text-align: center; }
 .table tr td:nth-child(2) { text-align: left; }

@@ -17,17 +17,84 @@ import java.util.regex.Pattern;
 public class EmailMain {
 
     // JDBC driver name and database URL
-    static final String JDBC_DRIVER = "com.tmax.tibero.jdbc.TbDriver";
-    static final String DB_URL = "jdbc:tibero:thin:@10.201.27.6:8629:CLIKDB";
+    static String JDBC_DRIVER = "com.tmax.tibero.jdbc.TbDriver";
+    static String DB_URL = "jdbc:tibero:thin:@10.201.27.150:8629:CLIKDB";
 
     // Database credentials
     static final String USER = "clik";
-    static final String PASS = "clik#dev";
+    static final String PASS = "clik#top";
 
     public static void main(String[] args) {
 
         EmailMain emailMain = new EmailMain();
-        String sql = "SELECT /*+ INDEX_FFS(TAR_LOG CLIK_TAR_LOG_CHART_IDX) PARALLEL_INDEX(TAR_LOG CLIK_TAR_LOG_CHART_IDX) */\n" +
+
+        // tar_log : 로그 테이블
+        StringBuffer sql_tar_log = new StringBuffer();
+        sql_tar_log.append("SELECT COUNT(*) FROM TAR_LOG");
+        sql_tar_log.append(" WHERE OCCRRNC_DE = TO_CHAR(SYSDATE, 'YYYYMMDD')");
+        sql_tar_log.append(" AND REQUST_INSTT_ID IN (SELECT RASMBLY_ID FROM COLGOVER WHERE ISVIEW = 'Y')");
+        sql_tar_log.append(" AND RESULT_CODE != '000'");
+        sql_tar_log.append(" AND RESULT_CODE != '104'");
+        List list = emailMain.selInfoList(sql_tar_log.toString());
+        // 1. 오늘 일자 기준 로그가 있는지 확인 한다.
+        if (list.size() > 0) {
+            // 2. 의회별로 관리하는 이메일이 등록 되었는지 체크
+            StringBuffer sql_email_set = new StringBuffer();
+            sql_email_set.append("SELECT RECEIVER, RASMLY_IDS");
+            sql_email_set.append(" FROM EMAIL_SET");
+            sql_email_set.append(" WHERE RASMLY_IDS IN (");
+            sql_email_set.append(" SELECT DISTINCT REQUST_INSTT_ID FROM TAR_LOG");
+            sql_email_set.append(" WHERE OCCRRNC_DE = TO_CHAR(SYSDATE, 'YYYYMMDD')");
+            sql_email_set.append(" AND REQUST_INSTT_ID IN (SELECT RASMBLY_ID FROM COLGOVER WHERE ISVIEW = 'Y')");
+            sql_email_set.append(" AND RESULT_CODE != '000'");
+            sql_email_set.append(" AND RESULT_CODE != '104'");
+            sql_email_set.append(")");
+            sql_email_set.append(" GROUP BY RECEIVER, RASMLY_IDS;");
+            List list2 = emailMain.selInfoList(sql_email_set.toString());
+            if (list2.size() > 0) {
+                // 3. 이미 전송한 로그는 제외한 의회코드를 뽑는다.
+                StringBuffer sql_email_mng = new StringBuffer();
+                sql_email_mng.append("SELECT RASMBLY_ID FROM EMAIL_MNG WHERE TAR_LOG_SEQ IN (");
+                sql_email_mng.append("        SELECT REQUST_ID FROM TAR_LOG");
+                sql_email_mng.append("        WHERE OCCRRNC_DE = TO_CHAR(SYSDATE, 'YYYYMMDD')");
+                sql_email_mng.append("        AND REQUST_INSTT_ID IN (SELECT RASMBLY_ID FROM COLGOVER WHERE ISVIEW = 'Y')");
+                sql_email_mng.append("        AND RESULT_CODE != '000'");
+                sql_email_mng.append("        AND RESULT_CODE != '104'");
+                sql_email_mng.append(");");
+                List list3 = emailMain.selInfoList(sql_email_mng.toString());
+                if (list3.size() > 0) {
+                    for (int i = 0; i < list2.size(); i++) {
+                        Map m = (Map) list2.get(i);
+                        String RASMLY_IDS = m.get("RASMLY_IDS").toString();
+                        String RECEIVER = m.get("RECEIVER").toString();
+                        // 4. 로그 데이터를 뽑아서 이메일을 전송한다.
+                        StringBuffer sql_tar_log_send = new StringBuffer();
+                        sql_tar_log_send.append("SELECT REQUST_ID, REQUST_INSTT_ID, RESULT_CODE, RESULT_MSSAGE ");
+                        sql_tar_log_send.append(" FROM TAR_LOG");
+                        sql_tar_log_send.append(" WHERE OCCRRNC_DE = TO_CHAR(SYSDATE, 'YYYYMMDD')");
+                        sql_tar_log_send.append(" AND REQUST_INSTT_ID = '" + RASMLY_IDS + "'");
+                        sql_tar_log_send.append(" AND RESULT_CODE != '000'");
+                        sql_tar_log_send.append(" AND RESULT_CODE != '104'");
+                        List list4 = emailMain.selInfoList(sql_tar_log_send.toString());
+                        if(list4.size() > 0) {
+                            for (int i2 = 0; i2 < list4.size(); i2++) {
+                                Map m2 = (Map) list4.get(i2);
+                                String REQUST_ID = m2.get("REQUST_ID").toString();
+                                String REQUST_INSTT_ID = m2.get("REQUST_INSTT_ID").toString();
+                                String RESULT_CODE = m2.get("RESULT_CODE").toString();
+                                String RESULT_MSSAGE = m2.get("RESULT_MSSAGE").toString();
+
+
+
+                                //emailMain.mailSend(); // 이메일 전송
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+       /* String sql = "SELECT *//*+ INDEX_FFS(TAR_LOG CLIK_TAR_LOG_CHART_IDX) PARALLEL_INDEX(TAR_LOG CLIK_TAR_LOG_CHART_IDX) *//*\n" +
                 "*\n" +
                 "        FROM TAR_LOG, COLGOVER\n" +
                 "        WHERE TAR_LOG.REQUST_INSTT_ID = COLGOVER.RASMBLY_ID\n" +
@@ -36,22 +103,23 @@ public class EmailMain {
                 "        AND CNTC_ID IS NOT NULL";
         List list = emailMain.selInfoList(sql); // 전송 오류가 있는지 체크
         StringJoiner requstIds = new StringJoiner(",");
-        if(list.size() > 0) {
+        if (list.size() > 0) {
             // requst_id 체크 이미 해당 오류건에 대해서 보냈는지?
-            for(int i=0; i<list.size(); i++) {
-                Map m = (Map)list.get(i);
+            for (int i = 0; i < list.size(); i++) {
+                Map m = (Map) list.get(i);
                 String requstId = m.get("REQUST_ID").toString();
                 requstIds.add("'" + requstId + "'");
             }
-            List resultList = emailMain.selInfoList("SELECT COUNT(*) FROM EMAIL_MNG WHERE REQUST_ID IN ("+requstIds+");"); // 전송 오류가 있는지 체크
-            if(resultList.size() == 0) {
+            List resultList = emailMain.selInfoList("SELECT COUNT(*) FROM EMAIL_MNG WHERE REQUST_ID IN (" + requstIds + ");"); // 전송 오류가 있는지 체크
+            if (resultList.size() == 0) {
                 emailMain.mailSend(); // 이메일 전송
             }
-        }
+        }*/
     }
 
     /**
      * insert, update 함수
+     *
      * @param sql
      * @return
      */
@@ -59,7 +127,7 @@ public class EmailMain {
         Connection connection = null;
         Statement stmt = null;
         int row = 0;
-        try{
+        try {
             Class.forName(JDBC_DRIVER);
 
             System.out.println("Connection to database...");
@@ -73,18 +141,18 @@ public class EmailMain {
             stmt.close();
             connection.close();
 
-        } catch (SQLException se){
+        } catch (SQLException se) {
             se.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                if(stmt != null)
+                if (stmt != null)
                     stmt.close();
             } catch (SQLException se) {
             }
             try {
-                if(connection != null)
+                if (connection != null)
                     connection.close();
             } catch (SQLException se) {
                 se.printStackTrace();
@@ -95,6 +163,7 @@ public class EmailMain {
 
     /**
      * select 함수
+     *
      * @param sql
      * @return
      */
@@ -106,7 +175,7 @@ public class EmailMain {
         List<Map> list = new ArrayList<>();
         Map<String, Object> map;
 
-        try{
+        try {
             Class.forName(JDBC_DRIVER);
 
             System.out.println("Connection to database...");
@@ -121,7 +190,7 @@ public class EmailMain {
 
             while (rs.next()) {
                 map = new HashMap<String, Object>();
-                for(int indexOfcolumn=0; indexOfcolumn<sizeofColumn; indexOfcolumn++) {
+                for (int indexOfcolumn = 0; indexOfcolumn < sizeofColumn; indexOfcolumn++) {
                     column = metaData.getColumnName(indexOfcolumn + 1);
                     map.put(column, rs.getString(column));
                 }
@@ -131,18 +200,18 @@ public class EmailMain {
             stmt.close();
             connection.close();
 
-        } catch (SQLException se){
+        } catch (SQLException se) {
             se.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                if(stmt != null)
+                if (stmt != null)
                     stmt.close();
             } catch (SQLException se) {
             }
             try {
-                if(connection != null)
+                if (connection != null)
                     connection.close();
             } catch (SQLException se) {
                 se.printStackTrace();
@@ -158,7 +227,7 @@ public class EmailMain {
     public void dbConnectionTest() {
         Connection connection = null;
         Statement stmt = null;
-        try{
+        try {
             Class.forName(JDBC_DRIVER);
 
             System.out.println("Connection to database...");
@@ -177,18 +246,18 @@ public class EmailMain {
             stmt.close();
             connection.close();
 
-        } catch (SQLException se){
+        } catch (SQLException se) {
             se.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                if(stmt != null)
+                if (stmt != null)
                     stmt.close();
             } catch (SQLException se) {
             }
             try {
-                if(connection != null)
+                if (connection != null)
                     connection.close();
             } catch (SQLException se) {
                 se.printStackTrace();
@@ -216,55 +285,54 @@ public class EmailMain {
             subject = new String(subject.getBytes("utf-8"));
             body = new String(body.getBytes("utf-8"));
 
-            for(int i=0; i<list.size(); i++) {
+            for (int i = 0; i < list.size(); i++) {
 
                 // 수신자 이메일
                 boolean find = false;
                 String cd = "";
                 find = isEmailPattern(to);
 
-                if(find == false){
+                if (find == false) {
                     cd = "false";
                 }
 
                 // 이메일 유효성 검사
-                if(cd.equals("false")){
+                if (cd.equals("false")) {
                     System.out.println("이메일이 유효하지 않습니다.");
                     return;
-                }else{
+                } else {
                     URL url = new URL("http://ems.nanet.go.kr/servlet/sendemailu");
                     InputStream is = null;
                     BufferedReader br = null;
                     ImHttpRequestor requestor = new ImHttpRequestor(url);
-                    requestor.addParameter("from", from);	// 보내는 사람
-                    requestor.addParameter("to", to);	// 받는사람 이메일
-                    requestor.addParameter("subject", subject);	// 제목
-                    requestor.addParameter("body", body);	// 본문
+                    requestor.addParameter("from", from);    // 보내는 사람
+                    requestor.addParameter("to", to);    // 받는사람 이메일
+                    requestor.addParameter("subject", subject);    // 제목
+                    requestor.addParameter("body", body);    // 본문
                     requestor.addParameter("charset", charset);
 
                     try {
                         is = requestor.sendMultipartPost();
                         br = new BufferedReader(new InputStreamReader(is));
                         String line = "";
-                        while( (line=br.readLine())!= null ) {
+                        while ((line = br.readLine()) != null) {
                             returnMsg += line.trim();
                         }
                         br.close();
-                    } catch(Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
-                        if ( is != null ){
+                        if (is != null) {
                             try {
                                 is.close();
-                            }
-                            catch(Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
-                        if ( br != null ){
+                        if (br != null) {
                             try {
                                 br.close();
-                            }catch(Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
@@ -282,24 +350,27 @@ public class EmailMain {
         }
         // --------------------------------------------   메일 발송 끝 --------------------------------------------
     }
+
     /**
      * 이메일 유효성 체크
+     *
      * @param email
      * @return
      */
-    public static boolean isEmailPattern(String email){
+    public static boolean isEmailPattern(String email) {
         //Pattern pattern=Pattern.compile("\\w+[@]\\w+\\.\\w+");
-        Pattern pattern= Pattern.compile("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$");
-        Matcher match=pattern.matcher(email);
+        Pattern pattern = Pattern.compile("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$");
+        Matcher match = pattern.matcher(email);
         return match.find();
     }
 
     /**
      * 이메일 주소 암호화
+     *
      * @return
      */
     // EncodeBySType(strD1);
-    public String EncodeBySType(String strData){
+    public String EncodeBySType(String strData) {
         String strRet = null;
         strRet = Encrypt.com_Encode(":" + strData + ":sisenc");
         return strRet;
@@ -307,27 +378,29 @@ public class EmailMain {
 
     /**
      * 이메일 주소 복호화
+     *
      * @return
      */
     // SSO 복호화, 사용방법 : strD1	=	DecodeBySType(strEncArr);
-    public String DecodeBySType(String strData){
+    public String DecodeBySType(String strData) {
         String strRet = null;
-        int e, d, s, i=0;
+        int e, d, s, i = 0;
 
         strRet = Encrypt.com_Decode(strData);
         e = strRet.indexOf(":");
         d = strRet.indexOf(":sisenc");
-        strRet = strRet.substring(e+1, d);
+        strRet = strRet.substring(e + 1, d);
         return strRet;
     }
 
     /**
      * 이메일 내용 decoding
+     *
      * @return
      */
-    public String ReplaceTag(String Expression, String type){
+    public String ReplaceTag(String Expression, String type) {
         String result = "";
-        if (Expression==null || Expression.equals("")) return "";
+        if (Expression == null || Expression.equals("")) return "";
 
         if (type == "encode") {
             result = StringUtils.replace(Expression, "&", "&amp;");
@@ -338,8 +411,7 @@ public class EmailMain {
             result = StringUtils.replace(result, ">", "&gt;");
             result = StringUtils.replace(result, "\r", "<br>");
             result = StringUtils.replace(result, "\n", "<p>");
-        }
-        else if (type == "decode") {
+        } else if (type == "decode") {
             result = StringUtils.replace(Expression, "&amp;", "&");
             result = StringUtils.replace(result, "&quot;", "\"");
 

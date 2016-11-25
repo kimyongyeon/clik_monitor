@@ -62,11 +62,11 @@
                         </tr>
                     </table>
                     <div class="BottomTable">
-                        <div class="tab01Box" id="sendList" >
+                        <div class="tab01Box" id="tpl-mail-list">
                             <div id="myTable5" class="chart_loding">
-                                <table class="table" id="tpl-mail-list">
+                                <table class="table">
                                     <colgroup>
-                                        <col style="width:20%">
+                                        <col style="width:3%">
                                         <col style="width:20%">
                                         <col style="width:20%">
                                         <col style="width:20%">
@@ -80,13 +80,26 @@
                                         <th>등록일</th>
                                     </tr>
                                     <tr v-for="item in items" @click="onCreateClass.fnDetail(item);">
-                                        <td>{{item.no}}</td>
+                                        <td>{{item.rnum}}</td>
                                         <td>{{item.receiver}}</td>
                                         <td><a href='#'>{{item.title}}</a></td>
                                         <td>{{item.rasmlyNm}}</td>
                                         <td>{{item.insertDate}}</td>
                                     </tr>
                                 </table>
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        <li v-if="prev" @click="onCreateClass.fnAjaxTableMailList(prevPage);"><a href="#">&laquo;</a></li>
+
+                                        <template v-for="item in lastPageNoOnPageList">
+                                            <li v-if="lastPageNoOnPageList > 1" @click="onCreateClass.fnAjaxTableMailList(firstPageNoOnPageList + item);" :class="{active: page == firstPageNoOnPageList + item}">
+                                                <a href="#" v-if="lastPageNoOnPageList >= firstPageNoOnPageList + item">{{firstPageNoOnPageList + item}}</a>
+                                            </li>
+                                        </template>
+
+                                        <li v-if="next" @click="onCreateClass.fnAjaxTableMailList(nextPage);"><a href="#">&raquo;</a></li>
+                                    </ul>
+                                </nav>
                                 <img src="/img/loading.gif" alt="">
                             </div>
                         </div>
@@ -128,25 +141,38 @@
                         </tr>
                     </table>
                     <div class="BottomTable">
-                        <div class="tab01Box">
+                        <div class="tab01Box" id="tpl-send-list">
                             <div id="myTable4" class="chart_loding">
-                                <table class="table" id="tpl-send-list">
+                                <table class="table" summary="발송내역에 대한 테이블 입니다. 번호,제목,발송일자로 구성">
                                     <colgroup>
-                                        <col style="width:33.33%">
-                                        <col style="width:33.33%">
-                                        <col style="width:33.33%">
+                                        <col style="width:5%">
+                                        <col style="width:85%">
+                                        <col style="width:5%">
                                     </colgroup>
                                     <tr>
-                                        <th>번호</th>
-                                        <th>제목</th>
-                                        <th>발송일자</th>
+                                        <th scope="col">번호</th>
+                                        <th scope="col">제목</th>
+                                        <th scope="col">발송일자</th>
                                     </tr>
                                     <tr v-for="item in items">
-                                        <td>{{item.no}}</td>
+                                        <td>{{item.rnum}}</td>
                                         <td>{{item.title}}</td>
-                                        <td>{{item.sendDate}}</td>
+                                        <td>{{dataFormat(item.sendDate)}}</td>
                                     </tr>
                                 </table>
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        <li v-if="prev" @click="onCreateClass.fnAjaxTableList(prevPage);"><a href="#">&laquo;</a></li>
+
+                                        <template v-for="item in lastPageNoOnPageList">
+                                            <li v-if="lastPageNoOnPageList > 1" @click="onCreateClass.fnAjaxTableList(firstPageNoOnPageList + item);" :class="{active: page == firstPageNoOnPageList + item}">
+                                                <a href="#" v-if="lastPageNoOnPageList >= firstPageNoOnPageList + item">{{firstPageNoOnPageList + item}}</a>
+                                            </li>
+                                        </template>
+
+                                        <li v-if="next" @click="onCreateClass.fnAjaxTableList(nextPage);"><a href="#">&raquo;</a></li>
+                                    </ul>
+                                </nav>
                                 <img src="/img/loading.gif" alt="">
                             </div>
                         </div>
@@ -194,6 +220,7 @@
                         <div class="tab01Box">
                             <div class="fr">
                                 <button class="edit-button" onclick="onCreateClass.fnList();">목록 </button>
+                                <button id="btn-mail-set-delete" class="edit-button" onclick="onCreateClass.fnPopupDel();">삭제 </button>
                                 <button class="edit-button" onclick="onCreateClass.fnPopupSave();">저장 </button>
                             </div>
                         </div>
@@ -202,10 +229,17 @@
             </div>
         </div>
 
-        <div class="q-popup-layout">
-            <p>저장하시겠습니까?</p>
+        <div class="q-popup-layout" id="insertPopup">
+            <p>저장 하시겠습니까?</p>
             <div class="btnSet">
-                <a href="#" class="edit-button" onclick="onCreateClass.fnSave();">예</a>
+                <a href="#" class="edit-button" onclick="onCreateClass.fnSaveProc();">예</a>
+                <a href="#" class="edit-button" onclick="onCreateClass.fnCancel();">아니오</a>
+            </div>
+        </div>
+        <div class="q-popup-layout" id="deletePopup">
+            <p>삭제 하시겠습니까?</p>
+            <div class="btnSet">
+                <a href="#" class="edit-button" onclick="onCreateClass.fnDelProc();">예</a>
                 <a href="#" class="edit-button" onclick="onCreateClass.fnCancel();">아니오</a>
             </div>
         </div>

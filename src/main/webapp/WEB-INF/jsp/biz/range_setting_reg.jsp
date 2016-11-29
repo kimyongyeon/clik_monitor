@@ -87,7 +87,6 @@
         $(document).ready(function () {
             var rasmblyId = '${rasmblyId}';
             var rasmblyNm = '${rasmblyNm}';
-            console.log(rasmblyId, rasmblyNm);
             onCreateClass.init(rasmblyId);
         });
     </script>

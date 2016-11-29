@@ -1,6 +1,7 @@
 package clikmonitor.nanet.go.kr.mapper;
 
 import clikmonitor.nanet.go.kr.vo.CommonSearchVO;
+import clikmonitor.nanet.go.kr.vo.ErrorBoxVO;
 import clikmonitor.nanet.go.kr.vo.LogVO;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
@@ -20,6 +21,10 @@ public interface LogMapper {
     LogVO selectErrorLogInfoOne(CommonSearchVO logVO);
 
     LogVO selectErrorLogButtonShowHideOne(CommonSearchVO logVO);
+
+    List<ErrorBoxVO> selectErrorLogBubbleList();
+
+    void updateErrorLogBublle(ErrorBoxVO errorBoxVO);
 
     /**
      * 로그 데이터 목록 정보 조회

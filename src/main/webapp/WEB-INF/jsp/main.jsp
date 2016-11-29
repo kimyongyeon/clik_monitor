@@ -29,12 +29,14 @@
             <div id="rightBox">
                 <div class="inner_box">
                     <div id="errorBox">
-                        <%--<div id="errorBox_{{selIdx}}" class="errorPop" data-id="{{selIdx}}">
-                            <div class="txtTitle">
-                                <a href="#">{{msg}}</a>
+                        <template v-for="item in list">
+                            <div v-bind:id="'errorBox_' + item.selIdx" v-model="item.selIdx"  v-show="item.isHide" class="errorPop">
+                                <div class="txtTitle">
+                                    <a href="#" @click="commonClass.fnLogDetailData(item.selIdx);">{{item.msg}}</a>
+                                </div>
+                                <div class="closeBtn"><a href="#" @click="fnClose(item.idx, item.isHide);">X</a></div>
                             </div>
-                            <div class="closeBtn"><a href="#" onclick="fnClose({{selIdx}});">X</a></div>
-                        </div>--%>
+                        </template>
                     </div>
                     <div class="topBox" id="tpl-agent-server-info-list">
                         <div id="rasmblyId_empty"><h1>선택된 의회가 없습니다.</h1></div>

@@ -22,6 +22,7 @@
 		<typeAlias alias="commonVO" type="clikmonitor.nanet.go.kr.vo.CommonVO" />
 		<typeAlias alias="loginVO" type="clikmonitor.nanet.go.kr.vo.LoginVO" />
 		<typeAlias alias="logVO" type="clikmonitor.nanet.go.kr.vo.LogVO" />
+		<typeAlias alias="errorBoxVO" type="clikmonitor.nanet.go.kr.vo.ErrorBoxVO" />
 		<typeAlias alias="logSearchVO" type="clikmonitor.nanet.go.kr.vo.LogSearchVO" />
 		<typeAlias alias="mailSearchVO" type="clikmonitor.nanet.go.kr.vo.MailSearchVO" />
 		<typeAlias alias="mailVO" type="clikmonitor.nanet.go.kr.vo.MailVO" />

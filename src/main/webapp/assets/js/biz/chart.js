@@ -235,6 +235,7 @@ var chartClass = {
         $(".button-chart-column2-top-right").css("color","#fff");
         $(".button-chart-column2-top-right").css("border","1px solid #fff");
     },
+    currentDataTypeList : [],
     btnChartSearch: function () { // 차트 검색(회의록, 부록, 의안, 의원, 의회별)
 
         var arrayDataType = [];
@@ -249,6 +250,7 @@ var chartClass = {
             arrayDataType.push(3);
             arrayDataType.push(4);
         }
+        this.currentDataTypeList = arrayDataType; // 데이터 수집 현황에서 사용하기 위해서.
         data = {
             ramblyList: (function() {
                 if(jsTreeClass.arraySelectWide.length == 0) {
@@ -443,37 +445,37 @@ function chart_spline() {
                 name: '메모리',
                 type: 'spline',
                 animation: true,
-                data: []
-                // data: (function () {
-                //     var data = [],
-                //         time = (new Date()).getTime(),
-                //         i, y = 0;
-                //     for (i = -10; i <= 0; i += 1) {
-                //         data.push({
-                //             x: time + i * 100,
-                //             y: i
-                //         });
-                //     }
-                //     return data;
-                // }())
+                // data: []
+                data: (function () {
+                    var data = [],
+                        time = (new Date()).getTime(),
+                        i, y = 0;
+                    for (i = -30; i <= 0; i += 1) {
+                        data.push({
+                            x: time + i * 100,
+                            y: i
+                        });
+                    }
+                    return data;
+                }())
             },
             {
                 name: 'CPU',
                 type: 'spline',
                 animation: true,
-                data: []
-                // data: (function () {
-                //     var data = [],
-                //         time = (new Date()).getTime(),
-                //         i, y = 0;
-                //     for (i = -10; i <= 0; i += 1) {
-                //         data.push({
-                //             x: time + i * 100,
-                //             y: i
-                //         });
-                //     }
-                //     return data;
-                // }())
+                // data: []
+                data: (function () {
+                    var data = [],
+                        time = (new Date()).getTime(),
+                        i, y = 0;
+                    for (i = -30; i <= 0; i += 1) {
+                        data.push({
+                            x: time + i * 100,
+                            y: i
+                        });
+                    }
+                    return data;
+                }())
             }]
         });
     });
@@ -507,17 +509,19 @@ function chart_column(ajaxData) {
                 // visible: false,
                 labels: {
                     formatter: function() {
-                        return this.value;
-                        // var temp = "";
-                        // for (var i = 0; i < this.value.length; i++) {
-                        //     temp += this.value.charAt(i) + '<br />';
-                        // }
-                        // return temp;
+                        if(this.value.length == 2) {
+                            return this.value;
+                        } else {
+                            return "";
+                        }
                     }
                 },
                 title: {
                     text: '<span style="color:#3c3c3e">1</span><br/><span style="color:#3c3c3e">1</span><br/> '
-                }
+                },
+                tickInterval: 1,
+                min: 0,
+                max: 16
             },
             yAxis: {
                 min: 0,
@@ -540,7 +544,7 @@ function chart_column(ajaxData) {
             tooltip: {
                 positioner: function (labelWidth, labelHeight, point) {
                     var tooltipX, tooltipY;
-                    tooltipY = point.plotY - 10;
+                    tooltipY = point.plotY + 40;
                     if(point.plotX > 500) {
                         tooltipX = point.plotX - 100;
                     } else {
@@ -568,20 +572,6 @@ function chart_column(ajaxData) {
                 },
                 useHTML: true
             },
-            // plotOptions: {
-            //     column: {
-            //         pointPadding: 0,
-            //         borderWidth: 1,
-            //         dataLabels: {
-            //             y: -1,
-            //             enabled: true,
-            //             formatter: function() {
-            //                 return this.y;
-            //             }
-            //
-            //         },
-            //     }
-            // },
             legend: {
                 enabled: false
             },
@@ -595,10 +585,8 @@ function chart_column(ajaxData) {
 
 function chart_column2(ajaxData) {
 
-    // if(commonClass.fnIsObjectNullCheck(ajaxData))
-    //     return;
-
     var categories = _.pluck(ajaxData.list, 'rasmblyNm');
+    categories = _.uniq(categories);
     var yData1 = _(ajaxData.list1).pluck('ydata').map(function (v) {
         return parseInt(v);
     });
@@ -620,17 +608,28 @@ function chart_column2(ajaxData) {
     var data2 = [];
     var data3 = [];
     var data4 = [];
-    _.each(yData1, function(i, e) {
-        data1.push({name: commonClass.fnStringToDate(yData1dt[e] || ''),y: yData1[e] || 0});
-    });
-    _.each(yData2, function(i, e) {
-        data2.push({name: commonClass.fnStringToDate(yData2dt[e] || ''),y: yData2[e] || 0});
-    });
-    _.each(yData3, function(i, e) {
-        data3.push({name: commonClass.fnStringToDate(yData3dt[e] || ''),y: yData3[e] || 0});
-    });
-    _.each(yData4, function(i, e) {
-        data4.push({name: commonClass.fnStringToDate(yData4dt[e] || ''),y: yData4[e] || 0});
+
+    $.each(chartClass.currentDataTypeList, function(i, d){
+       if(d == 1) {
+           _.each(yData1, function(i, e) {
+               data1.push({name: commonClass.fnStringToDate(yData1dt[e] || ''),y: yData1[e] || 0});
+           });
+       }
+       if(d == 2) {
+           _.each(yData2, function(i, e) {
+               data2.push({name: commonClass.fnStringToDate(yData2dt[e] || ''),y: yData2[e] || 0});
+           });
+       }
+       if(d == 3) {
+           _.each(yData3, function(i, e) {
+               data3.push({name: commonClass.fnStringToDate(yData3dt[e] || ''),y: yData3[e] || 0});
+           });
+       }
+       if(d == 4) {
+           _.each(yData4, function(i, e) {
+               data4.push({name: commonClass.fnStringToDate(yData4dt[e] || ''),y: yData4[e] || 0});
+           });
+       }
     });
 
     $(function () {
@@ -677,7 +676,6 @@ function chart_column2(ajaxData) {
                         y += points[2].series.name + " : <span style='float:right;'> " + commonClass.fnComma(points[2].y) + " 건 (" + points[2].key + ")</span><br />";
                     }
                     var x = this.x;
-                    //var series_name =  points[0].key;
                     var header = '<span style="font-size:16px">'+x+'</span><table style="width:260px;">';
                     var template = "";
                     template += header;
@@ -693,59 +691,34 @@ function chart_column2(ajaxData) {
             title: {
                 text: '데이터 수집 현황'
             },
-            // subtitle: {
-            //     text: '(단위:개)'
-            // },
             xAxis: {
                 categories: categories,
                 labels: {
                     formatter: function() {
-                        return this.value;
-                        // var temp = "";
-                        // for (var i = 0; i < this.value.length; i++) {
-                        //     temp += this.value.charAt(i) + '<br />';
-                        // }
-                        // return temp;
+                        if(this.value.length == 2) {
+                            return this.value;
+                        } else {
+                            return "";
+                        }
                     }
                 },
                 title: {
                     text: '<span style="color:#3c3c3e">1</span><br/><span style="color:#3c3c3e">1</span><br/> '
-                }
+                },
+                tickInterval: 1,
+                min: 0,
+                max: 16
             },
             yAxis: {
                 min: 0,
-                //tickInterval: 3500,
                 title: {
                     text: '',
                 }
             },
-            // plotOptions: {
-            //     column: {
-            //         dataLabels: {
-            //             pointPadding: 0,
-            //             borderWidth: 0,
-            //             y: 0,
-            //             enabled: false,
-            //             formatter: function() {
-            //                 var temp = "";
-            //                 for (var i = 0; i < this.x.length; i++) {
-            //                     temp += this.x.charAt(i) + '<br />';
-            //                 }
-            //                 return temp;
-            //             }
-            //         }
-            //     }
-            // },
             series: [{
                 name: '회의록',
                 data: data1
-            },
-            //     {
-            //     name: '부록',
-            //     data: data2
-            //
-            // },
-                {
+            }, {
                 name: '의안',
                 data: data3
 
@@ -802,9 +775,6 @@ function chart_scatter(ajaxData) {
     var list4 = ajaxData.list4;
     var arrayList4 = [];
     for (var i = 0; i < list4.length; i++) {
-        // if(parseInt(list4[i].xdata) > mm) {
-        //     continue;
-        // }
         var arrayData4 = {
             name: list4[i].xdata || '',
             y: parseInt(list4[i].ydata || 0)
@@ -828,9 +798,6 @@ function chart_scatter(ajaxData) {
         var xdata = _(ajaxData.list4).pluck('xdata');
         xdata = _.sortBy(xdata, function(num){ return num });
     }
-
-
-
 
     $(function () {
         $('#chart_scatter').highcharts({
@@ -893,7 +860,6 @@ function chart_scatter(ajaxData) {
             },
             yAxis: {
                 min: 0,
-                // max: 50000,
                 tickInterval: 5000,
                 title: {
                     text: '',
@@ -925,10 +891,6 @@ function chart_scatter(ajaxData) {
                     name: '회의록',
                     data: arrayList2
                 },
-                // {
-                //     name: '부록',
-                //     data: arrayList3
-                // },
                 {
                     name: '의안',
                     data: arrayList4
@@ -1116,10 +1078,6 @@ function chart_bar2(rasmblyId) {
                     name: (data.list.x1) ? "회의록" : data.list.x1,
                     data: [parseInt(data.list.y1)]
                 },
-                //     {
-                //     name: (data.list.x1) ? "부록" : data.list.x2,
-                //     data: [parseInt(data.list.y2)]
-                // },
                 {
                     name: (data.list.x1) ? "의안" : data.list.x3,
                     data: [parseInt(data.list.y3)]

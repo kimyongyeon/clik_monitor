@@ -1,12 +1,16 @@
 package clikmonitor.nanet.go.kr.service;
 
 import clikmonitor.nanet.go.kr.vo.CommonSearchVO;
+import clikmonitor.nanet.go.kr.vo.ErrorBoxVO;
 import clikmonitor.nanet.go.kr.vo.LogVO;
 import clikmonitor.nanet.go.kr.mapper.LogMapper;
+import clikmonitor.nanet.go.kr.vo.MailVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+
+import static com.sun.org.apache.xalan.internal.xsltc.compiler.sym.error;
 
 /**
  * Created by kimyongyeon on 2016-07-29.
@@ -21,11 +25,25 @@ public interface LogService {
 
     int selectErrorLogInfoListTotalRecordCount(CommonSearchVO logVO);
 
+    List<ErrorBoxVO> selectErrorLogBubbleList();
+
+    void updateErrorLogBublle(ErrorBoxVO errorBoxVO);
+
     @Service("logService")
     class LogServiceImpl implements LogService {
 
         @Resource(name = "logMapper")
         LogMapper logMapper;
+
+        @Override
+        public void updateErrorLogBublle(ErrorBoxVO errorBoxVO) {
+            logMapper.updateErrorLogBublle(errorBoxVO);
+        }
+
+        @Override
+        public List<ErrorBoxVO> selectErrorLogBubbleList() {
+            return logMapper.selectErrorLogBubbleList();
+        }
 
         @Override
         public LogVO selectErrorLogButtonShowHideOne(CommonSearchVO logVO) {

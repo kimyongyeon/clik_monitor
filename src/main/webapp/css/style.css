@@ -136,7 +136,7 @@ footer p { position: absolute; bottom: 26px; left: 45% }
 #rightBox { float: left; width: 85%; overflow: hidden; margin-left: 0.5%; margin-top: 1%;}
 
 /* 메인화면 작게 나오는 error 팝업 */
-#errorBox { position: absolute; top: 0; left: 0; width: 100%;}
+#errorBox { position: relative; top: 0; left: 0; width: 100%; display: none;}
 #rightBox .errorPop { width: 100%; height: 40px; background: yellow; border-bottom: solid 1px #eee;}
 #rightBox .errorPop .txtTitle { float: left; padding-left: 20px;}
 #rightBox .errorPop .txtTitle a { color: red; font-size: 14px; line-height: 40px; float: left;}

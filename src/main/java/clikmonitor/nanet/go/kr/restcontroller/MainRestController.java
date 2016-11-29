@@ -187,9 +187,36 @@ public class MainRestController  {
     @RequestMapping(value = "/getAgentErrorCheck.do"
             , headers = HttpHeaders.ACCEPT + "=" + MediaType.APPLICATION_JSON_UTF8_VALUE
             , method = RequestMethod.GET)
-    public ErrorBoxVO getAgentErrorCheck() throws InterruptedException {
-        Thread.sleep(5000);
-        return new ErrorBoxVO("-1", "에러 테스트 중입니다.", UUID.randomUUID().toString());
+    public Map getAgentErrorCheck() throws InterruptedException {
+        Map returnMap = new HashMap();
+        returnMap.put("list", logService.selectErrorLogBubbleList());
+        return returnMap;
+    }
+    /**
+     * 에러닫기
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getAgentErrorClose.do"
+            , headers = HttpHeaders.ACCEPT + "=" + MediaType.APPLICATION_JSON_UTF8_VALUE
+            , method = RequestMethod.GET)
+    public Map getAgentErrorClose(@ModelAttribute("errorBoxVO") ErrorBoxVO errorBoxVO) throws InterruptedException {
+        logService.updateErrorLogBublle(errorBoxVO);
+        Map returnMap = new HashMap();
+        returnMap.put("code", "success");
+        return returnMap;
+    }
+
+    /**
+     * 네트워크
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getNetworkState.do"
+            , headers = HttpHeaders.ACCEPT + "=" + MediaType.APPLICATION_JSON_UTF8_VALUE
+            , method = RequestMethod.GET)
+    public String getNetworkState() throws InterruptedException {
+        return "true";
     }
 
     /**

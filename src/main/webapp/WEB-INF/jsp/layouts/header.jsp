@@ -43,7 +43,7 @@
                 <div class="main-menu-left">
                     <a href="#" onclick="commonClass.page_go('main');"><img src="/img/logo.jpg" alt="로고" /></a>
                     <ul>
-                        <li><a class="menu menu_1" href="#" onclick="commonClass.page_go('main');">대쉬보드</a></li>
+                        <li><a class="menu menu_1" href="#" onclick="commonClass.page_go('main');">대시보드</a></li>
                         <li><a class="menu menu_2" href="#" onclick="commonClass.page_go('stat');">통계관리</a></li>
                         <li><a class="menu menu_4" href="#" onclick="commonClass.page_go('meta');">지방정책정보</a></li>
                         <li><a class="menu menu_5" href="#" onclick="commonClass.page_go('mail');">메일링관리</a></li>

@@ -5,6 +5,7 @@
 <mapper namespace="clikmonitor.nanet.go.kr.mapper.LogMapper">
 
     <resultMap id="logMap" type="logVO"></resultMap>
+    <resultMap id="errorBoxMap" type="errorBoxVO"></resultMap>
 
     <sql id = "h_top">
         <![CDATA[
@@ -23,6 +24,25 @@
 	        AND  	RNUM <= #{firstIndex} + #{recordCountPerPage}
 	    ]]>
     </sql>
+
+    <update id="updateErrorLogBublle" parameterType="errorBoxVO">
+        UPDATE EMAIL_MNG
+        SET POPUP_STATE = 'T'
+        WHERE TAR_LOG_SEQ = #{requstId}
+    </update>
+
+    <!-- 오늘 날짜 기준 말풍선 데이터를 뽑는다. -->
+    <select id="selectErrorLogBubbleList" resultMap="errorBoxMap">
+        SELECT REQUST_ID, REQUST_INSTT_ID, CNTC_ID, SERVER_IP, RESULT_CODE, FRST_REGIST_PNTTM, POPUP_STATE
+        FROM EMAIL_MNG A, TAR_LOG B
+        WHERE A.TAR_LOG_SEQ = B.REQUST_ID
+        AND B.REQUST_ID IN (SELECT TAR_LOG_SEQ FROM EMAIL_MNG)
+        AND OCCRRNC_DE = TO_CHAR(SYSDATE, 'YYYYMMDD')
+        AND B.RESULT_CODE != '000'
+        AND B.RESULT_CODE != '104'
+        AND POPUP_STATE = 'F'
+        ORDER BY OCCRRNC_DE DESC
+    </select>
 
     <!--로그 데이터 상세 정보 조회  -->
     <select id="selectErrorLogInfoOne" parameterType="logSearchVO" resultMap="logMap">
